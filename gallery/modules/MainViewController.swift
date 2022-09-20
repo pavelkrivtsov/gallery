@@ -61,7 +61,7 @@ extension MainViewController {
 extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
-            print("done")
+            self.presenter.fetchSearchigImages(searchText: searchText)
         }
     }
 }

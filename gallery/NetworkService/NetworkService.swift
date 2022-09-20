@@ -30,8 +30,8 @@ class NetworkService {
         task.resume()
     }
     
-    func fetchSearchigImages(searchItem: String, onCompletion: @escaping (SearchResults?) -> Void ) {
-        let urlString = "https://api.unsplash.com/search/photos?query=\(searchItem)"
+    func fetchSearchigImages(searchText: String, onCompletion: @escaping (SearchResults?) -> Void ) {
+        let urlString = "https://api.unsplash.com/search/photos?query=\(searchText)"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
         request.addValue(clientId, forHTTPHeaderField: "Authorization")
