@@ -1,23 +1,23 @@
 //
-//  MainPresenter.swift
+//  SearchPresenter.swift
 //  gallery
 //
-//  Created by Павел Кривцов on 20.09.2022.
+//  Created by Павел Кривцов on 29.09.2022.
 //
 
 import Foundation
 
-protocol MainPresenterIn: AnyObject {
+protocol SearchPresenterIn: AnyObject {
     func setupImageList()
     func fetchSearchigImages(searchText: String)
 }
 
-protocol MainPresenterOut: AnyObject {
-    func setImageList(imageList: [UnsplashPhoto])
+protocol SearchPresenterOut: AnyObject {
+    func setImageList(imageList: [UnsplashImage])
 }
 
-class MainPresenter {
-    weak var out: MainPresenterOut?
+class SeachPresenter {
+    weak var out: SearchPresenterOut?
     var networkDataFetcher: NetworkService
     
     init(networkDataFetcher: NetworkService) {
@@ -25,7 +25,7 @@ class MainPresenter {
     }
 }
 
-extension MainPresenter: MainPresenterIn {
+extension SeachPresenter: SearchPresenterIn {
     
     func setupImageList() {
         self.networkDataFetcher.fetchImagesList { [weak self] unsplashPhoto in

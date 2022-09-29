@@ -1,35 +1,35 @@
 //
-//  ImageCell.swift
-//  gallery
+//  SearchCell.swift
+//  AppConcept
 //
-//  Created by Павел Кривцов on 20.09.2022.
+//  Created by Павел Кривцов on 07.05.2021.
 //
 
 import UIKit
 import Kingfisher
 
-class ImageCell: UITableViewCell {
+class SearchCell: UICollectionViewCell {
     
-    static let cellIdentifier = "ImageCell"
+    static let cellIdentifier = "SearchCell"
     let descriptionLabel = UILabel()
     let userNameLabel = UILabel()
     let photoImageView = UIImageView()
     
-    var unsplashPhoto: UnsplashPhoto! {
+    var unsplashImage: UnsplashImage! {
         didSet {
-            let photoURL = unsplashPhoto.urls["regular"]
+            let photoURL = unsplashImage.urls["regular"]
             guard let photoURL = photoURL, let url = URL(string: photoURL) else { return }
             photoImageView.kf.setImage(with: url)
         }
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupImageView()
         setupDescriptionLabel()
         setupUserNameLabel()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -41,6 +41,7 @@ class ImageCell: UITableViewCell {
     
     private func setupImageView() {
         addSubview(photoImageView)
+//        photoImageView.contentMode
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             photoImageView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -78,11 +79,12 @@ class ImageCell: UITableViewCell {
             userNameLabel.trailingAnchor.constraint(equalTo: descriptionLabel.trailingAnchor)
         ])
     }
-    
-    func configure(image: UnsplashPhoto){
-        unsplashPhoto = image
+
+    func configure(image: UnsplashImage){
+        unsplashImage = image
         descriptionLabel.text = image.description
-        userNameLabel.text = "\(unsplashPhoto.user.name)"
+        userNameLabel.text = "\(unsplashImage.user.name)"
     }
     
 }
+

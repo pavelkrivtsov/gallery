@@ -9,10 +9,10 @@ import Foundation
 
 struct SearchResults: Decodable {
     let total: Int
-    let results: [UnsplashPhoto]
+    let results: [UnsplashImage]
 }
 
-struct UnsplashPhoto: Decodable {
+struct UnsplashImage: Decodable {
     let user: User
     let description: String?
     let width: Int

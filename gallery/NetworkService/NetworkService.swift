@@ -11,7 +11,7 @@ class NetworkService {
     
     private let clientId = "Client-ID H8VOOo5_EjEw5KJsHXBoxTzOL525-OPZ-58HmdHX4sQ"
     
-    func fetchImagesList(onCompletion: @escaping ([UnsplashPhoto]?) -> Void) {
+    func fetchImagesList(onCompletion: @escaping ([UnsplashImage]?) -> Void) {
         let urlString = "https://api.unsplash.com/photos/?"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
@@ -20,7 +20,7 @@ class NetworkService {
         
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             if let data = data {
-                if let decodeObjects = self?.parseJSON(type: [UnsplashPhoto].self, data: data) {
+                if let decodeObjects = self?.parseJSON(type: [UnsplashImage].self, data: data) {
                     DispatchQueue.main.async {
                         onCompletion(decodeObjects)
                     }
