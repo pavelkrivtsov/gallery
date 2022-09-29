@@ -14,7 +14,7 @@ class TabBarViewController: UITabBarController {
         tabBar.tintColor = .white
         viewControllers = [
             MainAssembly.assemle(),
-            SearchAssembly.assemle()
+//            SearchAssembly.assemle()
         ]
     }
 

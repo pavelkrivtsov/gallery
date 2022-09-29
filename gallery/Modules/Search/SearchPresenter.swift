@@ -16,7 +16,7 @@ protocol SearchPresenterOut: AnyObject {
     func setImageList(imageList: [UnsplashImage])
 }
 
-class SeachPresenter {
+class SearchPresenter {
     weak var out: SearchPresenterOut?
     var networkDataFetcher: NetworkService
     
@@ -25,7 +25,7 @@ class SeachPresenter {
     }
 }
 
-extension SeachPresenter: SearchPresenterIn {
+extension SearchPresenter: SearchPresenterIn {
     
     func setupImageList() {
         self.networkDataFetcher.fetchImagesList { [weak self] unsplashPhoto in

@@ -10,7 +10,7 @@ import UIKit
 class SearchAssembly {
     static func assemle() -> UINavigationController {
         let networkDataFetcher = NetworkService()
-        let presenter = MainPresenter(networkDataFetcher: networkDataFetcher)
+        let presenter = SearchPresenter(networkDataFetcher: networkDataFetcher)
         let view = SearchViewController(presenter: presenter)
         presenter.out = view
         return view.embedInNavigationController()

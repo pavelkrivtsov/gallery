@@ -12,7 +12,8 @@ struct SearchResults: Decodable {
     let results: [UnsplashImage]
 }
 
-struct UnsplashImage: Decodable {
+struct UnsplashImage: Decodable, Hashable {
+    
     let user: User
     let description: String?
     let width: Int
@@ -28,6 +29,6 @@ struct UnsplashImage: Decodable {
     }
 }
 
-struct User: Decodable {
+struct User: Decodable, Hashable {
     let name: String
 }

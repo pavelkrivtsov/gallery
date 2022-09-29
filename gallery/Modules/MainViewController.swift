@@ -10,11 +10,12 @@ import UIKit
 class MainViewController: UITableViewController {
     
     var presenter: MainPresenterIn
-    var images = [UnsplashImage]()
+    private var dataSource: UITableViewDiffableDataSource<Int, UnsplashImage>!
+    private var images = [UnsplashImage]()
     
     init(presenter: MainPresenterIn) {
         self.presenter = presenter
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .plain)
     }
     
     required init?(coder: NSCoder) {
@@ -24,24 +25,25 @@ class MainViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ImageCell.self, forCellReuseIdentifier: ImageCell.cellIdentifier)
+        
+        dataSource = UITableViewDiffableDataSource<Int, UnsplashImage>(tableView: tableView) { tableView, indexPath, itemIdentifier in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageCell.cellIdentifier,
+                                                           for: indexPath) as? ImageCell else {
+                fatalError("ImageCell is not registered for table view")
+            }
+            cell.configure(image: itemIdentifier)
+            return cell
+        }
+        
         presenter.setupImageList()
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.images.count
-    }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ImageCell.cellIdentifier, for: indexPath) as! ImageCell
-        let unsplashPhoto = images[indexPath.item]
-        cell.configure(image: unsplashPhoto)
-        return cell
-    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-      let currentImage = images[indexPath.item]
-      let heightPerItem = CGFloat(currentImage.width) / CGFloat(currentImage.height)
-      return tableView.frame.width / heightPerItem
+        let currentImage = images[indexPath.item]
+        let heightPerItem = CGFloat(currentImage.width) / CGFloat(currentImage.height)
+        return tableView.frame.width / heightPerItem
     }
 }
 
@@ -49,6 +51,7 @@ extension MainViewController {
     func embedInNavigationController() -> UINavigationController {
         let navigationController = UINavigationController(rootViewController: self)
         navigationController.tabBarItem.image = UIImage(systemName: "photo")
+        navigationController.navigationBar.isHidden = true
         return navigationController
     }
 }
@@ -56,6 +59,9 @@ extension MainViewController {
 extension MainViewController: MainPresenterOut {
     func setImageList(imageList: [UnsplashImage]) {
         self.images = imageList
-        tableView.reloadData()
+        var snapshot = NSDiffableDataSourceSnapshot<Int, UnsplashImage>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(images)
+        dataSource.apply(snapshot)
     }
 }

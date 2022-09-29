@@ -9,12 +9,12 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
-    var presenter: MainPresenterIn
+    var presenter: SearchPresenterIn
     let searchController = UISearchController(searchResultsController: nil)
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     var images = [UnsplashImage]()
     
-    init(presenter: MainPresenterIn) {
+    init(presenter: SearchPresenterIn) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -91,7 +91,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
 }
 
-extension SearchViewController: MainPresenterOut {
+extension SearchViewController: SearchPresenterOut {
     func setImageList(imageList: [UnsplashImage]) {
         self.images = imageList
         collectionView.reloadData()
