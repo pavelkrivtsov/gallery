@@ -10,6 +10,7 @@ import UIKit
 class MainViewController: UITableViewController {
     
     var presenter: MainPresenterIn
+    let searchController = UISearchController(searchResultsController: nil)
     private var dataSource: UITableViewDiffableDataSource<Int, UnsplashImage>!
     private var images = [UnsplashImage]()
     
@@ -38,8 +39,6 @@ class MainViewController: UITableViewController {
         presenter.setupImageList()
     }
     
-    
-    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let currentImage = images[indexPath.item]
         let heightPerItem = CGFloat(currentImage.width) / CGFloat(currentImage.height)
@@ -50,9 +49,21 @@ class MainViewController: UITableViewController {
 extension MainViewController {
     func embedInNavigationController() -> UINavigationController {
         let navigationController = UINavigationController(rootViewController: self)
-        navigationController.tabBarItem.image = UIImage(systemName: "photo")
-        navigationController.navigationBar.isHidden = true
+        navigationController.tabBarItem.image = UIImage(systemName: "magnifyingglass")
+        searchController.definesPresentationContext = true
+        searchController.searchBar.delegate = self
+        searchController.searchBar.placeholder = "Search photos, collections, users"
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         return navigationController
+    }
+}
+
+extension MainViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if let searchText = searchBar.text {
+            self.presenter.fetchSearchigImages(searchText: searchText)
+        }
     }
 }
 
@@ -62,6 +73,6 @@ extension MainViewController: MainPresenterOut {
         var snapshot = NSDiffableDataSourceSnapshot<Int, UnsplashImage>()
         snapshot.appendSections([0])
         snapshot.appendItems(images)
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
 }

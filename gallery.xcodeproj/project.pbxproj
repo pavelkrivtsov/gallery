@@ -12,17 +12,12 @@
 		1E12817C28D8D3400011C8FC /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E12817B28D8D3400011C8FC /* MainViewController.swift */; };
 		1E12818128D8D3410011C8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E12818028D8D3410011C8FC /* Assets.xcassets */; };
 		1E12818428D8D3410011C8FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E12818228D8D3410011C8FC /* LaunchScreen.storyboard */; };
-		1E5E283D28E48B6100C82B49 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5E283C28E48B6100C82B49 /* SearchViewController.swift */; };
-		1E5E283F28E48E1600C82B49 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5E283E28E48E1600C82B49 /* SearchCell.swift */; };
 		1EEF6EA228D9DB1300B864AB /* MainAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */; };
 		1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */; };
 		1EEF6EAB28D9FEB500B864AB /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAA28D9FEB500B864AB /* NetworkService.swift */; };
 		1EEF6EAE28D9FEF400B864AB /* SearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAD28D9FEF400B864AB /* SearchResults.swift */; };
 		1EEF6EB028DA032400B864AB /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAF28DA032400B864AB /* ImageCell.swift */; };
 		1EEF6EB328DA164900B864AB /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1EEF6EB228DA164900B864AB /* Kingfisher */; };
-		1EFB26FB28E5D7AD002BE9AB /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFB26FA28E5D7AD002BE9AB /* TabBarViewController.swift */; };
-		1EFB26FF28E5E4C4002BE9AB /* SearchAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFB26FE28E5E4C4002BE9AB /* SearchAssembly.swift */; };
-		1EFB270128E5E528002BE9AB /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFB270028E5E528002BE9AB /* SearchPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,16 +28,11 @@
 		1E12818028D8D3410011C8FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1E12818328D8D3410011C8FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1E12818528D8D3410011C8FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1E5E283C28E48B6100C82B49 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		1E5E283E28E48E1600C82B49 /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembly.swift; sourceTree = "<group>"; };
 		1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
 		1EEF6EAA28D9FEB500B864AB /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		1EEF6EAD28D9FEF400B864AB /* SearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResults.swift; sourceTree = "<group>"; };
 		1EEF6EAF28DA032400B864AB /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
-		1EFB26FA28E5D7AD002BE9AB /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
-		1EFB26FE28E5E4C4002BE9AB /* SearchAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAssembly.swift; sourceTree = "<group>"; };
-		1EFB270028E5E528002BE9AB /* SearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,9 +88,7 @@
 		1EEF6EA028D9DAFB00B864AB /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				1EFB26FA28E5D7AD002BE9AB /* TabBarViewController.swift */,
 				1EFB26FC28E5E46D002BE9AB /* Main */,
-				1EFB26FD28E5E47C002BE9AB /* Search */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -131,17 +119,6 @@
 				1EEF6EAF28DA032400B864AB /* ImageCell.swift */,
 			);
 			name = Main;
-			sourceTree = "<group>";
-		};
-		1EFB26FD28E5E47C002BE9AB /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				1EFB26FE28E5E4C4002BE9AB /* SearchAssembly.swift */,
-				1EFB270028E5E528002BE9AB /* SearchPresenter.swift */,
-				1E5E283C28E48B6100C82B49 /* SearchViewController.swift */,
-				1E5E283E28E48E1600C82B49 /* SearchCell.swift */,
-			);
-			path = Search;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,16 +198,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E12817C28D8D3400011C8FC /* MainViewController.swift in Sources */,
-				1EFB26FF28E5E4C4002BE9AB /* SearchAssembly.swift in Sources */,
 				1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */,
 				1E12817828D8D3400011C8FC /* AppDelegate.swift in Sources */,
-				1E5E283F28E48E1600C82B49 /* SearchCell.swift in Sources */,
-				1E5E283D28E48B6100C82B49 /* SearchViewController.swift in Sources */,
 				1EEF6EA228D9DB1300B864AB /* MainAssembly.swift in Sources */,
 				1EEF6EAE28D9FEF400B864AB /* SearchResults.swift in Sources */,
 				1EEF6EB028DA032400B864AB /* ImageCell.swift in Sources */,
-				1EFB270128E5E528002BE9AB /* SearchPresenter.swift in Sources */,
-				1EFB26FB28E5D7AD002BE9AB /* TabBarViewController.swift in Sources */,
 				1EEF6EAB28D9FEB500B864AB /* NetworkService.swift in Sources */,
 				1E12817A28D8D3400011C8FC /* SceneDelegate.swift in Sources */,
 			);

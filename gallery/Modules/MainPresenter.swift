@@ -9,6 +9,7 @@ import Foundation
 
 protocol MainPresenterIn: AnyObject {
     func setupImageList()
+    func fetchSearchigImages(searchText: String)
 }
 
 protocol MainPresenterOut: AnyObject {
@@ -32,5 +33,12 @@ extension MainPresenter: MainPresenterIn {
             self.out?.setImageList(imageList: unsplashPhoto)
         }
     }
+    
+    func fetchSearchigImages(searchText: String) {
+            self.networkDataFetcher.fetchSearchigImages(searchText: searchText) { [weak self] searchResults in
+                guard let self = self, let searchResults = searchResults else { return }
+                self.out?.setImageList(imageList: searchResults.results)
+            }
+        }
 
 }
