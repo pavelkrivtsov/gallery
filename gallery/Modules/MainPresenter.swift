@@ -7,38 +7,36 @@
 
 import Foundation
 
-protocol MainPresenterIn: AnyObject {
-    func setupImageList()
-    func fetchSearchigImages(searchText: String)
-}
-
-protocol MainPresenterOut: AnyObject {
-    func setImageList(imageList: [UnsplashImage])
+protocol MainPresenterProtocol: AnyObject {
+    func loadImageList()
+    func loadFoundImages(searchText: String)
 }
 
 class MainPresenter {
-    weak var out: MainPresenterOut?
-    var networkDataFetcher: NetworkService
+    weak var view: MainViewControllerProtocol?
+    var router: MainRouterProtocol
+    var networkService: NetworkServiceProtocol
     
-    init(networkDataFetcher: NetworkService) {
-        self.networkDataFetcher = networkDataFetcher
+    init(networkDataFetcher: NetworkServiceProtocol, router: MainRouterProtocol) {
+        self.networkService = networkDataFetcher
+        self.router = router
     }
 }
 
-extension MainPresenter: MainPresenterIn {
+extension MainPresenter: MainPresenterProtocol {
     
-    func setupImageList() {
-        self.networkDataFetcher.fetchImagesList { [weak self] unsplashPhoto in
+    func loadImageList() {
+        self.networkService.loadImagesList { [weak self] unsplashPhoto in
             guard let self = self, let unsplashPhoto = unsplashPhoto else { return }
-            self.out?.setImageList(imageList: unsplashPhoto)
+            self.view?.setImageList(imageList: unsplashPhoto)
         }
     }
     
-    func fetchSearchigImages(searchText: String) {
-            self.networkDataFetcher.fetchSearchigImages(searchText: searchText) { [weak self] searchResults in
-                guard let self = self, let searchResults = searchResults else { return }
-                self.out?.setImageList(imageList: searchResults.results)
-            }
+    func loadFoundImages(searchText: String) {
+        self.networkService.loadFoundImages(from: searchText) { [weak self] searchResults in
+            guard let self = self, let searchResults = searchResults else { return }
+            self.view?.setImageList(imageList: searchResults.results)
         }
-
+    }
+    
 }

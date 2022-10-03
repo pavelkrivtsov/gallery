@@ -1,5 +1,5 @@
 //
-//  ImageCell.swift
+//  MainImageCell.swift
 //  gallery
 //
 //  Created by Павел Кривцов on 20.09.2022.
@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class ImageCell: UITableViewCell {
+class MainImageCell: UITableViewCell {
     
     static let cellIdentifier = "ImageCell"
     let photoImageView = UIImageView()

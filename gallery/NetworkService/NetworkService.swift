@@ -7,11 +7,16 @@
 
 import Foundation
 
-class NetworkService {
+protocol NetworkServiceProtocol: AnyObject {
+    func loadImagesList(onCompletion: @escaping ([UnsplashImage]?) -> Void)
+    func loadFoundImages(from searchText: String, onCompletion: @escaping (SearchResults?) -> Void)
+}
+
+class NetworkService: NetworkServiceProtocol {
     
     private let clientId = "Client-ID H8VOOo5_EjEw5KJsHXBoxTzOL525-OPZ-58HmdHX4sQ"
     
-    func fetchImagesList(onCompletion: @escaping ([UnsplashImage]?) -> Void) {
+    func loadImagesList(onCompletion: @escaping ([UnsplashImage]?) -> Void) {
         let urlString = "https://api.unsplash.com/photos/?"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
@@ -30,7 +35,7 @@ class NetworkService {
         task.resume()
     }
     
-    func fetchSearchigImages(searchText: String, onCompletion: @escaping (SearchResults?) -> Void ) {
+    func loadFoundImages(from searchText: String, onCompletion: @escaping (SearchResults?) -> Void) {
         let urlString = "https://api.unsplash.com/search/photos?query=\(searchText)"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)

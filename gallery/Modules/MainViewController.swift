@@ -7,14 +7,18 @@
 
 import UIKit
 
+protocol MainViewControllerProtocol: AnyObject {
+    func setImageList(imageList: [UnsplashImage])
+}
+
 class MainViewController: UITableViewController {
     
-    var presenter: MainPresenterIn
+    var presenter: MainPresenterProtocol
     let searchController = UISearchController(searchResultsController: nil)
     private var dataSource: UITableViewDiffableDataSource<Int, UnsplashImage>!
     private var images = [UnsplashImage]()
     
-    init(presenter: MainPresenterIn) {
+    init(presenter: MainPresenterProtocol) {
         self.presenter = presenter
         super.init(style: .plain)
     }
@@ -25,18 +29,18 @@ class MainViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(ImageCell.self, forCellReuseIdentifier: ImageCell.cellIdentifier)
+        tableView.register(MainImageCell.self, forCellReuseIdentifier: MainImageCell.cellIdentifier)
         
         dataSource = UITableViewDiffableDataSource<Int, UnsplashImage>(tableView: tableView) { tableView, indexPath, itemIdentifier in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ImageCell.cellIdentifier,
-                                                           for: indexPath) as? ImageCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: MainImageCell.cellIdentifier,
+                                                           for: indexPath) as? MainImageCell else {
                 fatalError("ImageCell is not registered for table view")
             }
             cell.configure(image: itemIdentifier)
             return cell
         }
         
-        presenter.setupImageList()
+        presenter.loadImageList()
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -44,12 +48,16 @@ class MainViewController: UITableViewController {
         let heightPerItem = CGFloat(currentImage.width) / CGFloat(currentImage.height)
         return tableView.frame.width / heightPerItem
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let intdex = indexPath.item
+        print("DONE \(intdex)")
+    }
 }
 
 extension MainViewController {
     func embedInNavigationController() -> UINavigationController {
         let navigationController = UINavigationController(rootViewController: self)
-        navigationController.tabBarItem.image = UIImage(systemName: "magnifyingglass")
         searchController.definesPresentationContext = true
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Search photos, collections, users"
@@ -62,12 +70,12 @@ extension MainViewController {
 extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
-            self.presenter.fetchSearchigImages(searchText: searchText)
+            self.presenter.loadFoundImages(searchText: searchText)
         }
     }
 }
 
-extension MainViewController: MainPresenterOut {
+extension MainViewController: MainViewControllerProtocol {
     func setImageList(imageList: [UnsplashImage]) {
         self.images = imageList
         var snapshot = NSDiffableDataSourceSnapshot<Int, UnsplashImage>()
