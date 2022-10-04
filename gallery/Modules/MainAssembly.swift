@@ -14,6 +14,7 @@ class MainAssembly {
         let presenter = MainPresenter(networkDataFetcher: networkService, router: router)
         let view = MainViewController(presenter: presenter)
         presenter.view = view
+        router.view = view
         return view.embedInNavigationController()
     }
 }

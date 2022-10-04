@@ -11,12 +11,13 @@ import Kingfisher
 class MainImageCell: UITableViewCell {
     
     static let cellIdentifier = "ImageCell"
-    let photoImageView = UIImageView()
+    private let photoImageView = UIImageView()
     
-    var unsplashImage: UnsplashImage! {
+    private var unsplashImage: UnsplashImage! {
         didSet {
             let photoURL = unsplashImage.urls["regular"]
-            guard let photoURL = photoURL, let url = URL(string: photoURL) else { return }
+            guard let photoURL = photoURL,
+                  let url = URL(string: photoURL) else { return }
             photoImageView.kf.setImage(with: url)
         }
     }
@@ -24,14 +25,13 @@ class MainImageCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        photoImageView.backgroundColor =  .gray
         addSubview(photoImageView)
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             photoImageView.topAnchor.constraint(equalTo: self.topAnchor),
             photoImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            photoImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            photoImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
         ])
     }
     
@@ -46,7 +46,6 @@ class MainImageCell: UITableViewCell {
     
     func configure(image: UnsplashImage){
         unsplashImage = image
-
     }
     
 }

@@ -8,9 +8,16 @@
 import Foundation
 
 protocol MainRouterProtocol: AnyObject {
-    
+    func showImage(image: UnsplashImage)
 }
 
 class MainRouter: MainRouterProtocol {
-    weak var presenter: MainPresenterProtocol?
+
+    weak var view: MainViewController?
+    
+    func showImage(image: UnsplashImage) {
+        let detailVC = DetailAssembly.assemle(image: image)
+        self.view?.navigationController?.pushViewController(detailVC, animated: true)
+    }
 }
+

@@ -13,6 +13,9 @@
 		1E12818128D8D3410011C8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E12818028D8D3410011C8FC /* Assets.xcassets */; };
 		1E12818428D8D3410011C8FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E12818228D8D3410011C8FC /* LaunchScreen.storyboard */; };
 		1E5A928A28EB728600A8CE4E /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928928EB728600A8CE4E /* MainRouter.swift */; };
+		1E5A928D28EB809500A8CE4E /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928C28EB809500A8CE4E /* DetailViewController.swift */; };
+		1E5A928F28EB9E4800A8CE4E /* DetailAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928E28EB9E4800A8CE4E /* DetailAssembly.swift */; };
+		1E5A929128EB9E5900A8CE4E /* DetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A929028EB9E5900A8CE4E /* DetailPresenter.swift */; };
 		1EEF6EA228D9DB1300B864AB /* MainAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */; };
 		1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */; };
 		1EEF6EAB28D9FEB500B864AB /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAA28D9FEB500B864AB /* NetworkService.swift */; };
@@ -30,6 +33,9 @@
 		1E12818328D8D3410011C8FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1E12818528D8D3410011C8FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1E5A928928EB728600A8CE4E /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
+		1E5A928C28EB809500A8CE4E /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		1E5A928E28EB9E4800A8CE4E /* DetailAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAssembly.swift; sourceTree = "<group>"; };
+		1E5A929028EB9E5900A8CE4E /* DetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPresenter.swift; sourceTree = "<group>"; };
 		1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembly.swift; sourceTree = "<group>"; };
 		1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
 		1EEF6EAA28D9FEB500B864AB /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -78,6 +84,16 @@
 			path = gallery;
 			sourceTree = "<group>";
 		};
+		1E5A928B28EB7ED800A8CE4E /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				1E5A928E28EB9E4800A8CE4E /* DetailAssembly.swift */,
+				1E5A929028EB9E5900A8CE4E /* DetailPresenter.swift */,
+				1E5A928C28EB809500A8CE4E /* DetailViewController.swift */,
+			);
+			name = Detail;
+			sourceTree = "<group>";
+		};
 		1EEF6E9F28D9D63100B864AB /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -91,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				1EFB26FC28E5E46D002BE9AB /* Main */,
+				1E5A928B28EB7ED800A8CE4E /* Detail */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -200,6 +217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E5A928F28EB9E4800A8CE4E /* DetailAssembly.swift in Sources */,
 				1E12817C28D8D3400011C8FC /* MainViewController.swift in Sources */,
 				1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */,
 				1E12817828D8D3400011C8FC /* AppDelegate.swift in Sources */,
@@ -207,8 +225,10 @@
 				1EEF6EAE28D9FEF400B864AB /* SearchResults.swift in Sources */,
 				1EEF6EB028DA032400B864AB /* MainImageCell.swift in Sources */,
 				1EEF6EAB28D9FEB500B864AB /* NetworkService.swift in Sources */,
+				1E5A928D28EB809500A8CE4E /* DetailViewController.swift in Sources */,
 				1E12817A28D8D3400011C8FC /* SceneDelegate.swift in Sources */,
 				1E5A928A28EB728600A8CE4E /* MainRouter.swift in Sources */,
+				1E5A929128EB9E5900A8CE4E /* DetailPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

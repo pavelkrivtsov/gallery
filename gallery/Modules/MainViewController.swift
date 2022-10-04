@@ -13,8 +13,8 @@ protocol MainViewControllerProtocol: AnyObject {
 
 class MainViewController: UITableViewController {
     
-    var presenter: MainPresenterProtocol
-    let searchController = UISearchController(searchResultsController: nil)
+    private var presenter: MainPresenterProtocol
+    private let searchController = UISearchController(searchResultsController: nil)
     private var dataSource: UITableViewDiffableDataSource<Int, UnsplashImage>!
     private var images = [UnsplashImage]()
     
@@ -44,14 +44,14 @@ class MainViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let currentImage = images[indexPath.item]
-        let heightPerItem = CGFloat(currentImage.width) / CGFloat(currentImage.height)
+        let image = images[indexPath.item]
+        let heightPerItem = CGFloat(image.width) / CGFloat(image.height)
         return tableView.frame.width / heightPerItem
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let intdex = indexPath.item
-        print("DONE \(intdex)")
+        let image = images[indexPath.item]
+        presenter.showImage(image: image)
     }
 }
 

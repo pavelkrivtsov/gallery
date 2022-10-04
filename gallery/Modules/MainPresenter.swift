@@ -10,12 +10,13 @@ import Foundation
 protocol MainPresenterProtocol: AnyObject {
     func loadImageList()
     func loadFoundImages(searchText: String)
+    func showImage(image: UnsplashImage)
 }
 
 class MainPresenter {
     weak var view: MainViewControllerProtocol?
-    var router: MainRouterProtocol
-    var networkService: NetworkServiceProtocol
+    private var router: MainRouterProtocol
+    private var networkService: NetworkServiceProtocol
     
     init(networkDataFetcher: NetworkServiceProtocol, router: MainRouterProtocol) {
         self.networkService = networkDataFetcher
@@ -37,6 +38,10 @@ extension MainPresenter: MainPresenterProtocol {
             guard let self = self, let searchResults = searchResults else { return }
             self.view?.setImageList(imageList: searchResults.results)
         }
+    }
+    
+    func showImage(image: UnsplashImage) {
+        router.showImage(image: image)
     }
     
 }
