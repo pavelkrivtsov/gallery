@@ -9,9 +9,11 @@ import UIKit
 
 class DetailAssembly {
     static func assemle(image: UnsplashImage) -> UIViewController {
-        let presenter = DetailPresenter(image: image)
+        let router = DetailRouter()
+        let presenter = DetailPresenter(image: image, router: router)
         let view = DetailViewController(presenter: presenter)
         presenter.view = view
+        router.view = view
         return view
     }
 }

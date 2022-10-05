@@ -15,8 +15,26 @@ protocol DetailViewControllerProtocol: AnyObject {
 class DetailViewController: UIViewController {
     
     private var presenter: DetailPresenterProtocol
-    private var imageView = UIImageView()
-    private lazy var activityIndicator = UIActivityIndicatorView(style: .medium)
+    private var imageView: UIImageView = {
+        var imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        var activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        return activityIndicator
+    }()
+    
+    private var infoButton: UIBarButtonItem = {
+        var button = UIBarButtonItem(image: .init(systemName: "info.circle"),
+                                     style: .plain,
+                                     target: nil,
+                                     action: #selector(infoButtonTapped))
+        return button
+    }()
     
     private var unsplashImage: UnsplashImage! {
         didSet {
@@ -40,11 +58,14 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.topItem?.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = UIColor.init(named: "AccentColor")
+        infoButton.target = self
+        navigationItem.rightBarButtonItem = infoButton
+        
         view.addSubview(imageView)
         view.addSubview(activityIndicator)
-        imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: self.view.topAnchor),
             imageView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
@@ -52,18 +73,24 @@ class DetailViewController: UIViewController {
             imageView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             
             activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
         ])
         
         presenter.loadImage()
     }
     
+    @objc
+    func infoButtonTapped() {
+        presenter.showInfoAboutImage()
+    }
+
     override func viewWillLayoutSubviews() {
         imageView.image == nil ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
     
     private func configure(image: UnsplashImage) {
         unsplashImage = image
+        title = image.user.name
     }
 }
 

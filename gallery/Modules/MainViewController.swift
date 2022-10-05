@@ -29,6 +29,8 @@ class MainViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "//"
+        tableView.separatorStyle = .none
         tableView.register(MainImageCell.self, forCellReuseIdentifier: MainImageCell.cellIdentifier)
         
         dataSource = UITableViewDiffableDataSource<Int, UnsplashImage>(tableView: tableView) { tableView, indexPath, itemIdentifier in
