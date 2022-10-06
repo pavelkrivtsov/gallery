@@ -79,6 +79,13 @@ class DetailViewController: UIViewController {
         presenter.loadImage()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        KingfisherManager.shared.cache.clearMemoryCache()
+        KingfisherManager.shared.cache.clearDiskCache()
+        KingfisherManager.shared.cache.cleanExpiredDiskCache()
+    }
+    
     @objc
     func infoButtonTapped() {
         presenter.showInfoAboutImage()
