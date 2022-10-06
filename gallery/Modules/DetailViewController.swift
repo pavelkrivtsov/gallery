@@ -15,6 +15,17 @@ protocol DetailViewControllerProtocol: AnyObject {
 class DetailViewController: UIViewController {
     
     private var presenter: DetailPresenterProtocol
+    
+    private var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.minimumZoomScale = 1
+        scrollView.maximumZoomScale = 4
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
     private var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -23,17 +34,9 @@ class DetailViewController: UIViewController {
     }()
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
-        var activityIndicator = UIActivityIndicatorView(style: .medium)
+        let activityIndicator = UIActivityIndicatorView(style: .medium)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
-    }()
-    
-    private var infoButton: UIBarButtonItem = {
-        var button = UIBarButtonItem(image: .init(systemName: "info.circle"),
-                                     style: .plain,
-                                     target: nil,
-                                     action: #selector(infoButtonTapped))
-        return button
     }()
     
     private var unsplashImage: UnsplashImage! {
@@ -42,6 +45,7 @@ class DetailViewController: UIViewController {
             guard let photoURL = photoURL,
                   let url = URL(string: photoURL) else { return }
             imageView.kf.setImage(with: url)
+            title = unsplashImage.user.name
         }
     }
     
@@ -58,23 +62,10 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        navigationController?.navigationBar.topItem?.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = UIColor.init(named: "AccentColor")
-        infoButton.target = self
-        navigationItem.rightBarButtonItem = infoButton
+        scrollView.delegate = self
         
-        view.addSubview(imageView)
-        view.addSubview(activityIndicator)
-        
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: self.view.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            imageView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            
-            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-        ])
+        setupNavigationBar()
+        addSubviews()
         
         presenter.loadImage()
     }
@@ -86,19 +77,82 @@ class DetailViewController: UIViewController {
         KingfisherManager.shared.cache.cleanExpiredDiskCache()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        imageView.image == nil ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
+    }
+    
+    func setupNavigationBar() {
+        navigationController?.navigationBar.topItem?.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = UIColor.init(named: "AccentColor")
+        let infoButton = UIBarButtonItem(image: .init(systemName: "info.circle"),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(infoButtonTapped))
+        navigationItem.rightBarButtonItem = infoButton
+    }
+    
+    func addSubviews() {
+        view.addSubview(scrollView)
+        view.addSubview(activityIndicator)
+        scrollView.addSubview(imageView)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            
+            imageView.leadingAnchor.constraint(equalTo: self.scrollView.contentLayoutGuide.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: self.scrollView.contentLayoutGuide.trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: self.scrollView.contentLayoutGuide.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: self.scrollView.contentLayoutGuide.bottomAnchor),
+            
+            imageView.widthAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.widthAnchor),
+            imageView.heightAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.heightAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+        ])
+    }
+    
     @objc
     func infoButtonTapped() {
         presenter.showInfoAboutImage()
     }
-
-    override func viewWillLayoutSubviews() {
-        imageView.image == nil ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
-    }
     
     private func configure(image: UnsplashImage) {
         unsplashImage = image
-        title = image.user.name
     }
+}
+
+extension DetailViewController: UIScrollViewDelegate {
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? { imageView }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        if scrollView.zoomScale > 1 {
+            if let image = imageView.image {
+                let ratioWidth = imageView.frame.width / image.size.width
+                let ratioHeight = imageView.frame.height / image.size.height
+                
+                let ratio = ratioWidth < ratioHeight ? ratioWidth : ratioHeight
+                let newWidth = image.size.width * ratio
+                let newHeight = image.size.height * ratio
+                
+                let conditionLeft = newWidth * scrollView.zoomScale > imageView.frame.width
+                let left = 0.5 * (conditionLeft ? newWidth - imageView.frame.width :
+                                    (scrollView.frame.width - scrollView.contentSize.width))
+                let conditionTop = newHeight * scrollView.zoomScale > imageView.frame.height
+                let top = 0.5 * (conditionTop ? newHeight - imageView.frame.height :
+                                    (scrollView.frame.height - scrollView.contentSize.height))
+                
+                scrollView.contentInset = .init(top: top, left: left ,bottom: top, right: left)
+            }
+        } else {
+            scrollView.contentInset = .zero
+        }
+    }
+    
 }
 
 extension DetailViewController: DetailViewControllerProtocol {
