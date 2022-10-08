@@ -49,6 +49,12 @@ class DetailViewController: UIViewController {
         }
     }
     
+    private var gestureRecognizer: UITapGestureRecognizer = {
+        var gestureRecognizer = UITapGestureRecognizer()
+        gestureRecognizer.numberOfTapsRequired = 2
+        return gestureRecognizer
+    }()
+    
     init(presenter: DetailPresenterProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
@@ -63,7 +69,9 @@ class DetailViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         scrollView.delegate = self
-        
+        gestureRecognizer.addTarget(self, action: #selector(handleZoomingTap))
+        imageView.addGestureRecognizer(self.gestureRecognizer)
+        imageView.isUserInteractionEnabled = true
         setupNavigationBar()
         addSubviews()
         
@@ -102,17 +110,43 @@ class DetailViewController: UIViewController {
             scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             
-            imageView.leadingAnchor.constraint(equalTo: self.scrollView.contentLayoutGuide.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: self.scrollView.contentLayoutGuide.trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: self.scrollView.contentLayoutGuide.topAnchor),
-            imageView.bottomAnchor.constraint(equalTo: self.scrollView.contentLayoutGuide.bottomAnchor),
-            
             imageView.widthAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.widthAnchor),
             imageView.heightAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.heightAnchor),
             
             activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
         ])
+    }
+    
+    @objc
+    func handleZoomingTap(sender: UITapGestureRecognizer)  {
+        let location = sender.location(in: sender.view)
+        self.zoom(point: location, animated: true)
+    }
+    
+    func zoom(point: CGPoint, animated: Bool) {
+        let currentScale = self.scrollView.zoomScale
+        let minScale = self.scrollView.minimumZoomScale
+        let maxScale = self.scrollView.maximumZoomScale
+        
+        if (minScale == maxScale && minScale > 1) {
+            return
+        }
+        
+        let toScale = maxScale
+        let finalScale = (currentScale == minScale) ? toScale : minScale
+        let zoomRect = self.zoomRect(scale: finalScale , center: point)
+        self.scrollView.zoom(to: zoomRect, animated: animated)
+    }
+    
+    func zoomRect(scale: CGFloat, center: CGPoint ) -> CGRect {
+        var zoomRect = CGRect.zero
+        let bounds = self.scrollView.bounds
+        zoomRect.size.width = bounds.size.width / scale
+        zoomRect.size.height = bounds.size.height / scale
+        zoomRect.origin.x = center.x - (zoomRect.size.width / 2)
+        zoomRect.origin.y = center.y - (zoomRect.size.height  / 2)
+        return zoomRect
     }
     
     @objc
