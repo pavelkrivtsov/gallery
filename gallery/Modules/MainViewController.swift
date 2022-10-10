@@ -8,15 +8,15 @@
 import UIKit
 
 protocol MainViewControllerProtocol: AnyObject {
-    func setImageList(imageList: [UnsplashImage])
+    func setImageList(imageList: [Photo])
 }
 
 class MainViewController: UITableViewController {
     
     private var presenter: MainPresenterProtocol
     private let searchController = UISearchController(searchResultsController: nil)
-    private var dataSource: UITableViewDiffableDataSource<Int, UnsplashImage>!
-    private var images = [UnsplashImage]()
+    private var dataSource: UITableViewDiffableDataSource<Int, Photo>!
+    private var images = [Photo]()
     
     init(presenter: MainPresenterProtocol) {
         self.presenter = presenter
@@ -33,7 +33,7 @@ class MainViewController: UITableViewController {
         tableView.separatorStyle = .none
         tableView.register(MainImageCell.self, forCellReuseIdentifier: MainImageCell.cellIdentifier)
         
-        dataSource = UITableViewDiffableDataSource<Int, UnsplashImage>(tableView: tableView) { tableView, indexPath, itemIdentifier in
+        dataSource = UITableViewDiffableDataSource<Int, Photo>(tableView: tableView) { tableView, indexPath, itemIdentifier in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MainImageCell.cellIdentifier,
                                                            for: indexPath) as? MainImageCell else {
                 fatalError("ImageCell is not registered for table view")
@@ -78,9 +78,9 @@ extension MainViewController: UISearchBarDelegate {
 }
 
 extension MainViewController: MainViewControllerProtocol {
-    func setImageList(imageList: [UnsplashImage]) {
+    func setImageList(imageList: [Photo]) {
         self.images = imageList
-        var snapshot = NSDiffableDataSourceSnapshot<Int, UnsplashImage>()
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
         snapshot.appendSections([0])
         snapshot.appendItems(images)
         dataSource.apply(snapshot, animatingDifferences: false)

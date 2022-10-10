@@ -8,14 +8,14 @@
 import UIKit
 
 protocol DetailRouterProtocol: AnyObject {
-    func showInfo(from image: UnsplashImage)
+    func showInfo(from image: Photo)
 }
 
 class DetailRouter: DetailRouterProtocol {
     
     weak var view: DetailViewController?
     
-    func showInfo(from image: UnsplashImage) {
+    func showInfo(from image: Photo) {
         let infoVC = InfoVC(image: image)
         let navigationController = UINavigationController(rootViewController: infoVC)
         view?.present(navigationController, animated: true)

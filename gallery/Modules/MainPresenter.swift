@@ -10,7 +10,7 @@ import Foundation
 protocol MainPresenterProtocol: AnyObject {
     func loadImageList()
     func loadFoundImages(searchText: String)
-    func showImage(image: UnsplashImage)
+    func showImage(image: Photo)
 }
 
 class MainPresenter {
@@ -27,9 +27,9 @@ class MainPresenter {
 extension MainPresenter: MainPresenterProtocol {
     
     func loadImageList() {
-        self.networkService.loadImagesList { [weak self] unsplashPhoto in
-            guard let self = self, let unsplashPhoto = unsplashPhoto else { return }
-            self.view?.setImageList(imageList: unsplashPhoto)
+        self.networkService.loadImagesList { [weak self] photo in
+            guard let self = self, let photo = photo else { return }
+            self.view?.setImageList(imageList: photo)
         }
     }
     
@@ -40,7 +40,7 @@ extension MainPresenter: MainPresenterProtocol {
         }
     }
     
-    func showImage(image: UnsplashImage) {
+    func showImage(image: Photo) {
         router.showImage(image: image)
     }
     

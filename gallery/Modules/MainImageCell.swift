@@ -13,11 +13,10 @@ class MainImageCell: UITableViewCell {
     static let cellIdentifier = "ImageCell"
     private let photoImageView = UIImageView()
     
-    private var unsplashImage: UnsplashImage! {
+    private var photo: Photo! {
         didSet {
-            let photoURL = unsplashImage.urls["regular"]
-            guard let photoURL = photoURL,
-                  let url = URL(string: photoURL) else { return }
+            let photoURL = photo.urls.regular
+            guard let url = URL(string: photoURL) else { return }
             photoImageView.kf.setImage(with: url)
         }
     }
@@ -44,8 +43,8 @@ class MainImageCell: UITableViewCell {
         self.photoImageView.image = nil
     }
     
-    func configure(image: UnsplashImage){
-        unsplashImage = image
+    func configure(image: Photo){
+        photo = image
     }
     
 }

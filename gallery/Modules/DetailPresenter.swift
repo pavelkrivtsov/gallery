@@ -15,9 +15,9 @@ protocol DetailPresenterProtocol: AnyObject {
 class DetailPresenter {
     weak var view: DetailViewControllerProtocol?
     private var router: DetailRouterProtocol
-    private var image: UnsplashImage
+    private var image: Photo
     
-    init(image: UnsplashImage, router: DetailRouterProtocol) {
+    init(image: Photo, router: DetailRouterProtocol) {
         self.image = image
         self.router = router
     }

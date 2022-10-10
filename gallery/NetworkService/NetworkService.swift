@@ -8,15 +8,15 @@
 import Foundation
 
 protocol NetworkServiceProtocol: AnyObject {
-    func loadImagesList(onCompletion: @escaping ([UnsplashImage]?) -> Void)
-    func loadFoundImages(from searchText: String, onCompletion: @escaping (SearchResults?) -> Void)
+    func loadImagesList(onCompletion: @escaping ([Photo]?) -> Void)
+    func loadFoundImages(from searchText: String, onCompletion: @escaping (SearchPhotos?) -> Void)
 }
 
 class NetworkService: NetworkServiceProtocol {
     
     private let clientId = "Client-ID H8VOOo5_EjEw5KJsHXBoxTzOL525-OPZ-58HmdHX4sQ"
     
-    func loadImagesList(onCompletion: @escaping ([UnsplashImage]?) -> Void) {
+    func loadImagesList(onCompletion: @escaping ([Photo]?) -> Void) {
         let urlString = "https://api.unsplash.com/photos/?"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
@@ -25,7 +25,7 @@ class NetworkService: NetworkServiceProtocol {
         
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             if let data = data {
-                if let decodeObjects = self?.parseJSON(type: [UnsplashImage].self, data: data) {
+                if let decodeObjects = self?.parseJSON(type: [Photo].self, data: data) {
                     DispatchQueue.main.async {
                         onCompletion(decodeObjects)
                     }
@@ -35,7 +35,7 @@ class NetworkService: NetworkServiceProtocol {
         task.resume()
     }
     
-    func loadFoundImages(from searchText: String, onCompletion: @escaping (SearchResults?) -> Void) {
+    func loadFoundImages(from searchText: String, onCompletion: @escaping (SearchPhotos?) -> Void) {
         let urlString = "https://api.unsplash.com/search/photos?query=\(searchText)"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
@@ -44,7 +44,7 @@ class NetworkService: NetworkServiceProtocol {
         
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in
             guard let self = self, let data = data else { return }
-            if let decodeObjects = self.parseJSON(type: SearchResults.self, data: data) {
+            if let decodeObjects = self.parseJSON(type: SearchPhotos.self, data: data) {
                 DispatchQueue.main.async {
                     onCompletion(decodeObjects)
                 }

@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 
 protocol DetailViewControllerProtocol: AnyObject {
-    func loadImage(image: UnsplashImage)
+    func loadImage(image: Photo)
 }
 
 class DetailViewController: UIViewController {
@@ -39,13 +39,12 @@ class DetailViewController: UIViewController {
         return activityIndicator
     }()
     
-    private var unsplashImage: UnsplashImage! {
+    private var photo: Photo! {
         didSet {
-            let photoURL = unsplashImage.urls["full"]
-            guard let photoURL = photoURL,
-                  let url = URL(string: photoURL) else { return }
+            let photoURL = photo.urls.full
+            guard let url = URL(string: photoURL) else { return }
             imageView.kf.setImage(with: url)
-            title = unsplashImage.user.name
+            title = photo.user.name
         }
     }
     
@@ -154,8 +153,8 @@ class DetailViewController: UIViewController {
         presenter.showInfoAboutImage()
     }
     
-    private func configure(image: UnsplashImage) {
-        unsplashImage = image
+    private func configure(image: Photo) {
+        photo = image
     }
 }
 
@@ -190,7 +189,7 @@ extension DetailViewController: UIScrollViewDelegate {
 }
 
 extension DetailViewController: DetailViewControllerProtocol {
-    func loadImage(image: UnsplashImage) {
+    func loadImage(image: Photo) {
         self.configure(image: image)
     }
 }

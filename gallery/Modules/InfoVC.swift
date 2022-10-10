@@ -10,10 +10,10 @@ import UIKit
 
 class InfoVC: UIViewController {
     
-    var image: UnsplashImage
+    var image: Photo
     var label = UILabel()
     
-    init(image: UnsplashImage) {
+    init(image: Photo) {
         self.image = image
         super.init(nibName: nil, bundle: nil)
     }
