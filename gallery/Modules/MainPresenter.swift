@@ -27,14 +27,14 @@ class MainPresenter {
 extension MainPresenter: MainPresenterProtocol {
     
     func loadImageList() {
-        self.networkService.loadImagesList { [weak self] photo in
+        self.networkService.loadPhotosList { [weak self] photo in
             guard let self = self, let photo = photo else { return }
             self.view?.setImageList(imageList: photo)
         }
     }
     
     func loadFoundImages(searchText: String) {
-        self.networkService.loadFoundImages(from: searchText) { [weak self] searchResults in
+        self.networkService.loadFoundPhotos(from: searchText) { [weak self] searchResults in
             guard let self = self, let searchResults = searchResults else { return }
             self.view?.setImageList(imageList: searchResults.results)
         }

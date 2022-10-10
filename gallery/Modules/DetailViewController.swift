@@ -74,7 +74,7 @@ class DetailViewController: UIViewController {
         setupNavigationBar()
         addSubviews()
         
-        presenter.loadImage()
+        presenter.loadPhoto()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -150,7 +150,7 @@ class DetailViewController: UIViewController {
     
     @objc
     func infoButtonTapped() {
-        presenter.showInfoAboutImage()
+        presenter.showInfoAboutPhoto()
     }
     
     private func configure(image: Photo) {

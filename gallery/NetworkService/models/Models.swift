@@ -103,9 +103,9 @@ struct ProfileImage: Codable, Hashable {
 
 // MARK: - Exif
 struct Exif: Codable, Hashable {
-    let make, model, name, exposureTime: String
-    let aperture, focalLength: String
-    let iso: Int
+    let make, model, name, exposureTime: String?
+    let aperture, focalLength: String?
+    let iso: Int?
     
     enum CodingKeys: String, CodingKey {
         case make, model, name
@@ -124,5 +124,5 @@ struct Location: Codable, Hashable {
 
 // MARK: - Position
 struct Position: Codable, Hashable {
-    let latitude, longitude: Double
+    let latitude, longitude: Double?
 }
