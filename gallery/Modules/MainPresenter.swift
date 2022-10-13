@@ -8,9 +8,9 @@
 import Foundation
 
 protocol MainPresenterProtocol: AnyObject {
-    func loadImageList()
-    func loadFoundImages(searchText: String)
-    func showImage(image: Photo)
+    func loadPhotosList()
+    func loadFoundPhotos(searchText: String)
+    func showPhoto(photo: Photo)
 }
 
 class MainPresenter {
@@ -26,22 +26,22 @@ class MainPresenter {
 
 extension MainPresenter: MainPresenterProtocol {
     
-    func loadImageList() {
+    func loadPhotosList() {
         self.networkService.loadPhotosList { [weak self] photo in
             guard let self = self, let photo = photo else { return }
-            self.view?.setImageList(imageList: photo)
+            self.view?.setPhotosList(photosList: photo)
         }
     }
     
-    func loadFoundImages(searchText: String) {
+    func loadFoundPhotos(searchText: String) {
         self.networkService.loadFoundPhotos(from: searchText) { [weak self] searchResults in
             guard let self = self, let searchResults = searchResults else { return }
-            self.view?.setImageList(imageList: searchResults.results)
+            self.view?.setPhotosList(photosList: searchResults.results)
         }
     }
     
-    func showImage(image: Photo) {
-        router.showImage(image: image)
+    func showPhoto(photo: Photo) {
+        router.showPhoto(photo: photo)
     }
     
 }

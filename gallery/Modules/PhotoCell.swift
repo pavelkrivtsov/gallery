@@ -8,29 +8,29 @@
 import UIKit
 import Kingfisher
 
-class MainImageCell: UITableViewCell {
+class PhotoCell: UITableViewCell {
     
-    static let cellIdentifier = "ImageCell"
-    private let photoImageView = UIImageView()
+    static let cellIdentifier = "PhotoCell"
+    private let photoView = UIImageView()
     
     private var photo: Photo! {
         didSet {
             let photoURL = photo.urls.regular
             guard let url = URL(string: photoURL) else { return }
-            photoImageView.kf.setImage(with: url)
+            photoView.kf.setImage(with: url)
         }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(photoImageView)
-        photoImageView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(photoView)
+        photoView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            photoImageView.topAnchor.constraint(equalTo: self.topAnchor),
-            photoImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            photoImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            photoImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            photoView.topAnchor.constraint(equalTo: self.topAnchor),
+            photoView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            photoView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            photoView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
         ])
     }
     
@@ -40,11 +40,11 @@ class MainImageCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.photoImageView.image = nil
+        self.photoView.image = nil
     }
     
-    func configure(image: Photo){
-        photo = image
+    func configure(photo: Photo){
+        self.photo = photo
     }
     
 }

@@ -5,18 +5,18 @@
 //  Created by Павел Кривцов on 03.10.2022.
 //
 
-import Foundation
+import UIKit
 
 protocol MainRouterProtocol: AnyObject {
-    func showImage(image: Photo)
+    func showPhoto(photo: Photo)
 }
 
 class MainRouter: MainRouterProtocol {
 
-    weak var view: MainViewController?
+    weak var view: UIViewController?
     
-    func showImage(image: Photo) {
-        let detailVC = DetailAssembly.assemle(image: image)
+    func showPhoto(photo: Photo) {
+        let detailVC = CurrentPhotoAssembly.assemle(photo: photo)
         self.view?.navigationController?.pushViewController(detailVC, animated: true)
     }
 }

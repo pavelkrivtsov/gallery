@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MainViewControllerProtocol: AnyObject {
-    func setImageList(imageList: [Photo])
+    func setPhotosList(photosList: [Photo])
 }
 
 class MainViewController: UITableViewController {
@@ -16,7 +16,7 @@ class MainViewController: UITableViewController {
     private var presenter: MainPresenterProtocol
     private let searchController = UISearchController(searchResultsController: nil)
     private var dataSource: UITableViewDiffableDataSource<Int, Photo>!
-    private var images = [Photo]()
+    private var photos = [Photo]()
     
     init(presenter: MainPresenterProtocol) {
         self.presenter = presenter
@@ -31,29 +31,29 @@ class MainViewController: UITableViewController {
         super.viewDidLoad()
         title = "//"
         tableView.separatorStyle = .none
-        tableView.register(MainImageCell.self, forCellReuseIdentifier: MainImageCell.cellIdentifier)
+        tableView.register(PhotoCell.self, forCellReuseIdentifier: PhotoCell.cellIdentifier)
         
         dataSource = UITableViewDiffableDataSource<Int, Photo>(tableView: tableView) { tableView, indexPath, itemIdentifier in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: MainImageCell.cellIdentifier,
-                                                           for: indexPath) as? MainImageCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PhotoCell.cellIdentifier,
+                                                           for: indexPath) as? PhotoCell else {
                 fatalError("ImageCell is not registered for table view")
             }
-            cell.configure(image: itemIdentifier)
+            cell.configure(photo: itemIdentifier)
             return cell
         }
         
-        presenter.loadImageList()
+        presenter.loadPhotosList()
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let image = images[indexPath.item]
-        let heightPerItem = CGFloat(image.width) / CGFloat(image.height)
+        let photo = photos[indexPath.item]
+        let heightPerItem = CGFloat(photo.width) / CGFloat(photo.height)
         return tableView.frame.width / heightPerItem
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let image = images[indexPath.item]
-        presenter.showImage(image: image)
+        let photo = photos[indexPath.item]
+        presenter.showPhoto(photo: photo)
     }
 }
 
@@ -72,17 +72,17 @@ extension MainViewController {
 extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
-            self.presenter.loadFoundImages(searchText: searchText)
+            self.presenter.loadFoundPhotos(searchText: searchText)
         }
     }
 }
 
 extension MainViewController: MainViewControllerProtocol {
-    func setImageList(imageList: [Photo]) {
-        self.images = imageList
+    func setPhotosList(photosList: [Photo]) {
+        self.photos = photosList
         var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
         snapshot.appendSections([0])
-        snapshot.appendItems(images)
+        snapshot.appendItems(photos)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }

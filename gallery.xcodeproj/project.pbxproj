@@ -13,16 +13,17 @@
 		1E12818128D8D3410011C8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E12818028D8D3410011C8FC /* Assets.xcassets */; };
 		1E12818428D8D3410011C8FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E12818228D8D3410011C8FC /* LaunchScreen.storyboard */; };
 		1E5A928A28EB728600A8CE4E /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928928EB728600A8CE4E /* MainRouter.swift */; };
-		1E5A928D28EB809500A8CE4E /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928C28EB809500A8CE4E /* DetailViewController.swift */; };
-		1E5A928F28EB9E4800A8CE4E /* DetailAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928E28EB9E4800A8CE4E /* DetailAssembly.swift */; };
-		1E5A929128EB9E5900A8CE4E /* DetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A929028EB9E5900A8CE4E /* DetailPresenter.swift */; };
-		1EA1EB5528EDF4DB00EDB7F9 /* DetailRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EB5428EDF4DB00EDB7F9 /* DetailRouter.swift */; };
-		1EA1EB5A28EDFAF600EDB7F9 /* InfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EB5928EDFAF600EDB7F9 /* InfoVC.swift */; };
+		1E5A928D28EB809500A8CE4E /* CurrentPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */; };
+		1E5A928F28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */; };
+		1E5A929128EB9E5900A8CE4E /* CurrentPhotoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A929028EB9E5900A8CE4E /* CurrentPhotoPresenter.swift */; };
+		1EA1EB5528EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EB5428EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift */; };
+		1EA1EB5A28EDFAF600EDB7F9 /* DetailInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EB5928EDFAF600EDB7F9 /* DetailInfoViewController.swift */; };
+		1ED9C08F28F5CA2900211805 /* DetailInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED9C08E28F5CA2900211805 /* DetailInfoView.swift */; };
 		1EEF6EA228D9DB1300B864AB /* MainAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */; };
 		1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */; };
 		1EEF6EAB28D9FEB500B864AB /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAA28D9FEB500B864AB /* NetworkService.swift */; };
 		1EEF6EAE28D9FEF400B864AB /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAD28D9FEF400B864AB /* Models.swift */; };
-		1EEF6EB028DA032400B864AB /* MainImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAF28DA032400B864AB /* MainImageCell.swift */; };
+		1EEF6EB028DA032400B864AB /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAF28DA032400B864AB /* PhotoCell.swift */; };
 		1EEF6EB328DA164900B864AB /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1EEF6EB228DA164900B864AB /* Kingfisher */; };
 /* End PBXBuildFile section */
 
@@ -35,16 +36,17 @@
 		1E12818328D8D3410011C8FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1E12818528D8D3410011C8FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1E5A928928EB728600A8CE4E /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
-		1E5A928C28EB809500A8CE4E /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
-		1E5A928E28EB9E4800A8CE4E /* DetailAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAssembly.swift; sourceTree = "<group>"; };
-		1E5A929028EB9E5900A8CE4E /* DetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPresenter.swift; sourceTree = "<group>"; };
-		1EA1EB5428EDF4DB00EDB7F9 /* DetailRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailRouter.swift; sourceTree = "<group>"; };
-		1EA1EB5928EDFAF600EDB7F9 /* InfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoVC.swift; sourceTree = "<group>"; };
+		1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoViewController.swift; sourceTree = "<group>"; };
+		1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoAssembly.swift; sourceTree = "<group>"; };
+		1E5A929028EB9E5900A8CE4E /* CurrentPhotoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoPresenter.swift; sourceTree = "<group>"; };
+		1EA1EB5428EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoRouter.swift; sourceTree = "<group>"; };
+		1EA1EB5928EDFAF600EDB7F9 /* DetailInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoViewController.swift; sourceTree = "<group>"; };
+		1ED9C08E28F5CA2900211805 /* DetailInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoView.swift; sourceTree = "<group>"; };
 		1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembly.swift; sourceTree = "<group>"; };
 		1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
 		1EEF6EAA28D9FEB500B864AB /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		1EEF6EAD28D9FEF400B864AB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		1EEF6EAF28DA032400B864AB /* MainImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainImageCell.swift; sourceTree = "<group>"; };
+		1EEF6EAF28DA032400B864AB /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,16 +90,17 @@
 			path = gallery;
 			sourceTree = "<group>";
 		};
-		1E5A928B28EB7ED800A8CE4E /* Detail */ = {
+		1E5A928B28EB7ED800A8CE4E /* CurrentPhoto */ = {
 			isa = PBXGroup;
 			children = (
-				1E5A928E28EB9E4800A8CE4E /* DetailAssembly.swift */,
-				1E5A929028EB9E5900A8CE4E /* DetailPresenter.swift */,
-				1E5A928C28EB809500A8CE4E /* DetailViewController.swift */,
-				1EA1EB5428EDF4DB00EDB7F9 /* DetailRouter.swift */,
-				1EA1EB5928EDFAF600EDB7F9 /* InfoVC.swift */,
+				1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */,
+				1E5A929028EB9E5900A8CE4E /* CurrentPhotoPresenter.swift */,
+				1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */,
+				1EA1EB5428EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift */,
+				1EA1EB5928EDFAF600EDB7F9 /* DetailInfoViewController.swift */,
+				1ED9C08E28F5CA2900211805 /* DetailInfoView.swift */,
 			);
-			name = Detail;
+			name = CurrentPhoto;
 			sourceTree = "<group>";
 		};
 		1EEF6E9F28D9D63100B864AB /* App */ = {
@@ -112,8 +115,8 @@
 		1EEF6EA028D9DAFB00B864AB /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				1EFB26FC28E5E46D002BE9AB /* Main */,
-				1E5A928B28EB7ED800A8CE4E /* Detail */,
+				1EFB26FC28E5E46D002BE9AB /* MainScreen */,
+				1E5A928B28EB7ED800A8CE4E /* CurrentPhoto */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -135,16 +138,16 @@
 			path = models;
 			sourceTree = "<group>";
 		};
-		1EFB26FC28E5E46D002BE9AB /* Main */ = {
+		1EFB26FC28E5E46D002BE9AB /* MainScreen */ = {
 			isa = PBXGroup;
 			children = (
 				1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */,
 				1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */,
 				1E12817B28D8D3400011C8FC /* MainViewController.swift */,
-				1EEF6EAF28DA032400B864AB /* MainImageCell.swift */,
 				1E5A928928EB728600A8CE4E /* MainRouter.swift */,
+				1EEF6EAF28DA032400B864AB /* PhotoCell.swift */,
 			);
-			name = Main;
+			name = MainScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -223,20 +226,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E5A928F28EB9E4800A8CE4E /* DetailAssembly.swift in Sources */,
+				1E5A928F28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift in Sources */,
 				1E12817C28D8D3400011C8FC /* MainViewController.swift in Sources */,
 				1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */,
-				1EA1EB5528EDF4DB00EDB7F9 /* DetailRouter.swift in Sources */,
-				1EA1EB5A28EDFAF600EDB7F9 /* InfoVC.swift in Sources */,
+				1EA1EB5528EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift in Sources */,
+				1EA1EB5A28EDFAF600EDB7F9 /* DetailInfoViewController.swift in Sources */,
 				1E12817828D8D3400011C8FC /* AppDelegate.swift in Sources */,
 				1EEF6EA228D9DB1300B864AB /* MainAssembly.swift in Sources */,
 				1EEF6EAE28D9FEF400B864AB /* Models.swift in Sources */,
-				1EEF6EB028DA032400B864AB /* MainImageCell.swift in Sources */,
+				1EEF6EB028DA032400B864AB /* PhotoCell.swift in Sources */,
 				1EEF6EAB28D9FEB500B864AB /* NetworkService.swift in Sources */,
-				1E5A928D28EB809500A8CE4E /* DetailViewController.swift in Sources */,
+				1ED9C08F28F5CA2900211805 /* DetailInfoView.swift in Sources */,
+				1E5A928D28EB809500A8CE4E /* CurrentPhotoViewController.swift in Sources */,
 				1E12817A28D8D3400011C8FC /* SceneDelegate.swift in Sources */,
 				1E5A928A28EB728600A8CE4E /* MainRouter.swift in Sources */,
-				1E5A929128EB9E5900A8CE4E /* DetailPresenter.swift in Sources */,
+				1E5A929128EB9E5900A8CE4E /* CurrentPhotoPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

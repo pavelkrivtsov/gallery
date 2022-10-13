@@ -1,5 +1,5 @@
 //
-//  DetailViewController.swift
+//  CurrentPhotoViewController.swift
 //  gallery
 //
 //  Created by Павел Кривцов on 03.10.2022.
@@ -8,14 +8,13 @@
 import UIKit
 import Kingfisher
 
-protocol DetailViewControllerProtocol: AnyObject {
-    func loadImage(image: Photo)
+protocol CurrentPhotoViewControllerProtocol: AnyObject {
+    func loadPhoto(photo: Photo)
 }
 
-class DetailViewController: UIViewController {
-    
-    private var presenter: DetailPresenterProtocol
-    
+class CurrentPhotoViewController: UIViewController {
+    private var presenter: CurrentPhotoPresenterProtocol
+
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.minimumZoomScale = 1
@@ -54,7 +53,7 @@ class DetailViewController: UIViewController {
         return gestureRecognizer
     }()
     
-    init(presenter: DetailPresenterProtocol) {
+    init(presenter: CurrentPhotoPresenterProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -100,20 +99,20 @@ class DetailViewController: UIViewController {
     }
     
     func addSubviews() {
-        view.addSubview(scrollView)
         view.addSubview(activityIndicator)
+        view.addSubview(scrollView)
         scrollView.addSubview(imageView)
         NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            
             scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             
             imageView.widthAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.widthAnchor),
-            imageView.heightAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.heightAnchor),
-            
-            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+            imageView.heightAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.heightAnchor)
         ])
     }
     
@@ -158,7 +157,7 @@ class DetailViewController: UIViewController {
     }
 }
 
-extension DetailViewController: UIScrollViewDelegate {
+extension CurrentPhotoViewController: UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? { imageView }
     
@@ -188,8 +187,8 @@ extension DetailViewController: UIScrollViewDelegate {
     
 }
 
-extension DetailViewController: DetailViewControllerProtocol {
-    func loadImage(image: Photo) {
-        self.configure(image: image)
+extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
+    func loadPhoto(photo: Photo) {
+        self.configure(image: photo)
     }
 }
