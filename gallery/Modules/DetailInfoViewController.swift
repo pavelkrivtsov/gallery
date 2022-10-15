@@ -51,15 +51,12 @@ class DetailInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(stackView)
-        
         setupColors()
         setupConstraints()
     }
-    
 }
 
 extension DetailInfoViewController {
@@ -87,5 +84,4 @@ extension DetailInfoViewController {
             stackView.addArrangedSubview(view)
         }
     }
-    
 }

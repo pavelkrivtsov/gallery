@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import SnapKit
 
 protocol CurrentPhotoViewControllerProtocol: AnyObject {
     func loadPhoto(photo: Photo)
@@ -102,18 +103,13 @@ class CurrentPhotoViewController: UIViewController {
         view.addSubview(activityIndicator)
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
-        NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            
-            scrollView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            
-            imageView.widthAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.widthAnchor),
-            imageView.heightAnchor.constraint(equalTo: self.scrollView.frameLayoutGuide.heightAnchor)
-        ])
+        
+        activityIndicator.snp.makeConstraints { $0.centerX.centerY.equalToSuperview() }
+        scrollView.snp.makeConstraints { $0.leading.trailing.top.bottom.equalToSuperview() }
+        imageView.snp.makeConstraints {
+            $0.width.equalTo(self.scrollView.snp.width)
+            $0.height.equalTo(self.scrollView.snp.height)
+        }
     }
     
     @objc
