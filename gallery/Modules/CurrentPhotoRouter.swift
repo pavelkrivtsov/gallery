@@ -15,9 +15,6 @@ class CurrentPhotoRouter: CurrentPhotoRouterProtocol {
     weak var view: UIViewController?
     
     func showInfo(from photo: Photo) {
-        let infoVC = DetailInfoViewController(photo: photo)
-//        let navigationController = UINavigationController(rootViewController: infoVC)
-//        infoVC.modalPresentationStyle = .fullScreen
-        view?.present(infoVC, animated: true)
-    }
+        let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemle(photo: photo)
+        self.view?.present(detailPhotoInfoVC, animated: true)    }
 }

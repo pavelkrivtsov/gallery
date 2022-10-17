@@ -27,12 +27,13 @@ class PhotoCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        addSubview(photoView)
+        contentView.addSubview(photoView)
         photoView.frame = contentView.bounds
         photoView.autoresizingMask = [.flexibleHeight,.flexibleWidth]
         
         authorLabel.numberOfLines = 1
-        addSubview(authorLabel)
+        authorLabel.textColor = .white
+        contentView.addSubview(authorLabel)
         authorLabel.snp.makeConstraints {
             $0.bottom.equalToSuperview().inset(16)
             $0.leading.trailing.equalToSuperview().inset(16)

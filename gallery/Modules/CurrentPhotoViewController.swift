@@ -148,8 +148,8 @@ class CurrentPhotoViewController: UIViewController {
         presenter.showInfoAboutPhoto()
     }
     
-    private func configure(image: Photo) {
-        photo = image
+    private func configure(photo: Photo) {
+        self.photo = photo
     }
 }
 
@@ -185,6 +185,6 @@ extension CurrentPhotoViewController: UIScrollViewDelegate {
 
 extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
     func loadPhoto(photo: Photo) {
-        self.configure(image: photo)
+        self.configure(photo: photo)
     }
 }

@@ -30,11 +30,12 @@ extension CurrentPhotoPresenter: CurrentPhotoPresenterProtocol {
     func loadPhoto() {
         self.networkService.loadCurrentPhoto(by: self.photo.id) { [weak self] photo in
             guard let self = self, let photo = photo else { return }
+            self.photo = photo
             self.view?.loadPhoto(photo: photo)
         }
     }
     
     func showInfoAboutPhoto() {
-        router.showInfo(from: photo)
+        router.showInfo(from: self.photo)
     }
 }

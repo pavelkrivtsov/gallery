@@ -12,7 +12,6 @@ protocol MainRouterProtocol: AnyObject {
 }
 
 class MainRouter: MainRouterProtocol {
-
     weak var view: UIViewController?
     
     func showPhoto(photo: Photo) {
