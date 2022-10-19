@@ -10,10 +10,8 @@ import UIKit
 public protocol CellTypeProtocol {
     var cellsId: String { get }
     var general: CellGeneralPropertiesProtocol { get }
-    var label: CellLabelPropertiesProtocol? { get }
-    var descriptionLabel: CellLabelPropertiesProtocol? { get }
+    var titleLabel: CellLabelPropertiesProtocol? { get }
     var separator: CellSeparatorPropertiesProtocol? { get }
-    var image: CellImagePropertiesProtocol? { get }
 }
 
 public enum CellType {
@@ -44,7 +42,7 @@ extension CellType: CellTypeProtocol {
         }
     }
     
-    public var label: CellLabelPropertiesProtocol? {
+    public var titleLabel: CellLabelPropertiesProtocol? {
         switch self {
         case .spacerCell(general: _):
             return nil
@@ -52,25 +50,7 @@ extension CellType: CellTypeProtocol {
             return label
         }
     }
-    
-    public var descriptionLabel: CellLabelPropertiesProtocol? {
-        switch self {
-        case .spacerCell(general: _):
-            return nil
-        case .labelCell(general: _, label: _, separator: _):
-            return nil
-        }
-    }
-    
-    public var image: CellImagePropertiesProtocol? {
-        switch self {
-        case .spacerCell(general: _):
-            return nil
-        case .labelCell(general: _, label: _, separator: _):
-            return nil
-        }
-    }
-    
+
     public var separator: CellSeparatorPropertiesProtocol? {
         switch self {
         case .spacerCell(general: _):
@@ -91,7 +71,7 @@ public protocol CellGeneralPropertiesProtocol {
 public struct CellGeneralProperties: CellGeneralPropertiesProtocol {
     public var id: Int? = nil
     public var cellHeight: CGFloat = 44
-    public var cellBackgroundColor: UIColor = .systemBlue
+    public var cellBackgroundColor: UIColor = .clear
     public var tapAction: (() -> Void)?
 }
 
@@ -101,8 +81,6 @@ public protocol CellLabelPropertiesProtocol {
     var titleFont: UIFont { get }
     var numberOfLines: Int { get }
     var textAlignment: NSTextAlignment { get }
-    var leadingConstraint: CGFloat? { get }
-    var trailingConstraint: CGFloat? { get }
 }
 
 public struct CellLabelProperties: CellLabelPropertiesProtocol {
@@ -111,34 +89,15 @@ public struct CellLabelProperties: CellLabelPropertiesProtocol {
     public var titleFont: UIFont = .systemFont(ofSize: 17)
     public var numberOfLines: Int = 0
     public var textAlignment: NSTextAlignment = .left
-    public var leadingConstraint: CGFloat?
-    public var trailingConstraint: CGFloat?
 }
 
 public protocol CellSeparatorPropertiesProtocol {
     var isHidden: Bool { get }
     var backgroundColor: UIColor  { get }
-    var backgroundColorAlfa: CGFloat { get }
-    var leadingConstraint: CGFloat? { get set }
 }
 
 public struct CellSeparatorProperties: CellSeparatorPropertiesProtocol {
     public var isHidden: Bool = false
     public var backgroundColor: UIColor = .clear
-    public var backgroundColorAlfa: CGFloat = 1
-    public var leadingConstraint: CGFloat? = 0
 }
 
-public protocol CellImagePropertiesProtocol {
-    var image: String { get }
-    var imageContentMode: UIView.ContentMode { get }
-    var isRadio: Bool? { get }
-    var leadingConstraint: CGFloat? { get }
-}
-
-public struct CellImageProperties: CellImagePropertiesProtocol {
-    public var image: String = ""
-    public var imageContentMode: UIView.ContentMode = .scaleAspectFit
-    public var isRadio: Bool? = false
-    public var leadingConstraint: CGFloat?
-}

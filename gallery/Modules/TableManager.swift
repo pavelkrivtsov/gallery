@@ -25,6 +25,7 @@ extension TableManager: TableManagerProtocol {
         self.tableView = tableView
         self.tableView?.separatorStyle = .none
         self.tableView?.dataSource = self
+        self.tableView?.delegate = self
         self.tableView?.backgroundColor = .systemBackground
     }
     
@@ -67,17 +68,18 @@ extension TableManager: TableManagerProtocol {
 }
 
 // MARK: - Table view data source implementation
-extension TableManager: UITableViewDataSource {
+extension TableManager: UITableViewDataSource, UITableViewDelegate {
     
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModels.count
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        viewModels.count
     }
     
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return showScreen(tableView: tableView, cellForRowAt: indexPath, viewModels: viewModels)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        showScreen(tableView: tableView, cellForRowAt: indexPath, viewModels: viewModels)
     }
     
-    public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return max(0, viewModels[indexPath.row].general.cellHeight)
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        max(0, viewModels[indexPath.row].general.cellHeight)
     }
+    
 }

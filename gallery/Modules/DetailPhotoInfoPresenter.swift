@@ -26,13 +26,14 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
     func getDetailInfo() {
         
         let spacerCell: CellType =  .spacerCell(
-            general: CellGeneralProperties(cellHeight: 44,
-                                           cellBackgroundColor: .clear))
+            general: CellGeneralProperties())
+        
         let logOutCell: CellType = .labelCell(
-            general: CellGeneralProperties { },
-            label: CellLabelProperties(title: "test",
-                                       titleColor: .systemRed),
-            separator: CellSeparatorProperties())
+            general: CellGeneralProperties(cellBackgroundColor: .systemBlue),
+            label: CellLabelProperties(title: "TEST",
+                                       titleFont: .boldSystemFont(ofSize: 30),
+                                       textAlignment: .left),
+            separator: CellSeparatorProperties(backgroundColor: .cyan))
         
         let cellModels: [CellType] = [
             spacerCell,

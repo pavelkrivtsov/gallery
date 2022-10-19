@@ -38,16 +38,14 @@ class DetailPhotoInfoViewController: UIViewController {
     
     private func configureTableView() {
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+        tableView.snp.makeConstraints {
+            $0.top.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
 
 extension DetailPhotoInfoViewController: DetailPhotoInfoViewControllerProtocol {
     func showDetailInfo() {
-        view.backgroundColor = .green
+
     }
 }

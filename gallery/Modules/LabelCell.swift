@@ -47,15 +47,16 @@ class LabelCell: UITableViewCell {
 extension LabelCell: LabelCellProtocol {
     public func cellConfiguration(model: CellTypeProtocol) {
        
-        guard let label = model.label,
-              let separatorStyle = model.separator else { return }
+        guard let titleLabel = model.titleLabel,
+              let separator = model.separator else { return }
       
-        titleLabel.text = label.title
-        titleLabel.textColor = label.titleColor
-        titleLabel.font = label.titleFont
-        titleLabel.textAlignment = label.textAlignment
+        self.titleLabel.text = titleLabel.title
+        self.titleLabel.textColor = titleLabel.titleColor
+        self.titleLabel.font = titleLabel.titleFont
+        self.titleLabel.textAlignment = titleLabel.textAlignment
     
-        separator.isHidden = separatorStyle.isHidden
+        self.separator.isHidden = separator.isHidden
+        self.separator.backgroundColor = separator.backgroundColor
         self.backgroundColor = model.general.cellBackgroundColor
     }
  }
