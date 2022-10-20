@@ -26,7 +26,9 @@ extension TableManager: TableManagerProtocol {
         self.tableView?.separatorStyle = .none
         self.tableView?.dataSource = self
         self.tableView?.delegate = self
-        self.tableView?.backgroundColor = .systemBackground
+//        self.tableView?.backgroundColor = .systemBackground
+        self.tableView?.estimatedRowHeight = 300
+        self.tableView?.rowHeight = UITableView.automaticDimension
     }
     
     public func fillViewModels(viewModels: [CellType]) {
@@ -50,16 +52,16 @@ extension TableManager: TableManagerProtocol {
         let model = viewModels[indexPath.row]
         
         switch model {
-        case .spacerCell(general: _):
+        case .labelCell(label: _):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: model.cellsId,
-                                                           for: indexPath) as? SpacerCell else { return UITableViewCell() }
+                                                           for: indexPath) as? LabelCell else { return UITableViewCell() }
             cell.selectionStyle = .none
             cell.cellConfiguration(model: model)
             return cell
-
-        case .labelCell(general: _, label: _, separator: _):
+            
+        case .mapViewCell(label: _):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: model.cellsId,
-                                                           for: indexPath) as? LabelCell else { return UITableViewCell() }
+                                                           for: indexPath) as? MapViewCell else { return UITableViewCell() }
             cell.selectionStyle = .none
             cell.cellConfiguration(model: model)
             return cell
@@ -77,9 +79,4 @@ extension TableManager: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         showScreen(tableView: tableView, cellForRowAt: indexPath, viewModels: viewModels)
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        max(0, viewModels[indexPath.row].general.cellHeight)
-    }
-    
 }

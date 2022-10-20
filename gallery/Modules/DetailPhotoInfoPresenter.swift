@@ -24,23 +24,34 @@ class DetailPhotoInfoPresenter {
 
 extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
     func getDetailInfo() {
+    
+        let descriptionCell: [CellType] = {
+            guard let description = self.photo.photoDescription else { return [] }
+            return [
+                .labelCell(
+                    label: CellLabelProperties(title: description,
+                                               titleFont: .systemFont(ofSize: 16),
+                                               textAlignment: .left)
+                )
+            ]
+        }()
         
-        let spacerCell: CellType =  .spacerCell(
-            general: CellGeneralProperties())
+        let mapView: [CellType] =  {
+            guard let location = self.photo.location else { return [] }
+            return [
+                .mapViewCell(label: CellLabelProperties(title: "\(location.city ?? "-"), \(location.country ?? "-")",
+                                                        titleFont: .systemFont(ofSize: 16),
+                                                        numberOfLines: 1))
+            ]
+        }()
         
-        let logOutCell: CellType = .labelCell(
-            general: CellGeneralProperties(cellBackgroundColor: .systemBlue),
-            label: CellLabelProperties(title: "TEST",
-                                       titleFont: .boldSystemFont(ofSize: 30),
-                                       textAlignment: .left),
-            separator: CellSeparatorProperties(backgroundColor: .cyan))
-        
-        let cellModels: [CellType] = [
-            spacerCell,
-            logOutCell,
-            spacerCell,
-            logOutCell,
-        ]
+        let cameraLabel: [CellType] = {
+            return [.labelCell(label: CellLabelProperties(title: "Camera",
+                                                         titleFont: .boldSystemFont(ofSize: 17)))]
+        }()
+            
+        let cellModels: [CellType] = descriptionCell + mapView + cameraLabel
+            
         
         DispatchQueue.main.async {
             self.tableManager.fillViewModels(viewModels: cellModels)

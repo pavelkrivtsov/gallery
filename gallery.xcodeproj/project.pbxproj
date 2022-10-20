@@ -22,8 +22,8 @@
 		1E96981528FDBB8A00F3868A /* DetailPhotoInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981428FDBB8A00F3868A /* DetailPhotoInfoViewController.swift */; };
 		1E96981828FDC01400F3868A /* TableManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981728FDC01400F3868A /* TableManager.swift */; };
 		1E96981C28FDEF3A00F3868A /* CellsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981B28FDEF3A00F3868A /* CellsModels.swift */; };
-		1E96981E28FDF01800F3868A /* SpacerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981D28FDF01800F3868A /* SpacerCell.swift */; };
 		1E96982028FDF03400F3868A /* LabelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981F28FDF03400F3868A /* LabelCell.swift */; };
+		1E9698222900904400F3868A /* MapViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9698212900904400F3868A /* MapViewCell.swift */; };
 		1EA1EB5528EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EB5428EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift */; };
 		1EEF6EA228D9DB1300B864AB /* MainAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */; };
 		1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */; };
@@ -50,8 +50,8 @@
 		1E96981428FDBB8A00F3868A /* DetailPhotoInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPhotoInfoViewController.swift; sourceTree = "<group>"; };
 		1E96981728FDC01400F3868A /* TableManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableManager.swift; sourceTree = "<group>"; };
 		1E96981B28FDEF3A00F3868A /* CellsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellsModels.swift; sourceTree = "<group>"; };
-		1E96981D28FDF01800F3868A /* SpacerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacerCell.swift; sourceTree = "<group>"; };
 		1E96981F28FDF03400F3868A /* LabelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelCell.swift; sourceTree = "<group>"; };
+		1E9698212900904400F3868A /* MapViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewCell.swift; sourceTree = "<group>"; };
 		1EA1EB5428EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoRouter.swift; sourceTree = "<group>"; };
 		1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembly.swift; sourceTree = "<group>"; };
 		1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
@@ -145,8 +145,8 @@
 		1E96981A28FDEF1000F3868A /* CellsViews */ = {
 			isa = PBXGroup;
 			children = (
-				1E96981D28FDF01800F3868A /* SpacerCell.swift */,
 				1E96981F28FDF03400F3868A /* LabelCell.swift */,
+				1E9698212900904400F3868A /* MapViewCell.swift */,
 			);
 			name = CellsViews;
 			sourceTree = "<group>";
@@ -288,13 +288,13 @@
 				1EEF6EA228D9DB1300B864AB /* MainAssembly.swift in Sources */,
 				1EEF6EAE28D9FEF400B864AB /* Models.swift in Sources */,
 				1EEF6EB028DA032400B864AB /* PhotoCell.swift in Sources */,
-				1E96981E28FDF01800F3868A /* SpacerCell.swift in Sources */,
 				1EEF6EAB28D9FEB500B864AB /* NetworkService.swift in Sources */,
 				1E5A928D28EB809500A8CE4E /* CurrentPhotoViewController.swift in Sources */,
 				1E96981C28FDEF3A00F3868A /* CellsModels.swift in Sources */,
 				1E12817A28D8D3400011C8FC /* SceneDelegate.swift in Sources */,
 				1E5A928A28EB728600A8CE4E /* MainRouter.swift in Sources */,
 				1E5A929128EB9E5900A8CE4E /* CurrentPhotoPresenter.swift in Sources */,
+				1E9698222900904400F3868A /* MapViewCell.swift in Sources */,
 				1E96982028FDF03400F3868A /* LabelCell.swift in Sources */,
 				1E96981328FDBB7E00F3868A /* DetailPhotoInfoPresenter.swift in Sources */,
 			);

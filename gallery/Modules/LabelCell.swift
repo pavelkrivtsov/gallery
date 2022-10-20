@@ -14,29 +14,16 @@ protocol LabelCellProtocol {
 
 class LabelCell: UITableViewCell {
  
-    public lazy var titleLabel = UILabel()
-    public lazy var separator = UIView()
+    lazy var titleLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         contentView.addSubview(titleLabel)
-        contentView.addSubview(separator)
-        
         titleLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(16)
         }
-        
-        separator.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(0.5)
-        }
-    }
-    
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        titleLabel.preferredMaxLayoutWidth = frame.width
     }
     
     required init?(coder: NSCoder) {
@@ -46,17 +33,11 @@ class LabelCell: UITableViewCell {
 
 extension LabelCell: LabelCellProtocol {
     public func cellConfiguration(model: CellTypeProtocol) {
-       
-        guard let titleLabel = model.titleLabel,
-              let separator = model.separator else { return }
-      
+        guard let titleLabel = model.label else { return }
         self.titleLabel.text = titleLabel.title
-        self.titleLabel.textColor = titleLabel.titleColor
         self.titleLabel.font = titleLabel.titleFont
         self.titleLabel.textAlignment = titleLabel.textAlignment
-    
-        self.separator.isHidden = separator.isHidden
-        self.separator.backgroundColor = separator.backgroundColor
-        self.backgroundColor = model.general.cellBackgroundColor
+        self.titleLabel.numberOfLines = 0
+//        self.titleLabel.backgroundColor = .systemRed
     }
  }
