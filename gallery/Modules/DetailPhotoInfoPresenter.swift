@@ -36,7 +36,7 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
             ]
         }()
         
-        let mapView: [CellType] =  {
+        let mapViewCell: [CellType] =  {
             guard let latitude = self.photo.location?.position.latitude,
                   let longitude = self.photo.location?.position.longitude else { return [] }
             return [
@@ -45,9 +45,11 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
             ]
         }()
         
-        let cameraLabel: [CellType] = {
-            return [.labelCell(label: CellLabelProperties(title: "Camera",
-                                                          titleFont: .boldSystemFont(ofSize: 17)))]
+        let cameraLabelCell: [CellType] = {
+            return [
+                .labelCell(label: CellLabelProperties(title: "Camera",
+                                                      titleFont: .boldSystemFont(ofSize: 17)))
+            ]
         }()
         
         let stackLabelCell: [CellType] = {
@@ -78,7 +80,7 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
             ]
         }()
         
-        let cellModels: [CellType] = descriptionCell + mapView + cameraLabel + stackLabelCell
+        let cellModels: [CellType] = descriptionCell + mapViewCell + cameraLabelCell + stackLabelCell
         
         DispatchQueue.main.async {
             self.tableManager.fillViewModels(viewModels: cellModels)

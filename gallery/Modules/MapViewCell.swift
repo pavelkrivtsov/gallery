@@ -59,14 +59,16 @@ extension MapViewCell: MapViewCellProtocol {
         self.locationLabel.text = locationLabel.title
         self.locationLabel.font = locationLabel.titleFont
         self.locationLabel.textAlignment = locationLabel.textAlignment
-
-        let cameraCenter = CLLocation(latitude: model.map!.latitude, longitude: model.map!.longitude)
-        let region = MKCoordinateRegion(center: cameraCenter.coordinate,
-                                        latitudinalMeters: 50000,
-                                        longitudinalMeters: 50000)
-        self.mapView.setCameraBoundary(MKMapView.CameraBoundary(coordinateRegion: region), animated: true)
-        let annotation = Place(coordinate: .init(latitude: cameraCenter.coordinate.latitude,
-                                                 longitude: cameraCenter.coordinate.longitude))
+        
+        let location = CLLocation(latitude: model.map!.latitude,
+                                  longitude: model.map!.longitude)
+        let region = MKCoordinateRegion(center: location.coordinate,
+                                        span: MKCoordinateSpan(latitudeDelta: 0.18,
+                                                               longitudeDelta: 0.18))
+        self.mapView.setRegion(region, animated: true)
+        self.mapView.regionThatFits(region)
+        let annotation = Place(coordinate: .init(latitude: location.coordinate.latitude,
+                                                 longitude: location.coordinate.longitude))
         self.mapView.addAnnotation(annotation)
     }
 }
