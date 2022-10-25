@@ -29,7 +29,6 @@ class MainViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "//"
         tableView.separatorStyle = .none
         tableView.register(PhotoCell.self, forCellReuseIdentifier: PhotoCell.cellIdentifier)
         

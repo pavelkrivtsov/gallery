@@ -15,8 +15,9 @@ protocol MapViewCellProtocol {
 
 class MapViewCell: UITableViewCell {
     lazy var mapView = MKMapView()
-    lazy var mapImageView = UIImageView(image: .init(named: "location"))
+    lazy var mapImageView = UIImageView(image: appearance.locationPinImage)
     lazy var locationLabel = UILabel()
+    lazy var appearance = Appearance()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -26,18 +27,18 @@ class MapViewCell: UITableViewCell {
         contentView.addSubview(locationLabel)
         
         mapView.snp.makeConstraints {
-            $0.height.equalTo(200)
-            $0.top.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(appearance.mapHeight)
+            $0.top.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
         }
         mapImageView.snp.makeConstraints {
-            $0.top.equalTo(mapView.snp.bottom).offset(8)
+            $0.top.equalTo(mapView.snp.bottom).offset(appearance.sideMargin / 2)
             $0.leading.equalTo(mapView.snp.leading)
-            $0.width.height.equalTo(16)
-            $0.bottom.equalToSuperview().inset(8)
+            $0.width.height.equalTo(appearance.sideMargin)
+            $0.bottom.equalToSuperview().inset(appearance.sideMargin / 2)
         }
         locationLabel.snp.makeConstraints {
-            $0.top.equalTo(mapView.snp.bottom).offset(8)
-            $0.leading.equalTo(mapImageView.snp.trailing).offset(8)
+            $0.top.equalTo(mapView.snp.bottom).offset(appearance.sideMargin / 2)
+            $0.leading.equalTo(mapImageView.snp.trailing).offset(appearance.sideMargin / 2)
             $0.trailing.equalTo(mapView.snp.trailing)
             $0.centerY.equalTo(mapImageView.snp.centerY)
         }
@@ -63,8 +64,8 @@ extension MapViewCell: MapViewCellProtocol {
         let location = CLLocation(latitude: model.map!.latitude,
                                   longitude: model.map!.longitude)
         let region = MKCoordinateRegion(center: location.coordinate,
-                                        span: MKCoordinateSpan(latitudeDelta: 0.18,
-                                                               longitudeDelta: 0.18))
+                                        span: MKCoordinateSpan(latitudeDelta: appearance.coordinateSpan,
+                                                               longitudeDelta: appearance.coordinateSpan))
         self.mapView.setRegion(region, animated: true)
         self.mapView.regionThatFits(region)
         let annotation = Place(coordinate: .init(latitude: location.coordinate.latitude,

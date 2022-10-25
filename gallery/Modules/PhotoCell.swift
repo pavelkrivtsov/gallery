@@ -14,6 +14,7 @@ class PhotoCell: UITableViewCell {
     static let cellIdentifier = "PhotoCell"
     private let photoView = UIImageView()
     private var authorLabel = UILabel()
+    private let appearance = Appearance()
     
     private var photo: Photo! {
         didSet {
@@ -35,8 +36,8 @@ class PhotoCell: UITableViewCell {
         authorLabel.textColor = .white
         contentView.addSubview(authorLabel)
         authorLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(16)
-            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview().inset(appearance.sideMargin)
+            $0.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
         }
     }
     

@@ -16,5 +16,5 @@ class Place: NSObject, MKAnnotation {
         self.coordinate = coordinate
         super.init()
     }
-    
+
 }

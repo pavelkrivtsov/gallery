@@ -15,13 +15,14 @@ protocol LabelCellProtocol {
 class LabelCell: UITableViewCell {
  
     lazy var titleLabel = UILabel()
+    lazy var appearance = Appearance()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview().inset(16)
+            $0.top.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
             $0.bottom.equalToSuperview()
         }
     }

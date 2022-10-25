@@ -77,7 +77,7 @@ protocol CellLabelPropertiesProtocol {
 
 struct CellLabelProperties: CellLabelPropertiesProtocol {
     public var title: String = ""
-    var titleFont: UIFont = .systemFont(ofSize: 13)
+    var titleFont: UIFont = .systemFont(ofSize: 17)
     var numberOfLines: Int = 0
     var textAlignment: NSTextAlignment = .left
 }

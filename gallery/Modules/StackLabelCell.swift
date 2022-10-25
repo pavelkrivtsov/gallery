@@ -16,21 +16,21 @@ class StackLabelCell: UITableViewCell {
  
     lazy var mainStack: UIStackView = {
         var stack = UIStackView()
-//        stack.backgroundColor = .systemGray4
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = 5
+        stack.spacing = appearance.labelStackSpacing
         return stack
     }()
     
     lazy var firstlabelStack = LabelStack(frame: .zero)
     lazy var secondLabelStack = LabelStack(frame: .zero)
+    lazy var appearance = Appearance()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(mainStack)
         mainStack.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview().inset(16)
+            $0.top.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
             $0.bottom.equalToSuperview()
         }
         mainStack.addArrangedSubview(firstlabelStack)

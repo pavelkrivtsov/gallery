@@ -29,9 +29,7 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
             guard let description = self.photo.photoDescription else { return [] }
             return [
                 .labelCell(
-                    label: CellLabelProperties(title: description,
-                                               titleFont: .systemFont(ofSize: 16),
-                                               textAlignment: .left)
+                    label: CellLabelProperties(title: description, textAlignment: .left)
                 )
             ]
         }()
