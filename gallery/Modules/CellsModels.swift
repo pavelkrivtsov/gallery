@@ -10,12 +10,14 @@ import UIKit
 protocol CellTypeProtocol {
     var cellsId: String { get }
     var label: CellLabelPropertiesProtocol? { get }
+    var map: CellMapViewPropirtiesProtocol? { get }
     var labelStack: CellLabelStackPropirtiesProtocol? {get}
 }
 
 enum CellType {
     case labelCell(label: CellLabelPropertiesProtocol)
-    case mapViewCell(label: CellLabelPropertiesProtocol)
+    case mapViewCell(label: CellLabelPropertiesProtocol,
+                     map: CellMapViewPropirtiesProtocol)
     case stackLabelCell(label: CellLabelStackPropirtiesProtocol)
 }
 
@@ -36,8 +38,19 @@ extension CellType: CellTypeProtocol {
         switch self {
         case .labelCell(let label):
             return label
-        case .mapViewCell(let label):
+        case .mapViewCell(label: let label, map: _):
             return label
+        case .stackLabelCell(label: _):
+            return nil
+        }
+    }
+    
+    var map: CellMapViewPropirtiesProtocol? {
+        switch self {
+        case .labelCell(label: _):
+            return nil
+        case .mapViewCell(label: _, map: let map):
+            return map
         case .stackLabelCell(label: _):
             return nil
         }
@@ -64,7 +77,7 @@ protocol CellLabelPropertiesProtocol {
 
 struct CellLabelProperties: CellLabelPropertiesProtocol {
     public var title: String = ""
-    var titleFont: UIFont = .systemFont(ofSize: 17)
+    var titleFont: UIFont = .systemFont(ofSize: 13)
     var numberOfLines: Int = 0
     var textAlignment: NSTextAlignment = .left
 }
@@ -81,4 +94,14 @@ struct CellLabelStackPropirties: CellLabelStackPropirtiesProtocol {
     var firstLabelStackText: String = "-"
     var secondLabelStackTitle: String = "-"
     var secondLabelStackText: String = "-"
+}
+
+protocol CellMapViewPropirtiesProtocol {
+    var latitude: Double { get }
+    var longitude: Double { get }
+}
+
+struct CellMapViewPropirties: CellMapViewPropirtiesProtocol {
+    var latitude: Double
+    var longitude: Double
 }

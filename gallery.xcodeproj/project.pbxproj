@@ -33,6 +33,7 @@
 		1EEF6EB028DA032400B864AB /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAF28DA032400B864AB /* PhotoCell.swift */; };
 		1EEF6EB328DA164900B864AB /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1EEF6EB228DA164900B864AB /* Kingfisher */; };
 		1EFC591C29082787000C16D4 /* LabelStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFC591B29082787000C16D4 /* LabelStack.swift */; };
+		1EFC591E29088002000C16D4 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFC591D29088002000C16D4 /* Place.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		1EEF6EAD28D9FEF400B864AB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		1EEF6EAF28DA032400B864AB /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		1EFC591B29082787000C16D4 /* LabelStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelStack.swift; sourceTree = "<group>"; };
+		1EFC591D29088002000C16D4 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 				1E96981228FDBB7D00F3868A /* DetailPhotoInfoPresenter.swift */,
 				1E96981428FDBB8A00F3868A /* DetailPhotoInfoViewController.swift */,
 				1E96981628FDBFFE00F3868A /* TableManager */,
+				1EFC591D29088002000C16D4 /* Place.swift */,
 			);
 			name = DetailPhotoInfoScreen;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EFC591E29088002000C16D4 /* Place.swift in Sources */,
 				1E5A928F28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift in Sources */,
 				1E12817C28D8D3400011C8FC /* MainViewController.swift in Sources */,
 				1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */,

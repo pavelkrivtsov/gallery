@@ -30,7 +30,8 @@ class StackLabelCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(mainStack)
         mainStack.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalToSuperview().inset(16)
+            $0.top.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview()
         }
         mainStack.addArrangedSubview(firstlabelStack)
         mainStack.addArrangedSubview(secondLabelStack)

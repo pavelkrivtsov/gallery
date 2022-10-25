@@ -22,6 +22,7 @@ struct SearchPhotos: Codable {
 // MARK: - Photo
 struct Photo: Codable, Hashable {
     let id: String
+    let createdAt: String
     let width, height: Int
     let color, blurHash: String
     let photoDescription: String?
@@ -36,6 +37,7 @@ struct Photo: Codable, Hashable {
     
     enum CodingKeys: String, CodingKey {
         case id
+        case createdAt = "created_at"
         case width, height, color
         case blurHash = "blur_hash"
         case photoDescription = "description"

@@ -21,8 +21,8 @@ class LabelCell: UITableViewCell {
 
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.top.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview()
         }
     }
     
@@ -36,7 +36,5 @@ extension LabelCell: LabelCellProtocol {
         guard let titleLabel = model.label else { return }
         self.titleLabel.text = titleLabel.title
         self.titleLabel.font = titleLabel.titleFont
-        self.titleLabel.textAlignment = titleLabel.textAlignment
-        self.titleLabel.numberOfLines = 0
     }
  }

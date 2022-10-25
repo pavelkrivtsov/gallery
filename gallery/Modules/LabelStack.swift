@@ -16,9 +16,8 @@ class LabelStack: UIStackView {
         super.init(frame: frame)
         axis = .vertical
         spacing = 5
-        titleLabel.textColor = UIColor(white: 1, alpha: 0.7)
-        titleLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        textLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        titleLabel.font = .systemFont(ofSize: 13, weight: .medium)
+        textLabel.font = .systemFont(ofSize: 13, weight: .light)
         addArrangedSubview(titleLabel)
         addArrangedSubview(textLabel)
     }
