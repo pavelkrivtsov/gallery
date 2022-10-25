@@ -24,7 +24,7 @@ class DetailPhotoInfoPresenter {
 
 extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
     func getDetailInfo() {
-    
+        
         let descriptionCell: [CellType] = {
             guard let description = self.photo.photoDescription else { return [] }
             return [
@@ -47,12 +47,31 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
         
         let cameraLabel: [CellType] = {
             return [.labelCell(label: CellLabelProperties(title: "Camera",
-                                                         titleFont: .boldSystemFont(ofSize: 17)))]
+                                                          titleFont: .boldSystemFont(ofSize: 17)))]
         }()
-            
-        let cellModels: [CellType] = descriptionCell + mapView + cameraLabel
-            
         
+        let stackLabelCell: [CellType] = {
+            return [.stackLabelCell(label: CellLabelStackPropirties(firstLabelStackTitle: "Make",
+                                                                    firstLabelStackText: self.photo.exif?.make ?? "-",
+                                                                    secondLabelStackTitle: "Focal Length (mm)",
+                                                                    secondLabelStackText: self.photo.exif?.focalLength ?? "-")),
+                    .stackLabelCell(label: CellLabelStackPropirties(firstLabelStackTitle: "Model",
+                                                                    firstLabelStackText: self.photo.exif?.model ?? "-",
+                                                                    secondLabelStackTitle: "ISO",
+                                                                    secondLabelStackText: String(self.photo.exif?.iso ?? 0) )),
+                    .stackLabelCell(label: CellLabelStackPropirties(firstLabelStackTitle: "Shutter Speed (s)",
+                                                                    firstLabelStackText: self.photo.exif?.exposureTime ?? "-",
+                                                                    secondLabelStackTitle: "Dimensions",
+                                                                    secondLabelStackText: "\(self.photo.width) * \(self.photo.height)" )),
+                    .stackLabelCell(label: CellLabelStackPropirties(firstLabelStackTitle: "Aperture (f)",
+                                                                    firstLabelStackText: self.photo.exif?.aperture ?? "-",
+                                                                    secondLabelStackTitle: "Published",
+                                                                    secondLabelStackText: "published"))
+                  ]
+        }()
+        
+        let cellModels: [CellType] = descriptionCell + mapView + cameraLabel + stackLabelCell
+    
         DispatchQueue.main.async {
             self.tableManager.fillViewModels(viewModels: cellModels)
         }

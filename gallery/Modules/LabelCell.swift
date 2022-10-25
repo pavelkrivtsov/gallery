@@ -38,6 +38,5 @@ extension LabelCell: LabelCellProtocol {
         self.titleLabel.font = titleLabel.titleFont
         self.titleLabel.textAlignment = titleLabel.textAlignment
         self.titleLabel.numberOfLines = 0
-//        self.titleLabel.backgroundColor = .systemRed
     }
  }

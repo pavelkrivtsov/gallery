@@ -65,6 +65,13 @@ extension TableManager: TableManagerProtocol {
             cell.selectionStyle = .none
             cell.cellConfiguration(model: model)
             return cell
+            
+        case .stackLabelCell(label: _):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: model.cellsId,
+                                                           for: indexPath) as? StackLabelCell else { return UITableViewCell() }
+            cell.selectionStyle = .none
+            cell.cellConfiguration(model: model)
+            return cell
         }
     }
 }

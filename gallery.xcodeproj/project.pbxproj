@@ -13,6 +13,7 @@
 		1E12818128D8D3410011C8FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E12818028D8D3410011C8FC /* Assets.xcassets */; };
 		1E12818428D8D3410011C8FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E12818228D8D3410011C8FC /* LaunchScreen.storyboard */; };
 		1E221B9728FB4786007031A9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1E221B9628FB4786007031A9 /* SnapKit */; };
+		1E48B0F229071FB6006A40A2 /* StackLabelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E48B0F129071FB6006A40A2 /* StackLabelCell.swift */; };
 		1E5A928A28EB728600A8CE4E /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928928EB728600A8CE4E /* MainRouter.swift */; };
 		1E5A928D28EB809500A8CE4E /* CurrentPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */; };
 		1E5A928F28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */; };
@@ -31,6 +32,7 @@
 		1EEF6EAE28D9FEF400B864AB /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAD28D9FEF400B864AB /* Models.swift */; };
 		1EEF6EB028DA032400B864AB /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAF28DA032400B864AB /* PhotoCell.swift */; };
 		1EEF6EB328DA164900B864AB /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1EEF6EB228DA164900B864AB /* Kingfisher */; };
+		1EFC591C29082787000C16D4 /* LabelStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFC591B29082787000C16D4 /* LabelStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,7 @@
 		1E12818028D8D3410011C8FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1E12818328D8D3410011C8FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1E12818528D8D3410011C8FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1E48B0F129071FB6006A40A2 /* StackLabelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackLabelCell.swift; sourceTree = "<group>"; };
 		1E5A928928EB728600A8CE4E /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
 		1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoViewController.swift; sourceTree = "<group>"; };
 		1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoAssembly.swift; sourceTree = "<group>"; };
@@ -58,6 +61,7 @@
 		1EEF6EAA28D9FEB500B864AB /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		1EEF6EAD28D9FEF400B864AB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		1EEF6EAF28DA032400B864AB /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		1EFC591B29082787000C16D4 /* LabelStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +151,8 @@
 			children = (
 				1E96981F28FDF03400F3868A /* LabelCell.swift */,
 				1E9698212900904400F3868A /* MapViewCell.swift */,
+				1E48B0F129071FB6006A40A2 /* StackLabelCell.swift */,
+				1EFC591B29082787000C16D4 /* LabelStack.swift */,
 			);
 			name = CellsViews;
 			sourceTree = "<group>";
@@ -282,6 +288,7 @@
 				1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */,
 				1E96981128FDBB6400F3868A /* DetailPhotoInfoAssembly.swift in Sources */,
 				1E96981828FDC01400F3868A /* TableManager.swift in Sources */,
+				1EFC591C29082787000C16D4 /* LabelStack.swift in Sources */,
 				1EA1EB5528EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift in Sources */,
 				1E12817828D8D3400011C8FC /* AppDelegate.swift in Sources */,
 				1E96981528FDBB8A00F3868A /* DetailPhotoInfoViewController.swift in Sources */,
@@ -294,6 +301,7 @@
 				1E12817A28D8D3400011C8FC /* SceneDelegate.swift in Sources */,
 				1E5A928A28EB728600A8CE4E /* MainRouter.swift in Sources */,
 				1E5A929128EB9E5900A8CE4E /* CurrentPhotoPresenter.swift in Sources */,
+				1E48B0F229071FB6006A40A2 /* StackLabelCell.swift in Sources */,
 				1E9698222900904400F3868A /* MapViewCell.swift in Sources */,
 				1E96982028FDF03400F3868A /* LabelCell.swift in Sources */,
 				1E96981328FDBB7E00F3868A /* DetailPhotoInfoPresenter.swift in Sources */,
