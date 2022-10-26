@@ -15,6 +15,7 @@ protocol LabelCellProtocol {
 class LabelCell: UITableViewCell {
  
     lazy var titleLabel = UILabel()
+    lazy var separator = UIView(frame: .zero)
     lazy var appearance = Appearance()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -22,9 +23,15 @@ class LabelCell: UITableViewCell {
 
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
-            $0.bottom.equalToSuperview()
+            $0.top.bottom.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
         }
+        contentView.addSubview(separator)
+        separator.snp.makeConstraints {
+            $0.bottom.equalTo(titleLabel.snp.bottom).offset(appearance.sideMargin)
+            $0.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
+            $0.height.equalTo(1)
+        }
+        separator.backgroundColor = .systemGray
     }
     
     required init?(coder: NSCoder) {
@@ -37,5 +44,12 @@ extension LabelCell: LabelCellProtocol {
         guard let titleLabel = model.label else { return }
         self.titleLabel.text = titleLabel.title
         self.titleLabel.font = titleLabel.titleFont
+        self.titleLabel.textAlignment = titleLabel.titleAligment
+        self.titleLabel.numberOfLines = 0
+        self.separator.isHidden = titleLabel.separatorIsHidden
+        self.titleLabel.snp.remakeConstraints {
+            $0.top.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
+            $0.bottom.equalToSuperview().inset(titleLabel.bottomSideMargin)
+        }
     }
  }

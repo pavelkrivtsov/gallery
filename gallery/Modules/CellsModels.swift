@@ -71,15 +71,19 @@ extension CellType: CellTypeProtocol {
 protocol CellLabelPropertiesProtocol {
     var title: String { get }
     var titleFont: UIFont { get }
+    var titleAligment: NSTextAlignment { get }
+    var bottomSideMargin: Int { get }
     var numberOfLines: Int { get }
-    var textAlignment: NSTextAlignment { get }
+    var separatorIsHidden: Bool { get }
 }
 
 struct CellLabelProperties: CellLabelPropertiesProtocol {
-    public var title: String = ""
-    var titleFont: UIFont = .systemFont(ofSize: 17)
+    var title: String = ""
+    var titleFont: UIFont = .systemFont(ofSize: 13, weight: .light)
+    var titleAligment: NSTextAlignment = .left
+    var bottomSideMargin: Int = 16
     var numberOfLines: Int = 0
-    var textAlignment: NSTextAlignment = .left
+    var separatorIsHidden: Bool = true
 }
 
 protocol CellLabelStackPropirtiesProtocol {

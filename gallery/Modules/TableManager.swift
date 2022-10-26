@@ -26,7 +26,6 @@ extension TableManager: TableManagerProtocol {
         self.tableView?.separatorStyle = .none
         self.tableView?.dataSource = self
         self.tableView?.delegate = self
-//        self.tableView?.backgroundColor = .systemBackground
         self.tableView?.estimatedRowHeight = 300
         self.tableView?.rowHeight = UITableView.automaticDimension
     }

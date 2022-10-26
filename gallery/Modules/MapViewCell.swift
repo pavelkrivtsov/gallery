@@ -17,6 +17,7 @@ class MapViewCell: UITableViewCell {
     lazy var mapView = MKMapView()
     lazy var mapImageView = UIImageView(image: appearance.locationPinImage)
     lazy var locationLabel = UILabel()
+    lazy var separator = UIView(frame: .zero)
     lazy var appearance = Appearance()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -25,16 +26,17 @@ class MapViewCell: UITableViewCell {
         contentView.addSubview(mapView)
         contentView.addSubview(mapImageView)
         contentView.addSubview(locationLabel)
+        contentView.addSubview(separator)
         
         mapView.snp.makeConstraints {
-            $0.height.equalTo(appearance.mapHeight)
             $0.top.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
+            $0.height.equalTo(appearance.mapHeight)
         }
         mapImageView.snp.makeConstraints {
             $0.top.equalTo(mapView.snp.bottom).offset(appearance.sideMargin / 2)
             $0.leading.equalTo(mapView.snp.leading)
             $0.width.height.equalTo(appearance.sideMargin)
-            $0.bottom.equalToSuperview().inset(appearance.sideMargin / 2)
+            $0.bottom.equalToSuperview().inset(appearance.sideMargin)
         }
         locationLabel.snp.makeConstraints {
             $0.top.equalTo(mapView.snp.bottom).offset(appearance.sideMargin / 2)
@@ -42,6 +44,12 @@ class MapViewCell: UITableViewCell {
             $0.trailing.equalTo(mapView.snp.trailing)
             $0.centerY.equalTo(mapImageView.snp.centerY)
         }
+        separator.snp.makeConstraints {
+            $0.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
+            $0.height.equalTo(1)
+        }
+        separator.backgroundColor = .systemGray
         mapImageView.contentMode = .scaleAspectFill
     }
     
@@ -57,9 +65,9 @@ class MapViewCell: UITableViewCell {
 extension MapViewCell: MapViewCellProtocol {
     public func cellConfiguration(model: CellTypeProtocol) {
         guard let locationLabel = model.label else { return }
+        self.separator.isHidden = locationLabel.separatorIsHidden
         self.locationLabel.text = locationLabel.title
         self.locationLabel.font = locationLabel.titleFont
-        self.locationLabel.textAlignment = locationLabel.textAlignment
         
         let location = CLLocation(latitude: model.map!.latitude,
                                   longitude: model.map!.longitude)

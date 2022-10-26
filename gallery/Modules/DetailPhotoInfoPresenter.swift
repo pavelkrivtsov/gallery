@@ -23,13 +23,24 @@ class DetailPhotoInfoPresenter {
 }
 
 extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
+    
     func getDetailInfo() {
+        
+        let authorTitleCell: [CellType] = {
+            return [
+                .labelCell(label: CellLabelProperties(title: "Info",
+                                                      titleFont: .systemFont(ofSize: 17, weight: .bold),
+                                                      titleAligment: .center,
+                                                      bottomSideMargin: 0,
+                                                      numberOfLines: 1))
+            ]
+        }()
         
         let descriptionCell: [CellType] = {
             guard let description = self.photo.photoDescription else { return [] }
             return [
                 .labelCell(
-                    label: CellLabelProperties(title: description, textAlignment: .left)
+                    label: CellLabelProperties(title: description, titleFont: .systemFont(ofSize: 17, weight: .light), separatorIsHidden: false)
                 )
             ]
         }()
@@ -38,7 +49,8 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
             guard let latitude = self.photo.location?.position.latitude,
                   let longitude = self.photo.location?.position.longitude else { return [] }
             return [
-                .mapViewCell(label: CellLabelProperties(title: "\(self.photo.location?.name ?? "-")"),
+                .mapViewCell(label: CellLabelProperties(title: "\(self.photo.location?.name ?? "-")",
+                                                        separatorIsHidden: false),
                              map: CellMapViewPropirties(latitude: latitude, longitude: longitude))
             ]
         }()
@@ -46,7 +58,8 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
         let cameraLabelCell: [CellType] = {
             return [
                 .labelCell(label: CellLabelProperties(title: "Camera",
-                                                      titleFont: .boldSystemFont(ofSize: 17)))
+                                                      titleFont: .boldSystemFont(ofSize: 17),
+                                                      bottomSideMargin: 4))
             ]
         }()
         
@@ -78,7 +91,7 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
             ]
         }()
         
-        let cellModels: [CellType] = descriptionCell + mapViewCell + cameraLabelCell + stackLabelCell
+        let cellModels: [CellType] = authorTitleCell + descriptionCell + mapViewCell + cameraLabelCell + stackLabelCell
         
         DispatchQueue.main.async {
             self.tableManager.fillViewModels(viewModels: cellModels)

@@ -129,6 +129,7 @@
 				1E96981428FDBB8A00F3868A /* DetailPhotoInfoViewController.swift */,
 				1E96981628FDBFFE00F3868A /* TableManager */,
 				1EFC591D29088002000C16D4 /* Place.swift */,
+				1EFC591B29082787000C16D4 /* LabelStack.swift */,
 			);
 			name = DetailPhotoInfoScreen;
 			sourceTree = "<group>";
@@ -157,7 +158,6 @@
 				1E96981F28FDF03400F3868A /* LabelCell.swift */,
 				1E9698212900904400F3868A /* MapViewCell.swift */,
 				1E48B0F129071FB6006A40A2 /* StackLabelCell.swift */,
-				1EFC591B29082787000C16D4 /* LabelStack.swift */,
 			);
 			name = CellsViews;
 			sourceTree = "<group>";

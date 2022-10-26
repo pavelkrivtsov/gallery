@@ -16,6 +16,7 @@ class CurrentPhotoRouter: CurrentPhotoRouterProtocol {
     
     func showInfo(from photo: Photo) {
         let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemle(photo: photo)
-        self.view?.navigationController?.pushViewController(detailPhotoInfoVC, animated: true)
+        self.view?.present(detailPhotoInfoVC, animated: true)
+//        self.view?.navigationController?.pushViewController(detailPhotoInfoVC, animated: true)
     }
 }
