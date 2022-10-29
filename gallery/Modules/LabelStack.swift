@@ -11,14 +11,13 @@ class LabelStack: UIStackView {
     
     var titleLabel = UILabel()
     var textLabel = UILabel()
-    var appearance = Appearance()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         axis = .vertical
-        spacing = appearance.labelStackSpacing
-        titleLabel.font = .systemFont(ofSize: appearance.labelStackFontSize, weight: .medium)
-        textLabel.font = .systemFont(ofSize: appearance.labelStackFontSize, weight: .light)
+        spacing = 5
+        titleLabel.font = .systemFont(ofSize: 13, weight: .medium)
+        textLabel.font = .systemFont(ofSize: 13, weight: .light)
         addArrangedSubview(titleLabel)
         addArrangedSubview(textLabel)
     }

@@ -18,20 +18,19 @@ class StackLabelCell: UITableViewCell {
         var stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fillEqually
-        stack.spacing = appearance.labelStackSpacing
+        stack.spacing = 5
         return stack
     }()
     
     lazy var firstlabelStack = LabelStack(frame: .zero)
     lazy var secondLabelStack = LabelStack(frame: .zero)
-    lazy var appearance = Appearance()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(mainStack)
         mainStack.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(appearance.sideMargin)
-            $0.bottom.top.equalToSuperview().inset(appearance.sideMargin / 2)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.top.equalToSuperview().inset(8)
         }
         mainStack.addArrangedSubview(firstlabelStack)
         mainStack.addArrangedSubview(secondLabelStack)
