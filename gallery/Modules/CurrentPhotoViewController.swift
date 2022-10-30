@@ -96,7 +96,11 @@ class CurrentPhotoViewController: UIViewController {
                                          style: .plain,
                                          target: self,
                                          action: #selector(infoButtonTapped))
-        navigationItem.rightBarButtonItem = infoButton
+        let downloadButton = UIBarButtonItem(image: .init(systemName: "arrow.down.circle.fill"),
+                                             style: .plain,
+                                             target: self,
+                                             action: #selector(downloadButtonTapped))
+        navigationItem.rightBarButtonItems = [downloadButton, infoButton]
     }
     
     func addSubviews() {
@@ -144,8 +148,13 @@ class CurrentPhotoViewController: UIViewController {
     }
     
     @objc
-    func infoButtonTapped() {
+    private func infoButtonTapped() {
         presenter.showInfoAboutPhoto()
+    }
+    
+    @objc
+    private func downloadButtonTapped() {
+        presenter.downloadPhoto(photo: self.photo)
     }
     
     private func configure(photo: Photo) {

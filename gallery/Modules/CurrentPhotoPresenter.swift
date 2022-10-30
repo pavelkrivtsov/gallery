@@ -10,6 +10,7 @@ import Foundation
 protocol CurrentPhotoPresenterProtocol: AnyObject {
     func loadPhoto()
     func showInfoAboutPhoto()
+    func downloadPhoto(photo: Photo)
 }
 
 class CurrentPhotoPresenter {
@@ -38,4 +39,11 @@ extension CurrentPhotoPresenter: CurrentPhotoPresenterProtocol {
     func showInfoAboutPhoto() {
         router.showInfo(from: self.photo)
     }
+    
+    func downloadPhoto(photo: Photo) {
+        
+        
+        
+    }
+    
 }
