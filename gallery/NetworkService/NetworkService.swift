@@ -15,9 +15,8 @@ protocol NetworkServiceProtocol: AnyObject {
 
 class NetworkService: NetworkServiceProtocol {
     
-    private let clientId = "Client-ID H8VOOo5_EjEw5KJsHXBoxTzOL525-OPZ-58HmdHX4sQ"
-    
     func loadPhotosList(onCompletion: @escaping ([Photo]?) -> Void) {
+        guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/photos/?"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
@@ -37,6 +36,7 @@ class NetworkService: NetworkServiceProtocol {
     }
     
     func loadCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void) {
+        guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/photos/\(id)"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
@@ -56,6 +56,7 @@ class NetworkService: NetworkServiceProtocol {
     }
     
     func loadFoundPhotos(from searchText: String, onCompletion: @escaping (SearchPhotos?) -> Void) {
+        guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/search/photos?query=\(searchText)"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
@@ -84,6 +85,11 @@ class NetworkService: NetworkServiceProtocol {
             print("Failed to decode JSON", jsonError)
             return nil
         }
+    }
+    
+    private func getEnvironmentVar(_ name: String) -> String? {
+        guard let rawValue = getenv(name) else { return nil }
+        return String(utf8String: rawValue)
     }
     
 }

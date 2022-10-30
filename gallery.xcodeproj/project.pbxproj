@@ -101,9 +101,7 @@
 				1EEF6E9F28D9D63100B864AB /* App */,
 				1EEF6EA928D9FE9D00B864AB /* NetworkService */,
 				1EEF6EA028D9DAFB00B864AB /* Modules */,
-				1E12818028D8D3410011C8FC /* Assets.xcassets */,
-				1E12818228D8D3410011C8FC /* LaunchScreen.storyboard */,
-				1E12818528D8D3410011C8FC /* Info.plist */,
+				1EE59EB5290D664F00F8758C /* Supporting files */,
 			);
 			path = gallery;
 			sourceTree = "<group>";
@@ -158,6 +156,16 @@
 				1E48B0F129071FB6006A40A2 /* StackLabelCell.swift */,
 			);
 			name = CellsViews;
+			sourceTree = "<group>";
+		};
+		1EE59EB5290D664F00F8758C /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				1E12818028D8D3410011C8FC /* Assets.xcassets */,
+				1E12818228D8D3410011C8FC /* LaunchScreen.storyboard */,
+				1E12818528D8D3410011C8FC /* Info.plist */,
+			);
+			path = "Supporting files";
 			sourceTree = "<group>";
 		};
 		1EEF6E9F28D9D63100B864AB /* App */ = {
@@ -441,7 +449,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A3JHD7MWF8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = gallery/Info.plist;
+				INFOPLIST_FILE = "gallery/Supporting files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ImageGallery;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
@@ -473,7 +481,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = A3JHD7MWF8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = gallery/Info.plist;
+				INFOPLIST_FILE = "gallery/Supporting files/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = ImageGallery;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
