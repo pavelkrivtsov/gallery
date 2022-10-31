@@ -11,6 +11,7 @@ protocol NetworkServiceProtocol: AnyObject {
     func loadPhotosList(onCompletion: @escaping ([Photo]?) -> Void)
     func loadCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void)
     func loadFoundPhotos(from searchText: String, onCompletion: @escaping (SearchPhotos?) -> Void)
+    func downloadPhoto(photo: Photo, onCompletion: @escaping(Data) -> Void)
 }
 
 class NetworkService: NetworkServiceProtocol {
@@ -55,7 +56,7 @@ class NetworkService: NetworkServiceProtocol {
         task.resume()
     }
     
-    func loadFoundPhotos(from searchText: String, onCompletion: @escaping (SearchPhotos?) -> Void) {
+    func loadFoundPhotos(from searchText: String, onCompletion: @escaping(SearchPhotos?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/search/photos?query=\(searchText)"
         guard let url = URL(string: urlString) else { return }
@@ -70,6 +71,20 @@ class NetworkService: NetworkServiceProtocol {
                     onCompletion(decodeObjects)
                 }
             }
+        }
+        task.resume()
+    }
+    
+    func downloadPhoto(photo: Photo, onCompletion: @escaping(Data) -> Void) {
+        guard let clientId = getEnvironmentVar("API_KEY"),
+              let url = URL(string: photo.urls.raw) else { return }
+        var request = URLRequest(url: url)
+        request.addValue(clientId, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+    
+        let task = URLSession.shared.dataTask(with: request) { data, _, _ in
+            guard let data = data else { return }
+            onCompletion(data)
         }
         task.resume()
     }

@@ -11,6 +11,9 @@ import SnapKit
 
 protocol CurrentPhotoViewControllerProtocol: AnyObject {
     func loadPhoto(photo: Photo)
+    func startActivityIndicator()
+    func stopActivityIndicator()
+    func showAlert()
 }
 
 class CurrentPhotoViewController: UIViewController {
@@ -22,20 +25,20 @@ class CurrentPhotoViewController: UIViewController {
         scrollView.maximumZoomScale = 4
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+//        scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
     
     private var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+//        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
     }()
     
@@ -71,8 +74,8 @@ class CurrentPhotoViewController: UIViewController {
         gestureRecognizer.addTarget(self, action: #selector(handleZoomingTap))
         imageView.addGestureRecognizer(self.gestureRecognizer)
         imageView.isUserInteractionEnabled = true
-        setupNavigationBar()
         addSubviews()
+        setupNavigationBar()
         
         presenter.loadPhoto()
     }
@@ -89,7 +92,7 @@ class CurrentPhotoViewController: UIViewController {
         imageView.image == nil ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
     }
     
-    func setupNavigationBar() {
+    private func setupNavigationBar() {
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = UIColor.init(named: "AccentColor")
         let infoButton = UIBarButtonItem(image: .init(systemName: "info.circle"),
@@ -103,7 +106,7 @@ class CurrentPhotoViewController: UIViewController {
         navigationItem.rightBarButtonItems = [downloadButton, infoButton]
     }
     
-    func addSubviews() {
+    private func addSubviews() {
         view.addSubview(activityIndicator)
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
@@ -117,12 +120,12 @@ class CurrentPhotoViewController: UIViewController {
     }
     
     @objc
-    func handleZoomingTap(sender: UITapGestureRecognizer)  {
+    private func handleZoomingTap(sender: UITapGestureRecognizer)  {
         let location = sender.location(in: sender.view)
         self.zoom(point: location, animated: true)
     }
     
-    func zoom(point: CGPoint, animated: Bool) {
+    private func zoom(point: CGPoint, animated: Bool) {
         let currentScale = self.scrollView.zoomScale
         let minScale = self.scrollView.minimumZoomScale
         let maxScale = self.scrollView.maximumZoomScale
@@ -137,7 +140,7 @@ class CurrentPhotoViewController: UIViewController {
         self.scrollView.zoom(to: zoomRect, animated: animated)
     }
     
-    func zoomRect(scale: CGFloat, center: CGPoint ) -> CGRect {
+    private func zoomRect(scale: CGFloat, center: CGPoint ) -> CGRect {
         var zoomRect = CGRect.zero
         let bounds = self.scrollView.bounds
         zoomRect.size.width = bounds.size.width / scale
@@ -193,7 +196,30 @@ extension CurrentPhotoViewController: UIScrollViewDelegate {
 }
 
 extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
+   
     func loadPhoto(photo: Photo) {
         self.configure(photo: photo)
     }
+    
+    func startActivityIndicator() {
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+    }
+    
+    func stopActivityIndicator() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+    
+    func showAlert() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Saved", message: nil, preferredStyle: .alert)
+            let okACtion = UIAlertAction(title: "Ok", style: .default)
+            alert.addAction(okACtion)
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
 }

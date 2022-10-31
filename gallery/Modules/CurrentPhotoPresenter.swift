@@ -5,7 +5,7 @@
 //  Created by Павел Кривцов on 04.10.2022.
 //
 
-import Foundation
+import UIKit
 
 protocol CurrentPhotoPresenterProtocol: AnyObject {
     func loadPhoto()
@@ -41,9 +41,13 @@ extension CurrentPhotoPresenter: CurrentPhotoPresenterProtocol {
     }
     
     func downloadPhoto(photo: Photo) {
-        
-        
-        
+        self.view?.startActivityIndicator()
+        networkService.downloadPhoto(photo: photo) { data in
+            guard let photo = UIImage(data: data) else { return }
+            UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
+            self.view?.stopActivityIndicator()
+            self.view?.showAlert()
+        }
     }
     
 }
