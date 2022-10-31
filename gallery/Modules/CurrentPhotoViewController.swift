@@ -25,20 +25,18 @@ class CurrentPhotoViewController: UIViewController {
         scrollView.maximumZoomScale = 4
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
-//        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.isScrollEnabled = false
         return scrollView
     }()
     
     private var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-//        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-//        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
     }()
     
@@ -107,16 +105,17 @@ class CurrentPhotoViewController: UIViewController {
     }
     
     private func addSubviews() {
-        view.addSubview(activityIndicator)
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
+        view.addSubview(activityIndicator)
         
-        activityIndicator.snp.makeConstraints { $0.centerX.centerY.equalToSuperview() }
-        scrollView.snp.makeConstraints { $0.leading.trailing.top.bottom.equalToSuperview() }
-        imageView.snp.makeConstraints {
-            $0.width.equalTo(self.scrollView.snp.width)
-            $0.height.equalTo(self.scrollView.snp.height)
+        scrollView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
+        imageView.snp.makeConstraints { $0.leading.trailing.top.bottom.width.height.equalToSuperview() }
+        activityIndicator.snp.makeConstraints { $0.centerX.centerY.equalToSuperview() }
     }
     
     @objc
