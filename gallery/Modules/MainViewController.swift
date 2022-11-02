@@ -54,6 +54,14 @@ class MainViewController: UITableViewController {
         let photo = photos[indexPath.item]
         presenter.showPhoto(photo: photo)
     }
+    
+    override func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        
+    }
 }
 
 extension MainViewController {
@@ -78,7 +86,7 @@ extension MainViewController: UISearchBarDelegate {
 
 extension MainViewController: MainViewControllerProtocol {
     func setPhotosList(photosList: [Photo]) {
-        self.photos = photosList
+        self.photos = self.photos + photosList
         var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
         snapshot.appendSections([0])
         snapshot.appendItems(photos)

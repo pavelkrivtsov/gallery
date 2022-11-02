@@ -19,7 +19,7 @@ protocol CurrentPhotoViewControllerProtocol: AnyObject {
 class CurrentPhotoViewController: UIViewController {
     private var presenter: CurrentPhotoPresenterProtocol
 
-    private var scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.minimumZoomScale = 1
         scrollView.maximumZoomScale = 4
@@ -29,7 +29,7 @@ class CurrentPhotoViewController: UIViewController {
         return scrollView
     }()
     
-    private var imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -38,6 +38,24 @@ class CurrentPhotoViewController: UIViewController {
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         return activityIndicator
+    }()
+    
+    private lazy var infoButton: UIButton = {
+        var button = UIButton()
+        var config = UIButton.Configuration.bordered()
+        config.image = .init(systemName: "info")
+        button.configuration = config
+        button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var downloadButton: UIButton = {
+        var button = UIButton()
+        var config = UIButton.Configuration.bordered()
+        config.image = .init(systemName: "arrow.down")
+        button.configuration = config
+        button.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
+        return button
     }()
     
     private var photo: Photo! {
@@ -93,20 +111,13 @@ class CurrentPhotoViewController: UIViewController {
     private func setupNavigationBar() {
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = UIColor.init(named: "AccentColor")
-        let infoButton = UIBarButtonItem(image: .init(systemName: "info.circle"),
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(infoButtonTapped))
-        let downloadButton = UIBarButtonItem(image: .init(systemName: "arrow.down.circle.fill"),
-                                             style: .plain,
-                                             target: self,
-                                             action: #selector(downloadButtonTapped))
-        navigationItem.rightBarButtonItems = [downloadButton, infoButton]
     }
     
     private func addSubviews() {
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
+        view.addSubview(downloadButton)
+        view.addSubview(infoButton)
         view.addSubview(activityIndicator)
         
         scrollView.snp.makeConstraints {
@@ -116,6 +127,18 @@ class CurrentPhotoViewController: UIViewController {
         }
         imageView.snp.makeConstraints { $0.leading.trailing.top.bottom.width.height.equalToSuperview() }
         activityIndicator.snp.makeConstraints { $0.centerX.centerY.equalToSuperview() }
+        
+        downloadButton.snp.makeConstraints {
+            $0.width.height.equalTo(44)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
+        }
+        
+        infoButton.snp.makeConstraints {
+            $0.width.height.equalTo(44)
+            $0.trailing.equalTo(downloadButton.snp.leading).offset(-16)
+            $0.centerY.equalTo(downloadButton.snp.centerY)
+        }
     }
     
     @objc
