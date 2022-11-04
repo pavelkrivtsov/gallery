@@ -48,6 +48,10 @@ class MainViewController: UITableViewController {
         presenter.loadList(for: self.currentPage)
     }
     
+    override func viewWillLayoutSubviews() {
+        KingfisherManager.shared.cache.clearMemoryCache()
+        KingfisherManager.shared.cache.clearDiskCache()
+        KingfisherManager.shared.cache.cleanExpiredDiskCache()
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
