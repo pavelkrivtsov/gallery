@@ -8,17 +8,17 @@
 import Foundation
 
 protocol NetworkServiceProtocol: AnyObject {
-    func loadPhotosList(onCompletion: @escaping ([Photo]?) -> Void)
-    func loadCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void)
-    func loadFoundPhotos(from searchText: String, onCompletion: @escaping (SearchPhotos?) -> Void)
+    func getListFromServer(page: Int, onCompletion: @escaping ([Photo]?) -> Void)
+    func getFoundListFromServer(from searchText: String, onCompletion: @escaping (SearchPhotos?) -> Void)
+    func getCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void)
     func downloadPhoto(photo: Photo, onCompletion: @escaping(Data) -> Void)
 }
 
 class NetworkService: NetworkServiceProtocol {
     
-    func loadPhotosList(onCompletion: @escaping ([Photo]?) -> Void) {
+    func getListFromServer(page: Int, onCompletion: @escaping ([Photo]?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
-        let urlString = "https://api.unsplash.com/photos/?"
+        let urlString = "https://api.unsplash.com/photos/?page=\(page)"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
         request.addValue(clientId, forHTTPHeaderField: "Authorization")
@@ -36,7 +36,27 @@ class NetworkService: NetworkServiceProtocol {
         task.resume()
     }
     
-    func loadCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void) {
+    
+    func getFoundListFromServer(from searchText: String, onCompletion: @escaping(SearchPhotos?) -> Void) {
+        guard let clientId = getEnvironmentVar("API_KEY") else { return }
+        let urlString = "https://api.unsplash.com/search/photos?page=1&query=\(searchText)"
+        guard let url = URL(string: urlString) else { return }
+        var request = URLRequest(url: url)
+        request.addValue(clientId, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in
+            guard let self = self, let data = data else { return }
+            if let decodeObjects = self.parseJSON(type: SearchPhotos.self, data: data) {
+                DispatchQueue.main.async {
+                    onCompletion(decodeObjects)
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    func getCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/photos/\(id)"
         guard let url = URL(string: urlString) else { return }
@@ -56,23 +76,17 @@ class NetworkService: NetworkServiceProtocol {
         task.resume()
     }
     
-    func loadFoundPhotos(from searchText: String, onCompletion: @escaping(SearchPhotos?) -> Void) {
-        guard let clientId = getEnvironmentVar("API_KEY") else { return }
-        let urlString = "https://api.unsplash.com/search/photos?query=\(searchText)"
-        guard let url = URL(string: urlString) else { return }
-        var request = URLRequest(url: url)
-        request.addValue(clientId, forHTTPHeaderField: "Authorization")
-        request.httpMethod = "GET"
+    private func parseJSON<Results: Decodable>(type: Results.Type, data: Data?) -> Results? {
+        let decoder = JSONDecoder()
+        guard let data = data else { return nil }
         
-        let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in
-            guard let self = self, let data = data else { return }
-            if let decodeObjects = self.parseJSON(type: SearchPhotos.self, data: data) {
-                DispatchQueue.main.async {
-                    onCompletion(decodeObjects)
-                }
-            }
+        do {
+            let objects = try decoder.decode(type.self, from: data)
+            return objects
+        } catch let jsonError {
+            print("Failed to decode JSON", jsonError)
+            return nil
         }
-        task.resume()
     }
     
     func downloadPhoto(photo: Photo, onCompletion: @escaping(Data) -> Void) {
@@ -87,19 +101,6 @@ class NetworkService: NetworkServiceProtocol {
             onCompletion(data)
         }
         task.resume()
-    }
-    
-    private func parseJSON<Results: Decodable>(type: Results.Type, data: Data?) -> Results? {
-        let decoder = JSONDecoder()
-        guard let data = data else { return nil }
-        
-        do {
-            let objects = try decoder.decode(type.self, from: data)
-            return objects
-        } catch let jsonError {
-            print("Failed to decode JSON", jsonError)
-            return nil
-        }
     }
     
     private func getEnvironmentVar(_ name: String) -> String? {

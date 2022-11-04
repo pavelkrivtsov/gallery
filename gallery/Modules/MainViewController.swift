@@ -17,7 +17,9 @@ class MainViewController: UITableViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     private var dataSource: UITableViewDiffableDataSource<Int, Photo>!
     private var photos = [Photo]()
-    
+
+    private var currentPage = 1
+     
     init(presenter: MainPresenterProtocol) {
         self.presenter = presenter
         super.init(style: .plain)
@@ -30,18 +32,19 @@ class MainViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         tableView.register(PhotoCell.self, forCellReuseIdentifier: PhotoCell.cellIdentifier)
         
-        dataSource = UITableViewDiffableDataSource<Int, Photo>(tableView: tableView) { tableView, indexPath, itemIdentifier in
+        dataSource = UITableViewDiffableDataSource<Int, Photo>(tableView: tableView) { tableView, indexPath, item in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PhotoCell.cellIdentifier,
                                                            for: indexPath) as? PhotoCell else {
                 fatalError("ImageCell is not registered for table view")
             }
-            cell.configure(photo: itemIdentifier)
+            cell.configure(photo: item)
             return cell
         }
         
-        presenter.loadPhotosList()
+        presenter.loadList(from: self.currentPage)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -55,12 +58,12 @@ class MainViewController: UITableViewController {
         presenter.showPhoto(photo: photo)
     }
     
-    override func tableView(_ tableView: UITableView, didEndDisplayingFooterView view: UIView, forSection section: Int) {
-        
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
-        
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lastIndex = self.photos.count - 1
+        if indexPath.row == lastIndex {
+            self.currentPage += 1
+            presenter.loadList(from: self.currentPage)
+        }
     }
 }
 
@@ -79,7 +82,7 @@ extension MainViewController {
 extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text {
-            self.presenter.loadFoundPhotos(searchText: searchText)
+//            self.presenter.loadFoundPhotoList(searchText: searchText)
         }
     }
 }
