@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import Kingfisher
 
 protocol MainViewControllerProtocol: AnyObject {
-    func setPhotosList(photosList: [Photo])
+    func setList(from photos: [Photo])
 }
 
 class MainViewController: UITableViewController {
@@ -17,8 +18,8 @@ class MainViewController: UITableViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     private var dataSource: UITableViewDiffableDataSource<Int, Photo>!
     private var photos = [Photo]()
-
     private var currentPage = 1
+    private var searchText = ""
      
     init(presenter: MainPresenterProtocol) {
         self.presenter = presenter
@@ -44,11 +45,13 @@ class MainViewController: UITableViewController {
             return cell
         }
         
-        presenter.loadList(from: self.currentPage)
+        presenter.loadList(for: self.currentPage)
+    }
+    
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let photo = photos[indexPath.item]
+        let photo = self.photos[indexPath.item]
         let heightPerItem = CGFloat(photo.width) / CGFloat(photo.height)
         return tableView.frame.width / heightPerItem
     }
@@ -62,7 +65,11 @@ class MainViewController: UITableViewController {
         let lastIndex = self.photos.count - 1
         if indexPath.row == lastIndex {
             self.currentPage += 1
-            presenter.loadList(from: self.currentPage)
+            if !self.searchText.isEmpty {
+                self.presenter.loadFoundList(from: self.searchText, for: self.currentPage)
+            } else {
+                self.presenter.loadList(for: self.currentPage)
+            }
         }
     }
 }
@@ -72,7 +79,7 @@ extension MainViewController {
         let navigationController = UINavigationController(rootViewController: self)
         searchController.definesPresentationContext = true
         searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Search photos, collections, users"
+        searchController.searchBar.placeholder = "Search photos"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         return navigationController
@@ -80,19 +87,32 @@ extension MainViewController {
 }
 
 extension MainViewController: UISearchBarDelegate {
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.photos.removeAll()
+        self.currentPage = 1
+        
         if let searchText = searchBar.text {
-//            self.presenter.loadFoundPhotoList(searchText: searchText)
+            self.searchText = searchText
+            self.presenter.loadFoundList(from: searchText, for: self.currentPage)
+        } else {
+            self.presenter.loadList(for: self.currentPage)
         }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.photos.removeAll()
+        self.currentPage = 1
+        self.presenter.loadList(for: self.currentPage)
     }
 }
 
 extension MainViewController: MainViewControllerProtocol {
-    func setPhotosList(photosList: [Photo]) {
-        self.photos = self.photos + photosList
+    func setList(from photos: [Photo]) {
+        self.photos = self.photos + photos
         var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
         snapshot.appendSections([0])
-        snapshot.appendItems(photos)
+        snapshot.appendItems(self.photos)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
 }

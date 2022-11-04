@@ -8,15 +8,15 @@
 import Foundation
 
 protocol NetworkServiceProtocol: AnyObject {
-    func getListFromServer(page: Int, onCompletion: @escaping ([Photo]?) -> Void)
-    func getFoundListFromServer(from searchText: String, onCompletion: @escaping (SearchPhotos?) -> Void)
+    func getListFromServer(for page: Int, onCompletion: @escaping ([Photo]?) -> Void)
+    func getFoundListFromServer(from searchText: String, for page: Int, onCompletion: @escaping (SearchPhotos?) -> Void)
     func getCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void)
     func downloadPhoto(photo: Photo, onCompletion: @escaping(Data) -> Void)
 }
 
 class NetworkService: NetworkServiceProtocol {
     
-    func getListFromServer(page: Int, onCompletion: @escaping ([Photo]?) -> Void) {
+    func getListFromServer(for page: Int, onCompletion: @escaping ([Photo]?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/photos/?page=\(page)"
         guard let url = URL(string: urlString) else { return }
@@ -37,9 +37,9 @@ class NetworkService: NetworkServiceProtocol {
     }
     
     
-    func getFoundListFromServer(from searchText: String, onCompletion: @escaping(SearchPhotos?) -> Void) {
+    func getFoundListFromServer(from searchText: String, for page: Int, onCompletion: @escaping(SearchPhotos?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
-        let urlString = "https://api.unsplash.com/search/photos?page=1&query=\(searchText)"
+        let urlString = "https://api.unsplash.com/search/photos?page=\(page)&query=\(searchText)"
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
         request.addValue(clientId, forHTTPHeaderField: "Authorization")
@@ -107,5 +107,4 @@ class NetworkService: NetworkServiceProtocol {
         guard let rawValue = getenv(name) else { return nil }
         return String(utf8String: rawValue)
     }
-    
 }
