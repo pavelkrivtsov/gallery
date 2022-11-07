@@ -18,7 +18,7 @@ protocol CurrentPhotoViewControllerProtocol: AnyObject {
 
 class CurrentPhotoViewController: UIViewController {
     private var presenter: CurrentPhotoPresenterProtocol
-
+    
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.minimumZoomScale = 1
@@ -174,12 +174,18 @@ class CurrentPhotoViewController: UIViewController {
     
     @objc
     private func infoButtonTapped() {
+        let generator = UIImpactFeedbackGenerator(style: .rigid)
+        generator.prepare()
         presenter.showInfoAboutPhoto()
+        generator.impactOccurred()
     }
     
     @objc
     private func downloadButtonTapped() {
+        let generator = UIImpactFeedbackGenerator(style: .rigid)
+        generator.prepare()
         presenter.downloadPhoto(photo: self.photo)
+        generator.impactOccurred()
     }
     
     private func configure(photo: Photo) {
@@ -237,10 +243,13 @@ extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
     
     func showAlert() {
         DispatchQueue.main.async {
+            let generator = UINotificationFeedbackGenerator()
+            generator.prepare()
             let alert = UIAlertController(title: "Saved", message: nil, preferredStyle: .alert)
             let okACtion = UIAlertAction(title: "Ok", style: .default)
             alert.addAction(okACtion)
             self.present(alert, animated: true, completion: nil)
+            generator.notificationOccurred(.success)
         }
     }
     

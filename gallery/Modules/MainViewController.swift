@@ -61,8 +61,11 @@ class MainViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let generator = UIImpactFeedbackGenerator(style: .soft)
+        generator.prepare()
         let photo = photos[indexPath.item]
         presenter.showPhoto(photo: photo)
+        generator.impactOccurred()
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
