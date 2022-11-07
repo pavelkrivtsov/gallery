@@ -10,7 +10,7 @@ import UIKit
 protocol CurrentPhotoPresenterProtocol: AnyObject {
     func loadPhoto()
     func showInfoAboutPhoto()
-    func downloadPhoto(photo: Photo)
+    func downloadPhoto()
 }
 
 class CurrentPhotoPresenter {
@@ -40,9 +40,9 @@ extension CurrentPhotoPresenter: CurrentPhotoPresenterProtocol {
         router.showInfo(from: self.photo)
     }
     
-    func downloadPhoto(photo: Photo) {
+    func downloadPhoto() {
         self.view?.startActivityIndicator()
-        networkService.downloadPhoto(photo: photo) { data in
+        networkService.downloadPhoto(photo: self.photo) { data in
             guard let photo = UIImage(data: data) else { return }
             UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
             self.view?.stopActivityIndicator()

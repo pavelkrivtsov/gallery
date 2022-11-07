@@ -25,18 +25,22 @@ class CurrentPhotoViewController: UIViewController {
         scrollView.maximumZoomScale = 4
         scrollView.showsVerticalScrollIndicator = false
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.isScrollEnabled = false
+        scrollView.delegate = self
         return scrollView
     }()
     
     private lazy var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(self.gestureRecognizer)
+        imageView.image == nil ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
         return imageView
     }()
     
-    private lazy var activityIndicator: UIActivityIndicatorView = {
+    private var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
+        activityIndicator.startAnimating()
         return activityIndicator
     }()
     
@@ -58,18 +62,10 @@ class CurrentPhotoViewController: UIViewController {
         return button
     }()
     
-    private var photo: Photo! {
-        didSet {
-            let photoURL = photo.urls.full
-            guard let url = URL(string: photoURL) else { return }
-            imageView.kf.setImage(with: url)
-            title = photo.user.name
-        }
-    }
-    
-    private var gestureRecognizer: UITapGestureRecognizer = {
+    private lazy var gestureRecognizer: UITapGestureRecognizer = {
         var gestureRecognizer = UITapGestureRecognizer()
         gestureRecognizer.numberOfTapsRequired = 2
+        gestureRecognizer.addTarget(self, action: #selector(handleZoomingTap))
         return gestureRecognizer
     }()
     
@@ -84,15 +80,8 @@ class CurrentPhotoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .systemBackground
-        scrollView.delegate = self
-        gestureRecognizer.addTarget(self, action: #selector(handleZoomingTap))
-        imageView.addGestureRecognizer(self.gestureRecognizer)
-        imageView.isUserInteractionEnabled = true
         addSubviews()
-        setupNavigationBar()
-        
         presenter.loadPhoto()
     }
     
@@ -102,23 +91,13 @@ class CurrentPhotoViewController: UIViewController {
         KingfisherManager.shared.cache.clearDiskCache()
         KingfisherManager.shared.cache.cleanExpiredDiskCache()
     }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        imageView.image == nil ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
-    }
-    
-    private func setupNavigationBar() {
-        navigationController?.navigationBar.topItem?.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = UIColor.init(named: "AccentColor")
-    }
-    
+
     private func addSubviews() {
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
-        view.addSubview(downloadButton)
-        view.addSubview(infoButton)
         view.addSubview(activityIndicator)
+        view.addSubview(infoButton)
+        view.addSubview(downloadButton)
         
         scrollView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
@@ -126,14 +105,15 @@ class CurrentPhotoViewController: UIViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         imageView.snp.makeConstraints { $0.leading.trailing.top.bottom.width.height.equalToSuperview() }
-        activityIndicator.snp.makeConstraints { $0.centerX.centerY.equalToSuperview() }
-        
+        activityIndicator.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
+            $0.width.height.equalTo(100)
+        }
         downloadButton.snp.makeConstraints {
             $0.width.height.equalTo(44)
             $0.trailing.equalToSuperview().inset(16)
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
         }
-        
         infoButton.snp.makeConstraints {
             $0.width.height.equalTo(44)
             $0.trailing.equalTo(downloadButton.snp.leading).offset(-16)
@@ -184,12 +164,15 @@ class CurrentPhotoViewController: UIViewController {
     private func downloadButtonTapped() {
         let generator = UIImpactFeedbackGenerator(style: .rigid)
         generator.prepare()
-        presenter.downloadPhoto(photo: self.photo)
+        presenter.downloadPhoto()
         generator.impactOccurred()
     }
     
     private func configure(photo: Photo) {
-        self.photo = photo
+        let photoURL = photo.urls.full
+        guard let url = URL(string: photoURL) else { return }
+        imageView.kf.setImage(with: url)
+        title = photo.user.name
     }
 }
 
@@ -224,7 +207,7 @@ extension CurrentPhotoViewController: UIScrollViewDelegate {
 }
 
 extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
-   
+    
     func loadPhoto(photo: Photo) {
         self.configure(photo: photo)
     }

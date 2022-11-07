@@ -89,6 +89,8 @@ extension MainViewController {
         searchController.searchBar.placeholder = "Search photos"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
+        navigationController.navigationBar.topItem?.backButtonTitle = ""
+        navigationController.navigationBar.tintColor = UIColor.init(named: "AccentColor")
         return navigationController
     }
 }
