@@ -34,13 +34,11 @@ class CurrentPhotoViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(self.gestureRecognizer)
-        imageView.image == nil ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
         return imageView
     }()
     
     private var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
-        activityIndicator.startAnimating()
         return activityIndicator
     }()
     
@@ -91,7 +89,7 @@ class CurrentPhotoViewController: UIViewController {
         KingfisherManager.shared.cache.clearDiskCache()
         KingfisherManager.shared.cache.cleanExpiredDiskCache()
     }
-
+    
     private func addSubviews() {
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
@@ -107,7 +105,6 @@ class CurrentPhotoViewController: UIViewController {
         imageView.snp.makeConstraints { $0.leading.trailing.top.bottom.width.height.equalToSuperview() }
         activityIndicator.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
-            $0.width.height.equalTo(100)
         }
         downloadButton.snp.makeConstraints {
             $0.width.height.equalTo(44)
@@ -120,6 +117,25 @@ class CurrentPhotoViewController: UIViewController {
             $0.centerY.equalTo(downloadButton.snp.centerY)
         }
     }
+    
+    @objc
+    private func infoButtonTapped() {
+        let generator = UIImpactFeedbackGenerator(style: .rigid)
+        generator.prepare()
+        presenter.showInfoAboutPhoto()
+        generator.impactOccurred()
+    }
+    
+    @objc
+    private func downloadButtonTapped() {
+        let generator = UIImpactFeedbackGenerator(style: .rigid)
+        generator.prepare()
+        self.presenter.downloadPhoto()
+        generator.impactOccurred()
+    }
+}
+
+extension CurrentPhotoViewController: UIScrollViewDelegate {
     
     @objc
     private func handleZoomingTap(sender: UITapGestureRecognizer)  {
@@ -152,32 +168,6 @@ class CurrentPhotoViewController: UIViewController {
         return zoomRect
     }
     
-    @objc
-    private func infoButtonTapped() {
-        let generator = UIImpactFeedbackGenerator(style: .rigid)
-        generator.prepare()
-        presenter.showInfoAboutPhoto()
-        generator.impactOccurred()
-    }
-    
-    @objc
-    private func downloadButtonTapped() {
-        let generator = UIImpactFeedbackGenerator(style: .rigid)
-        generator.prepare()
-        presenter.downloadPhoto()
-        generator.impactOccurred()
-    }
-    
-    private func configure(photo: Photo) {
-        let photoURL = photo.urls.full
-        guard let url = URL(string: photoURL) else { return }
-        imageView.kf.setImage(with: url)
-        title = photo.user.name
-    }
-}
-
-extension CurrentPhotoViewController: UIScrollViewDelegate {
-    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? { imageView }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -209,7 +199,19 @@ extension CurrentPhotoViewController: UIScrollViewDelegate {
 extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
     
     func loadPhoto(photo: Photo) {
-        self.configure(photo: photo)
+        let photoURL = photo.urls.full
+        guard let url = URL(string: photoURL) else { return }
+        DispatchQueue.main.async {
+            self.imageView.kf.setImage(with: url) { result in
+                switch result {
+                case .success(_):
+                    self.activityIndicator.stopAnimating()
+                case .failure(_):
+                    print("self.imageView.kf.setImage(with: url) { failure }")
+                }
+            }
+            self.title = photo.user.name
+        }
     }
     
     func startActivityIndicator() {
