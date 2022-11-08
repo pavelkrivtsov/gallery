@@ -14,15 +14,7 @@ class PhotoCell: UITableViewCell {
     static let cellIdentifier = "PhotoCell"
     private let photoView = UIImageView()
     private var authorLabel = UILabel()
-    
-    private var photo: Photo! {
-        didSet {
-            let photoURL = photo.urls.regular
-            guard let url = URL(string: photoURL) else { return }
-            photoView.kf.setImage(with: url)
-            authorLabel.text = photo.user.name
-        }
-    }
+    private var activityIndicator = UIActivityIndicatorView(style: .medium)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -35,8 +27,13 @@ class PhotoCell: UITableViewCell {
         authorLabel.textColor = .white
         contentView.addSubview(authorLabel)
         authorLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(16)
-            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.leading.trailing.equalToSuperview().inset(16)
+        }
+        
+        activityIndicator.startAnimating()
+        contentView.addSubview(activityIndicator)
+        activityIndicator.snp.makeConstraints {
+            $0.centerX.centerY.equalToSuperview()
         }
     }
     
@@ -47,9 +44,23 @@ class PhotoCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.photoView.image = nil
+        self.authorLabel.text = ""
+        self.activityIndicator.startAnimating()
     }
     
     func configure(photo: Photo){
-        self.photo = photo
+        let photoURL = photo.urls.regular
+        guard let url = URL(string: photoURL) else { return }
+        DispatchQueue.main.async {
+            self.photoView.kf.setImage(with: url) { result in
+                switch result {
+                case .success(_):
+                    self.activityIndicator.stopAnimating()
+                case .failure(_):
+                    print("self.imageView.kf.setImage(with: url) { failure }")
+                }
+            }
+            self.authorLabel.text = photo.user.name
+        }
     }
 }
