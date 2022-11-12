@@ -199,7 +199,7 @@ extension CurrentPhotoViewController: UIScrollViewDelegate {
 extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
     
     func loadPhoto(photo: Photo) {
-        let photoURL = photo.urls.full
+        let photoURL = photo.urls.regular
         guard let url = URL(string: photoURL) else { return }
         DispatchQueue.main.async {
             self.imageView.kf.setImage(with: url) { result in
