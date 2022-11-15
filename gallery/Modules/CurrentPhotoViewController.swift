@@ -256,14 +256,25 @@ extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
     }
     
     func showAlert() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
         DispatchQueue.main.async { [weak self] in
-            let generator = UINotificationFeedbackGenerator()
-            generator.prepare()
-            let alert = UIAlertController(title: "Saved", message: nil, preferredStyle: .alert)
-            let okACtion = UIAlertAction(title: "Ok", style: .default)
-            alert.addAction(okACtion)
-            self?.present(alert, animated: true, completion: nil)
-            generator.notificationOccurred(.success)
+            let alert = UIAlertController(title: "", message: nil, preferredStyle: .alert)
+            let imageView = UIImageView(image: .init(systemName: "square.and.arrow.down"))
+            let alertSize = 75
+            alert.view.addSubview(imageView)
+            alert.view.snp.makeConstraints {
+                $0.size.equalTo(alertSize)
+            }
+            imageView.snp.makeConstraints {
+                $0.centerY.centerX.equalToSuperview()
+                $0.size.equalTo(alertSize / 2)
+            }
+            
+            self?.present(alert, animated: true) {
+                alert.dismiss(animated: true)
+            }
         }
+        generator.notificationOccurred(.success)
     }
 }

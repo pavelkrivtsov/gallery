@@ -32,6 +32,7 @@ extension CurrentPhotoPresenter: CurrentPhotoPresenterProtocol {
         self.view?.startActivityIndicator()
         self.networkService.getCurrentPhoto(by: self.photo.id) { [weak self] photo in
             guard let self = self, let photo = photo else { return }
+            self.photo = photo
             self.view?.loadPhoto(photo: photo)
         }
     }
