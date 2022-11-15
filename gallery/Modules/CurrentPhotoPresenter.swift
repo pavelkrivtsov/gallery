@@ -61,6 +61,7 @@ extension CurrentPhotoPresenter: URLSessionDownloadDelegate {
         }
         UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
         self.view?.hideProgressView()
+        self.view?.setTitle(title: self.photo.user.name ?? "")
         self.view?.showAlert()
     }
     

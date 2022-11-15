@@ -16,6 +16,7 @@ protocol CurrentPhotoViewControllerProtocol: AnyObject {
     func trackDownloadProgress(progress: Float)
     func hideProgressView()
     func showProgressView()
+    func setTitle(title: String)
 }
 
 class CurrentPhotoViewController: UIViewController {
@@ -212,7 +213,7 @@ extension CurrentPhotoViewController: UIScrollViewDelegate {
 }
 
 extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
-    
+        
     func loadPhoto(photo: Photo) {
         let photoURL = photo.urls.regular
         guard let url = URL(string: photoURL) else { return }
@@ -239,6 +240,7 @@ extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
     func trackDownloadProgress(progress: Float) {
         DispatchQueue.main.async {
             self.progressView.setProgress(progress, animated: true)
+            self.title = "\(Int(progress * 100))%"
         }
     }
     
@@ -246,6 +248,12 @@ extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
         DispatchQueue.main.async {
             self.progressView.progress = 0
             self.progressView.isHidden = true
+        }
+    }
+    
+    func setTitle(title: String) {
+        DispatchQueue.main.async {
+            self.title = title
         }
     }
     
