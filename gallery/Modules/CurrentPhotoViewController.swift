@@ -12,8 +12,10 @@ import SnapKit
 protocol CurrentPhotoViewControllerProtocol: AnyObject {
     func loadPhoto(photo: Photo)
     func startActivityIndicator()
-    func stopActivityIndicator()
     func showAlert()
+    func trackDownloadProgress(progress: Float)
+    func hideProgressView()
+    func showProgressView()
 }
 
 class CurrentPhotoViewController: UIViewController {
@@ -40,6 +42,12 @@ class CurrentPhotoViewController: UIViewController {
     private var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         return activityIndicator
+    }()
+    
+    private var progressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .bar)
+        progressView.isHidden = true
+        return progressView
     }()
     
     private lazy var infoButton: UIButton = {
@@ -93,6 +101,7 @@ class CurrentPhotoViewController: UIViewController {
     private func addSubviews() {
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
+        view.addSubview(progressView)
         view.addSubview(activityIndicator)
         view.addSubview(infoButton)
         view.addSubview(downloadButton)
@@ -102,6 +111,12 @@ class CurrentPhotoViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
+
+        progressView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+
         imageView.snp.makeConstraints { $0.leading.trailing.top.bottom.width.height.equalToSuperview() }
         activityIndicator.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
@@ -201,41 +216,54 @@ extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
     func loadPhoto(photo: Photo) {
         let photoURL = photo.urls.regular
         guard let url = URL(string: photoURL) else { return }
-        DispatchQueue.main.async {
-            self.imageView.kf.setImage(with: url) { result in
+        DispatchQueue.main.async { [weak self] in
+            self?.imageView.kf.setImage(with: url) { result in
                 switch result {
                 case .success(_):
-                    self.activityIndicator.stopAnimating()
+                    self?.activityIndicator.stopAnimating()
+                    
                 case .failure(_):
                     print("self.imageView.kf.setImage(with: url) { failure }")
                 }
             }
-            self.title = photo.user.name
+            self?.title = photo.user.name
         }
     }
     
     func startActivityIndicator() {
-        DispatchQueue.main.async {
-            self.activityIndicator.startAnimating()
+        DispatchQueue.main.async { [weak self] in
+            self?.activityIndicator.startAnimating()
         }
     }
     
-    func stopActivityIndicator() {
+    func trackDownloadProgress(progress: Float) {
         DispatchQueue.main.async {
-            self.activityIndicator.stopAnimating()
+            self.progressView.setProgress(progress, animated: true)
+        }
+    }
+    
+    func hideProgressView() {
+        DispatchQueue.main.async {
+            self.progressView.progress = 0
+            self.progressView.isHidden = true
+        }
+    }
+    
+    func showProgressView() {
+        DispatchQueue.main.async {
+            self.progressView.isHidden = false
         }
     }
     
     func showAlert() {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
             let generator = UINotificationFeedbackGenerator()
             generator.prepare()
             let alert = UIAlertController(title: "Saved", message: nil, preferredStyle: .alert)
             let okACtion = UIAlertAction(title: "Ok", style: .default)
             alert.addAction(okACtion)
-            self.present(alert, animated: true, completion: nil)
+            self?.present(alert, animated: true, completion: nil)
             generator.notificationOccurred(.success)
         }
     }
-    
 }

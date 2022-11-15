@@ -13,7 +13,7 @@ protocol CurrentPhotoPresenterProtocol: AnyObject {
     func downloadPhoto()
 }
 
-class CurrentPhotoPresenter {
+class CurrentPhotoPresenter: NSObject {
     weak var view: CurrentPhotoViewControllerProtocol?
     private var networkService: NetworkServiceProtocol
     private var router: CurrentPhotoRouterProtocol
@@ -30,25 +30,45 @@ extension CurrentPhotoPresenter: CurrentPhotoPresenterProtocol {
     
     func loadPhoto() {
         self.view?.startActivityIndicator()
-        self.view?.loadPhoto(photo: self.photo)
+        self.networkService.getCurrentPhoto(by: self.photo.id) { [weak self] photo in
+            guard let self = self, let photo = photo else { return }
+            self.view?.loadPhoto(photo: photo)
+        }
     }
     
     func showInfoAboutPhoto() {
-        self.networkService.getCurrentPhoto(by: self.photo.id) { [weak self] photo in
-            guard let self = self, let photo = photo else { return }
-            self.photo = photo
-            self.router.showInfo(from: self.photo)
-        }
+        self.router.showInfo(from: self.photo)
     }
     
     func downloadPhoto() {
-        self.view?.startActivityIndicator()
-        networkService.downloadPhoto(photo: self.photo) { data in
-            guard let photo = UIImage(data: data) else { return }
-            UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
-            self.view?.stopActivityIndicator()
-            self.view?.showAlert()
+        self.view?.showProgressView()
+        let session = URLSession(configuration: .default,
+                                 delegate: self,
+                                 delegateQueue: nil)
+        networkService.downloadPhoto(session: session, photo: self.photo)
+    }
+}
+
+extension CurrentPhotoPresenter: URLSessionDownloadDelegate {
+    
+    func urlSession(_ session: URLSession,
+                    downloadTask: URLSessionDownloadTask,
+                    didFinishDownloadingTo location: URL) {
+        guard let data = try? Data(contentsOf: location), let photo = UIImage(data: data) else {
+            print("The data could be loaded")
+            return
         }
+        UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
+        self.view?.hideProgressView()
+        self.view?.showAlert()
     }
     
+    func urlSession(_ session: URLSession,
+                    downloadTask: URLSessionDownloadTask,
+                    didWriteData bytesWritten: Int64,
+                    totalBytesWritten: Int64,
+                    totalBytesExpectedToWrite: Int64) {
+        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+        self.view?.trackDownloadProgress(progress: progress)
+    }
 }
