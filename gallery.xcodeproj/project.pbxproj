@@ -117,6 +117,24 @@
 			name = TableManager;
 			sourceTree = "<group>";
 		};
+		1E20ACF52926718100BCAD64 /* MapViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				1E9698212900904400F3868A /* MapViewCell.swift */,
+				1EFC591D29088002000C16D4 /* Place.swift */,
+			);
+			name = MapViewCell;
+			sourceTree = "<group>";
+		};
+		1E20ACF62926718E00BCAD64 /* StackLabelCell */ = {
+			isa = PBXGroup;
+			children = (
+				1E48B0F129071FB6006A40A2 /* StackLabelCell.swift */,
+				1EFC591B29082787000C16D4 /* LabelStack.swift */,
+			);
+			name = StackLabelCell;
+			sourceTree = "<group>";
+		};
 		1E5A928B28EB7ED800A8CE4E /* CurrentPhoto */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,8 +163,6 @@
 				1E96981728FDC01400F3868A /* DetailTableManager.swift */,
 				1E96981928FDEEF600F3868A /* CellsModels */,
 				1E96981A28FDEF1000F3868A /* CellsViews */,
-				1EFC591D29088002000C16D4 /* Place.swift */,
-				1EFC591B29082787000C16D4 /* LabelStack.swift */,
 			);
 			name = TableManager;
 			sourceTree = "<group>";
@@ -163,8 +179,8 @@
 			isa = PBXGroup;
 			children = (
 				1E96981F28FDF03400F3868A /* LabelCell.swift */,
-				1E9698212900904400F3868A /* MapViewCell.swift */,
-				1E48B0F129071FB6006A40A2 /* StackLabelCell.swift */,
+				1E20ACF52926718100BCAD64 /* MapViewCell */,
+				1E20ACF62926718E00BCAD64 /* StackLabelCell */,
 			);
 			name = CellsViews;
 			sourceTree = "<group>";
