@@ -6,11 +6,6 @@
 //
 
 import UIKit
-import SnapKit
-
-protocol DetailPhotoInfoViewControllerProtocol: AnyObject {
-    func showDetailInfo()
-}
 
 class DetailPhotoInfoViewController: UIViewController {
     private var presenter: DetailPhotoInfoPresenterProtocol
@@ -28,24 +23,8 @@ class DetailPhotoInfoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter.getDetailInfo()
-    }
-    
-    public override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        configureTableView()
-    }
-    
-    private func configureTableView() {
         view.addSubview(tableView)
-        tableView.snp.makeConstraints {
-            $0.top.leading.trailing.bottom.equalToSuperview()
-        }
-    }
-}
-
-extension DetailPhotoInfoViewController: DetailPhotoInfoViewControllerProtocol {
-    func showDetailInfo() {
-
+        self.tableView.frame = self.view.bounds
+        presenter.getDetailInfo()
     }
 }

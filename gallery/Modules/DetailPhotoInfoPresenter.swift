@@ -12,11 +12,10 @@ protocol DetailPhotoInfoPresenterProtocol: AnyObject {
 }
 
 class DetailPhotoInfoPresenter {
-    weak var view: DetailPhotoInfoViewControllerProtocol?
-    private var tableManager: TableManagerProtocol
+    private var tableManager: DetailTableManagerProtocol
     private var photo: Photo
     
-    init(photo: Photo, tableManager: TableManager) {
+    init(photo: Photo, tableManager: DetailTableManager) {
         self.photo = photo
         self.tableManager = tableManager
     }
