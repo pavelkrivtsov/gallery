@@ -29,13 +29,7 @@ class DetailTableManager: NSObject {
 
 extension DetailTableManager: DetailTableManagerProtocol {
     
-    func fillViewModels(viewModels: [CellType]) {
-        self.viewModels = viewModels
-        self.registerForCells(viewModels: viewModels)
-        self.tableView.reloadData()
-    }
-    
-    func registerForCells(viewModels: [CellType]) {
+    private func registerForCells(viewModels: [CellType]) {
         let keys: Set<String> = Set(viewModels.map({ $0.cellsId }))
         keys.forEach { key in
             let objectClass: AnyClass?  = NSClassFromString( "gallery." + key)
@@ -44,6 +38,12 @@ extension DetailTableManager: DetailTableManagerProtocol {
             }
             self.tableView.register(classType, forCellReuseIdentifier: key)
         }
+    }
+    
+    func fillViewModels(viewModels: [CellType]) {
+        self.viewModels = viewModels
+        self.registerForCells(viewModels: viewModels)
+        self.tableView.reloadData()
     }
     
     func showScreen(tableView: UITableView,

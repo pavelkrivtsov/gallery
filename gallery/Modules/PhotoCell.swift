@@ -46,6 +46,9 @@ class PhotoCell: UITableViewCell {
         self.photoView.image = nil
         self.authorLabel.text = ""
         self.activityIndicator.startAnimating()
+        KingfisherManager.shared.cache.clearMemoryCache()
+        KingfisherManager.shared.cache.clearDiskCache()
+        KingfisherManager.shared.cache.cleanExpiredDiskCache()
     }
     
     func configure(photo: Photo){

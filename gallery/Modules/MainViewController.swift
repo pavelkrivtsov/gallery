@@ -8,22 +8,20 @@
 import UIKit
 import Kingfisher
 
-protocol MainViewControllerProtocol: AnyObject {
-    func setList(from photos: [Photo])
-}
+//protocol MainViewControllerProtocol: AnyObject {
+//    func setList(from photos: [Photo])
+//}
 
-class MainViewController: UITableViewController {
+class MainViewController: UIViewController {
     
     private var presenter: MainPresenterProtocol
+    private var tableView: UITableView
     private let searchController = UISearchController(searchResultsController: nil)
-    private var dataSource: UITableViewDiffableDataSource<Int, Photo>!
-    private var photos = [Photo]()
-    private var currentPage = 1
-    private var searchText = ""
-     
-    init(presenter: MainPresenterProtocol) {
+         
+    init(presenter: MainPresenterProtocol, tableView: UITableView) {
         self.presenter = presenter
-        super.init(style: .plain)
+        self.tableView = tableView
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -32,52 +30,9 @@ class MainViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = false
-        tableView.register(PhotoCell.self, forCellReuseIdentifier: PhotoCell.cellIdentifier)
-        
-        dataSource = UITableViewDiffableDataSource<Int, Photo>(tableView: tableView) { tableView, indexPath, item in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: PhotoCell.cellIdentifier,
-                                                           for: indexPath) as? PhotoCell else {
-                fatalError("ImageCell is not registered for table view")
-            }
-            cell.configure(photo: item)
-            return cell
-        }
-        
-        presenter.loadList(for: self.currentPage)
-    }
-    
-    override func viewWillLayoutSubviews() {
-        KingfisherManager.shared.cache.clearMemoryCache()
-        KingfisherManager.shared.cache.clearDiskCache()
-        KingfisherManager.shared.cache.cleanExpiredDiskCache()
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let photo = self.photos[indexPath.item]
-        let heightPerItem = CGFloat(photo.width) / CGFloat(photo.height)
-        return tableView.frame.width / heightPerItem
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let generator = UIImpactFeedbackGenerator(style: .soft)
-        generator.prepare()
-        let photo = photos[indexPath.item]
-        presenter.showPhoto(photo: photo)
-        generator.impactOccurred()
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let lastIndex = self.photos.count - 1
-        if indexPath.row == lastIndex {
-            self.currentPage += 1
-            if !self.searchText.isEmpty {
-                self.presenter.loadFoundList(from: self.searchText, for: self.currentPage)
-            } else {
-                self.presenter.loadList(for: self.currentPage)
-            }
-        }
+        view.addSubview(tableView)
+        self.tableView.frame = self.view.bounds
+        presenter.loadList()
     }
 }
 
@@ -98,30 +53,26 @@ extension MainViewController {
 extension MainViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.photos.removeAll()
-        self.currentPage = 1
-        
-        if let searchText = searchBar.text {
-            self.searchText = searchText
-            self.presenter.loadFoundList(from: searchText, for: self.currentPage)
-        } else {
-            self.presenter.loadList(for: self.currentPage)
+        if let searchText = searchBar.text, !searchText.isEmpty  {
+            self.presenter.clearList()
+            self.presenter.loadFoundList(from: searchText)
         }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.photos.removeAll()
-        self.currentPage = 1
-        self.presenter.loadList(for: self.currentPage)
+        if let searchText = searchBar.text, !searchText.isEmpty {
+            self.presenter.clearList()
+            self.presenter.loadList()
+        }
     }
 }
 
-extension MainViewController: MainViewControllerProtocol {
-    func setList(from photos: [Photo]) {
-        self.photos = self.photos + photos
-        var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(self.photos)
-        dataSource.apply(snapshot, animatingDifferences: false)
-    }
-}
+//extension MainViewController: MainViewControllerProtocol {
+//    func setList(from photos: [Photo]) {
+//        self.photos = self.photos + photos
+//        var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
+//        snapshot.appendSections([0])
+//        snapshot.appendItems(self.photos)
+//        dataSource.apply(snapshot, animatingDifferences: false)
+//    }
+//}
