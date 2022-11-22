@@ -6,19 +6,24 @@
 //
 
 import UIKit
-import Kingfisher
 
-//protocol MainViewControllerProtocol: AnyObject {
-//    func setList(from photos: [Photo])
-//}
+protocol MainViewOutput: AnyObject {
+    func clearList()
+    func loadList()
+    func loadFoundList(from text: String)
+}
+
+protocol MainViewInput: AnyObject {
+    func showCurrentPhoto(viewController: UIViewController)
+}
 
 class MainViewController: UIViewController {
     
-    private var presenter: MainPresenterProtocol
+    private var presenter: MainViewOutput
     private var tableView: UITableView
     private let searchController = UISearchController(searchResultsController: nil)
          
-    init(presenter: MainPresenterProtocol, tableView: UITableView) {
+    init(presenter: MainViewOutput, tableView: UITableView) {
         self.presenter = presenter
         self.tableView = tableView
         super.init(nibName: nil, bundle: nil)
@@ -36,7 +41,15 @@ class MainViewController: UIViewController {
     }
 }
 
+extension MainViewController: MainViewInput {
+    
+    func showCurrentPhoto(viewController: UIViewController) {
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 extension MainViewController {
+    
     func embedInNavigationController() -> UINavigationController {
         let navigationController = UINavigationController(rootViewController: self)
         searchController.definesPresentationContext = true
@@ -66,13 +79,3 @@ extension MainViewController: UISearchBarDelegate {
         }
     }
 }
-
-//extension MainViewController: MainViewControllerProtocol {
-//    func setList(from photos: [Photo]) {
-//        self.photos = self.photos + photos
-//        var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
-//        snapshot.appendSections([0])
-//        snapshot.appendItems(self.photos)
-//        dataSource.apply(snapshot, animatingDifferences: false)
-//    }
-//}

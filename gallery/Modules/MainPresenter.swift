@@ -5,34 +5,25 @@
 //  Created by Павел Кривцов on 20.09.2022.
 //
 
-import Foundation
-
-protocol MainPresenterProtocol: AnyObject {
-    func clearList()
-    func loadList()
-    func loadFoundList(from text: String)
-    func willDisplay(isSearch: Bool)
-    func showPhoto(photo: Photo)
-}
+import UIKit
+import Kingfisher
 
 class MainPresenter {
-//    weak var view: MainViewControllerProtocol?
-    private var networkService: NetworkServiceProtocol
-    private var tableManager: MainTableManagerProtocol
-    private var router: MainRouterProtocol
     
+    weak var view: MainViewInput?
+    private var networkService: NetworkServiceOutput
+    private var tableManager: MainTableManagerOutput
     private var photos = [Photo]()
     private var currentPage = 1
     private var searchText = ""
     
-    init(networkDataFetcher: NetworkServiceProtocol, tableManager: MainTableManager, router: MainRouterProtocol) {
+    init(networkDataFetcher: NetworkServiceOutput, tableManager: MainTableManagerOutput) {
         self.networkService = networkDataFetcher
         self.tableManager = tableManager
-        self.router = router
     }
 }
 
-extension MainPresenter: MainPresenterProtocol {
+extension MainPresenter: MainViewOutput {
     
     func clearList() {
         self.currentPage = 1
@@ -53,13 +44,18 @@ extension MainPresenter: MainPresenterProtocol {
             self.tableManager.setList(from: searchResults.results, isSearch: self.searchText.isEmpty ? false : true)
         }
     }
+}
+
+extension MainPresenter: MainTableManagerInput {
     
     func willDisplay(isSearch: Bool) {
         self.currentPage += 1
         isSearch ? self.loadFoundList(from: self.searchText) : self.loadList()
     }
-    
+
     func showPhoto(photo: Photo) {
-        router.showPhoto(photo: photo)
+        let detailVC = CurrentPhotoAssembly.assemble(photo: photo)
+        view?.showCurrentPhoto(viewController: detailVC)
     }
 }
+

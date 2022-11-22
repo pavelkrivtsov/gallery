@@ -23,14 +23,13 @@ class PhotoCell: UITableViewCell {
         photoView.frame = contentView.bounds
         photoView.autoresizingMask = [.flexibleHeight,.flexibleWidth]
         
+        contentView.addSubview(authorLabel)
         authorLabel.numberOfLines = 1
         authorLabel.textColor = .white
-        contentView.addSubview(authorLabel)
         authorLabel.snp.makeConstraints {
             $0.bottom.leading.trailing.equalToSuperview().inset(16)
         }
         
-        activityIndicator.startAnimating()
         contentView.addSubview(activityIndicator)
         activityIndicator.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
@@ -55,6 +54,7 @@ class PhotoCell: UITableViewCell {
         let photoURL = photo.urls.regular
         guard let url = URL(string: photoURL) else { return }
         DispatchQueue.main.async { [weak self] in
+            self?.activityIndicator.startAnimating()
             self?.photoView.kf.setImage(with: url) { result in
                 switch result {
                 case .success(_):

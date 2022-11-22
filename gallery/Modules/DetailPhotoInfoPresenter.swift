@@ -7,24 +7,24 @@
 
 import Foundation
 
-protocol DetailPhotoInfoPresenterProtocol: AnyObject {
+protocol DetailPhotoInfoViewOutput: AnyObject {
     func getDetailInfo()
 }
 
 class DetailPhotoInfoPresenter {
-    private var tableManager: DetailTableManagerProtocol
+    
+    private var tableManager: DetailTableManagerOutput
     private var photo: Photo
     
-    init(photo: Photo, tableManager: DetailTableManager) {
+    init(photo: Photo, tableManager: DetailTableManagerOutput) {
         self.photo = photo
         self.tableManager = tableManager
     }
 }
 
-extension DetailPhotoInfoPresenter: DetailPhotoInfoPresenterProtocol {
+extension DetailPhotoInfoPresenter: DetailPhotoInfoViewOutput {
     
     func getDetailInfo() {
-        
         let authorTitleCell: [CellType] = {
             return [
                 .labelCell(label: CellLabelProperties(title: "Info",

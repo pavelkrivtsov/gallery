@@ -42,6 +42,7 @@ class StackLabelCell: UITableViewCell {
 }
 
 extension StackLabelCell: StackLabelCellProtocol {
+    
     public func cellConfiguration(model: CellTypeProtocol) {
         guard let firstTitleLabel = model.labelStack?.firstLabelStackTitle,
         let secondTitleLabel = model.labelStack?.secondLabelStackTitle else { return }

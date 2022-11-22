@@ -8,13 +8,11 @@
 import UIKit
 
 class CurrentPhotoAssembly {
-    static func assemle(photo: Photo) -> UIViewController {
+    static func assemble(photo: Photo) -> UIViewController {
         let networkService = NetworkService()
-        let router = CurrentPhotoRouter()
-        let presenter = CurrentPhotoPresenter(photo: photo, router: router, networkService: networkService)
+        let presenter = CurrentPhotoPresenter(photo: photo, networkService: networkService)
         let view = CurrentPhotoViewController(presenter: presenter)
         presenter.view = view
-        router.view = view
         return view
     }
 }

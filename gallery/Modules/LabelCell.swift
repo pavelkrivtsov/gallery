@@ -39,6 +39,7 @@ class LabelCell: UITableViewCell {
 }
 
 extension LabelCell: LabelCellProtocol {
+    
     public func cellConfiguration(model: CellTypeProtocol) {
         guard let titleLabel = model.label else { return }
         self.titleLabel.text = titleLabel.title

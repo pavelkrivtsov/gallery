@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol DetailTableManagerProtocol {
+protocol DetailTableManagerOutput {
     func fillViewModels(viewModels: [CellType])
     func showScreen(tableView: UITableView,
                     cellForRowAt indexPath: IndexPath,
@@ -15,6 +15,7 @@ protocol DetailTableManagerProtocol {
 }
 
 class DetailTableManager: NSObject {
+    
     private var tableView: UITableView
     private var viewModels = [CellType]()
     
@@ -27,7 +28,7 @@ class DetailTableManager: NSObject {
     }
 }
 
-extension DetailTableManager: DetailTableManagerProtocol {
+extension DetailTableManager: DetailTableManagerOutput {
     
     private func registerForCells(viewModels: [CellType]) {
         let keys: Set<String> = Set(viewModels.map({ $0.cellsId }))
@@ -80,7 +81,6 @@ extension DetailTableManager: DetailTableManagerProtocol {
     }
 }
 
-// MARK: - Table view data source implementation
 extension DetailTableManager: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

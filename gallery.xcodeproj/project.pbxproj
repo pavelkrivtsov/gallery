@@ -15,7 +15,6 @@
 		1E20ACF42926632200BCAD64 /* MainTableManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E20ACF32926632200BCAD64 /* MainTableManager.swift */; };
 		1E221B9728FB4786007031A9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1E221B9628FB4786007031A9 /* SnapKit */; };
 		1E48B0F229071FB6006A40A2 /* StackLabelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E48B0F129071FB6006A40A2 /* StackLabelCell.swift */; };
-		1E5A928A28EB728600A8CE4E /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928928EB728600A8CE4E /* MainRouter.swift */; };
 		1E5A928D28EB809500A8CE4E /* CurrentPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */; };
 		1E5A928F28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */; };
 		1E5A929128EB9E5900A8CE4E /* CurrentPhotoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A929028EB9E5900A8CE4E /* CurrentPhotoPresenter.swift */; };
@@ -26,7 +25,6 @@
 		1E96981C28FDEF3A00F3868A /* CellsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981B28FDEF3A00F3868A /* CellsModels.swift */; };
 		1E96982028FDF03400F3868A /* LabelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981F28FDF03400F3868A /* LabelCell.swift */; };
 		1E9698222900904400F3868A /* MapViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9698212900904400F3868A /* MapViewCell.swift */; };
-		1EA1EB5528EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA1EB5428EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift */; };
 		1EEF6EA228D9DB1300B864AB /* MainAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */; };
 		1EEF6EA628D9DB3800B864AB /* MainPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */; };
 		1EEF6EAB28D9FEB500B864AB /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEF6EAA28D9FEB500B864AB /* NetworkService.swift */; };
@@ -47,7 +45,6 @@
 		1E12818528D8D3410011C8FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1E20ACF32926632200BCAD64 /* MainTableManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableManager.swift; sourceTree = "<group>"; };
 		1E48B0F129071FB6006A40A2 /* StackLabelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackLabelCell.swift; sourceTree = "<group>"; };
-		1E5A928928EB728600A8CE4E /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
 		1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoViewController.swift; sourceTree = "<group>"; };
 		1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoAssembly.swift; sourceTree = "<group>"; };
 		1E5A929028EB9E5900A8CE4E /* CurrentPhotoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoPresenter.swift; sourceTree = "<group>"; };
@@ -58,7 +55,6 @@
 		1E96981B28FDEF3A00F3868A /* CellsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellsModels.swift; sourceTree = "<group>"; };
 		1E96981F28FDF03400F3868A /* LabelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelCell.swift; sourceTree = "<group>"; };
 		1E9698212900904400F3868A /* MapViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewCell.swift; sourceTree = "<group>"; };
-		1EA1EB5428EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoRouter.swift; sourceTree = "<group>"; };
 		1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembly.swift; sourceTree = "<group>"; };
 		1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPresenter.swift; sourceTree = "<group>"; };
 		1EEF6EAA28D9FEB500B864AB /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -141,7 +137,6 @@
 				1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */,
 				1E5A929028EB9E5900A8CE4E /* CurrentPhotoPresenter.swift */,
 				1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */,
-				1EA1EB5428EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift */,
 			);
 			name = CurrentPhoto;
 			sourceTree = "<group>";
@@ -229,7 +224,6 @@
 				1EEF6EA128D9DB1300B864AB /* MainAssembly.swift */,
 				1EEF6EA528D9DB3800B864AB /* MainPresenter.swift */,
 				1E12817B28D8D3400011C8FC /* MainViewController.swift */,
-				1E5A928928EB728600A8CE4E /* MainRouter.swift */,
 				1E20ACF2292662EE00BCAD64 /* TableManager */,
 			);
 			name = MainScreen;
@@ -320,7 +314,6 @@
 				1E96981128FDBB6400F3868A /* DetailPhotoInfoAssembly.swift in Sources */,
 				1E96981828FDC01400F3868A /* DetailTableManager.swift in Sources */,
 				1EFC591C29082787000C16D4 /* LabelStack.swift in Sources */,
-				1EA1EB5528EDF4DB00EDB7F9 /* CurrentPhotoRouter.swift in Sources */,
 				1E12817828D8D3400011C8FC /* AppDelegate.swift in Sources */,
 				1E20ACF42926632200BCAD64 /* MainTableManager.swift in Sources */,
 				1E96981528FDBB8A00F3868A /* DetailPhotoInfoViewController.swift in Sources */,
@@ -331,7 +324,6 @@
 				1E5A928D28EB809500A8CE4E /* CurrentPhotoViewController.swift in Sources */,
 				1E96981C28FDEF3A00F3868A /* CellsModels.swift in Sources */,
 				1E12817A28D8D3400011C8FC /* SceneDelegate.swift in Sources */,
-				1E5A928A28EB728600A8CE4E /* MainRouter.swift in Sources */,
 				1E5A929128EB9E5900A8CE4E /* CurrentPhotoPresenter.swift in Sources */,
 				1E48B0F229071FB6006A40A2 /* StackLabelCell.swift in Sources */,
 				1E9698222900904400F3868A /* MapViewCell.swift in Sources */,

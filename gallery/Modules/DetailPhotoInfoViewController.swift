@@ -8,10 +8,11 @@
 import UIKit
 
 class DetailPhotoInfoViewController: UIViewController {
-    private var presenter: DetailPhotoInfoPresenterProtocol
-    public var tableView: UITableView
     
-    init(presenter: DetailPhotoInfoPresenterProtocol, tableView: UITableView) {
+    private var presenter: DetailPhotoInfoViewOutput
+    private var tableView: UITableView
+    
+    init(presenter: DetailPhotoInfoViewOutput, tableView: UITableView) {
         self.presenter = presenter
         self.tableView = tableView
         super.init(nibName: nil, bundle: nil)

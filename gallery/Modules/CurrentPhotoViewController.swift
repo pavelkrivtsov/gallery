@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 import SnapKit
 
-protocol CurrentPhotoViewControllerProtocol: AnyObject {
+protocol CurrentPhotoViewInput: AnyObject {
     func loadPhoto(photo: Photo)
     func startActivityIndicator()
     func showAlert()
@@ -17,10 +17,18 @@ protocol CurrentPhotoViewControllerProtocol: AnyObject {
     func hideProgressView()
     func showProgressView()
     func setTitle(title: String)
+    func showInfoAboutPhoto(from view: UIViewController)
+}
+
+protocol CurrentPhotoViewOutput: AnyObject {
+    func loadPhoto()
+    func showInfoAboutPhoto()
+    func downloadPhoto()
 }
 
 class CurrentPhotoViewController: UIViewController {
-    private var presenter: CurrentPhotoPresenterProtocol
+    
+    private var presenter: CurrentPhotoViewOutput
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -40,12 +48,12 @@ class CurrentPhotoViewController: UIViewController {
         return imageView
     }()
     
-    private var activityIndicator: UIActivityIndicatorView = {
+    private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .medium)
         return activityIndicator
     }()
     
-    private var progressView: UIProgressView = {
+    private lazy var progressView: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .bar)
         progressView.isHidden = true
         return progressView
@@ -76,7 +84,7 @@ class CurrentPhotoViewController: UIViewController {
         return gestureRecognizer
     }()
     
-    init(presenter: CurrentPhotoPresenterProtocol) {
+    init(presenter: CurrentPhotoViewOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
@@ -112,13 +120,13 @@ class CurrentPhotoViewController: UIViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
-
         progressView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
-
-        imageView.snp.makeConstraints { $0.leading.trailing.top.bottom.width.height.equalToSuperview() }
+        imageView.snp.makeConstraints {
+            $0.leading.trailing.top.bottom.width.height.equalToSuperview()
+        }
         activityIndicator.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
         }
@@ -209,11 +217,14 @@ extension CurrentPhotoViewController: UIScrollViewDelegate {
             scrollView.contentInset = .zero
         }
     }
-    
 }
 
-extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
-        
+extension CurrentPhotoViewController: CurrentPhotoViewInput {
+    
+    func showInfoAboutPhoto(from view: UIViewController) {
+        navigationController?.pushViewController(view, animated: true)
+    }
+    
     func loadPhoto(photo: Photo) {
         let photoURL = photo.urls.regular
         guard let url = URL(string: photoURL) else { return }
@@ -238,28 +249,28 @@ extension CurrentPhotoViewController: CurrentPhotoViewControllerProtocol {
     }
     
     func trackDownloadProgress(progress: Float) {
-        DispatchQueue.main.async {
-            self.progressView.setProgress(progress, animated: true)
-            self.title = "\(Int(progress * 100))%"
+        DispatchQueue.main.async { [weak self] in
+            self?.progressView.setProgress(progress, animated: true)
+            self?.title = "\(Int(progress * 100))%"
         }
     }
     
     func hideProgressView() {
-        DispatchQueue.main.async {
-            self.progressView.progress = 0
-            self.progressView.isHidden = true
+        DispatchQueue.main.async { [weak self] in
+            self?.progressView.progress = 0
+            self?.progressView.isHidden = true
         }
     }
     
     func setTitle(title: String) {
-        DispatchQueue.main.async {
-            self.title = title
+        DispatchQueue.main.async { [weak self] in
+            self?.title = title
         }
     }
     
     func showProgressView() {
-        DispatchQueue.main.async {
-            self.progressView.isHidden = false
+        DispatchQueue.main.async { [weak self] in
+            self?.progressView.isHidden = false
         }
     }
     

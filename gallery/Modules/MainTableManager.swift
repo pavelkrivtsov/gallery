@@ -7,14 +7,19 @@
 
 import UIKit
 
-protocol MainTableManagerProtocol {
+protocol MainTableManagerOutput {
     func clearList()
     func setList(from photos: [Photo], isSearch: Bool)
 }
 
+protocol MainTableManagerInput: AnyObject {
+    func willDisplay(isSearch: Bool)
+    func showPhoto(photo: Photo)
+}
+
 class MainTableManager: NSObject {
     
-    weak var presenter: MainPresenterProtocol?
+    weak var presenter: MainTableManagerInput?
     private var tableView: UITableView
     private var dataSource: UITableViewDiffableDataSource<Int, Photo>!
     private var photos = [Photo]()
@@ -40,10 +45,10 @@ class MainTableManager: NSObject {
     }
 }
 
-extension MainTableManager: MainTableManagerProtocol {
+extension MainTableManager: MainTableManagerOutput {
     
     func clearList() {
-        self.photos = []
+        self.photos.removeAll()
         var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
         snapshot.appendSections([0])
         snapshot.appendItems(self.photos)

@@ -7,26 +7,19 @@
 
 import UIKit
 
-protocol CurrentPhotoPresenterProtocol: AnyObject {
-    func loadPhoto()
-    func showInfoAboutPhoto()
-    func downloadPhoto()
-}
-
 class CurrentPhotoPresenter: NSObject {
-    weak var view: CurrentPhotoViewControllerProtocol?
-    private var networkService: NetworkServiceProtocol
-    private var router: CurrentPhotoRouterProtocol
+    
+    weak var view: CurrentPhotoViewInput?
+    private var networkService: NetworkServiceOutput
     private var photo: Photo
     
-    init(photo: Photo, router: CurrentPhotoRouterProtocol, networkService: NetworkServiceProtocol) {
+    init(photo: Photo, networkService: NetworkServiceOutput) {
         self.photo = photo
-        self.router = router
         self.networkService = networkService
     }
 }
 
-extension CurrentPhotoPresenter: CurrentPhotoPresenterProtocol {
+extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     
     func loadPhoto() {
         self.view?.startActivityIndicator()
@@ -38,7 +31,8 @@ extension CurrentPhotoPresenter: CurrentPhotoPresenterProtocol {
     }
     
     func showInfoAboutPhoto() {
-        self.router.showInfo(from: self.photo)
+        let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemble(from: photo)
+        self.view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
     }
     
     func downloadPhoto() {

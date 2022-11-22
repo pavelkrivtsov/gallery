@@ -14,6 +14,7 @@ protocol MapViewCellProtocol {
 }
 
 class MapViewCell: UITableViewCell {
+    
     lazy var mapView = MKMapView()
     lazy var mapImageView = UIImageView(image: .init(named: "location"))
     lazy var locationLabel = UILabel()
@@ -62,7 +63,8 @@ class MapViewCell: UITableViewCell {
 }
 
 extension MapViewCell: MapViewCellProtocol {
-    public func cellConfiguration(model: CellTypeProtocol) {
+    
+    func cellConfiguration(model: CellTypeProtocol) {
         guard let locationLabel = model.label else { return }
         self.separator.isHidden = locationLabel.separatorIsHidden
         self.locationLabel.text = locationLabel.title
