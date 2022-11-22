@@ -54,8 +54,18 @@ extension MainPresenter: MainTableManagerInput {
     }
 
     func showPhoto(photo: Photo) {
-        let detailVC = CurrentPhotoAssembly.assemble(photo: photo)
-        view?.showCurrentPhoto(viewController: detailVC)
+        guard let url = URL(string: photo.urls.regular) else { return }
+        let photoId = photo.id
+        let authorName = photo.user.name ?? ""
+        
+        DispatchQueue.global().async { [weak self] in
+            if let data = try? Data(contentsOf: url), let photo = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    let detailVC = CurrentPhotoAssembly.assemble(photoId: photoId, photo: photo, authorName: authorName)
+                    self?.view?.showCurrentPhoto(viewController: detailVC)
+                }
+            }
+        }
     }
 }
 

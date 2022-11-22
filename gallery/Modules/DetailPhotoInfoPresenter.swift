@@ -25,17 +25,6 @@ class DetailPhotoInfoPresenter {
 extension DetailPhotoInfoPresenter: DetailPhotoInfoViewOutput {
     
     func getDetailInfo() {
-        let authorTitleCell: [CellType] = {
-            return [
-                .labelCell(label: CellLabelProperties(title: "Info",
-                                                      titleFont: .systemFont(ofSize: 17, weight: .bold),
-                                                      titleAligment: .center,
-                                                      bottomSideMargin: 0,
-                                                      numberOfLines: 1)
-                )
-            ]
-        }()
-        
         let descriptionCell: [CellType] = {
             guard let description = self.photo.photoDescription else { return [] }
             return [
@@ -105,7 +94,7 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoViewOutput {
             ]
         }()
         
-        let cellModels: [CellType] = authorTitleCell + descriptionCell + mapViewCell + cameraLabelCell + stackLabelCell
+        let cellModels: [CellType] = descriptionCell + mapViewCell + cameraLabelCell + stackLabelCell
         
         DispatchQueue.main.async { [weak self] in
             self?.tableManager.fillViewModels(viewModels: cellModels)

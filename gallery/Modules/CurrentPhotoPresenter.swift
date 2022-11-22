@@ -11,10 +11,22 @@ class CurrentPhotoPresenter: NSObject {
     
     weak var view: CurrentPhotoViewInput?
     private var networkService: NetworkServiceOutput
-    private var photo: Photo
+    private var detailPhotoInfo: Photo?
     
-    init(photo: Photo, networkService: NetworkServiceOutput) {
+    private var photoId = ""
+    private var photo = UIImage()
+    private var authorName = ""
+    
+
+//    init(photo: Photo, networkService: NetworkServiceOutput) {
+//        self.photo = photo
+//        self.networkService = networkService
+//    }
+    
+    init(photoId: String, photo: UIImage, authorName: String, networkService: NetworkServiceOutput) {
         self.photo = photo
+        self.photoId = photoId
+        self.authorName = authorName
         self.networkService = networkService
     }
 }
@@ -22,16 +34,16 @@ class CurrentPhotoPresenter: NSObject {
 extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     
     func loadPhoto() {
-        self.view?.startActivityIndicator()
-        self.networkService.getCurrentPhoto(by: self.photo.id) { [weak self] photo in
-            guard let self = self, let photo = photo else { return }
-            self.photo = photo
-            self.view?.loadPhoto(photo: photo)
+        self.view?.loadPhoto(photo: self.photo, authorName: self.authorName)
+        self.networkService.getCurrentPhoto(by: self.photoId) { [weak self] photo in
+            guard let self = self,
+                  let photo = photo else { return }
+            self.detailPhotoInfo = photo
         }
     }
     
     func showInfoAboutPhoto() {
-        let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemble(from: photo)
+        let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemble(from: self.detailPhotoInfo!)
         self.view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
     }
     
@@ -40,7 +52,7 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
         let session = URLSession(configuration: .default,
                                  delegate: self,
                                  delegateQueue: nil)
-        networkService.downloadPhoto(session: session, photo: self.photo)
+        networkService.downloadPhoto(session: session, photo: self.detailPhotoInfo!)
     }
 }
 
@@ -55,7 +67,7 @@ extension CurrentPhotoPresenter: URLSessionDownloadDelegate {
         }
         UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
         self.view?.hideProgressView()
-        self.view?.setTitle(title: self.photo.user.name ?? "")
+        self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
         self.view?.showAlert()
     }
     

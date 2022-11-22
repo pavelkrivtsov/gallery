@@ -10,8 +10,7 @@ import Kingfisher
 import SnapKit
 
 protocol CurrentPhotoViewInput: AnyObject {
-    func loadPhoto(photo: Photo)
-    func startActivityIndicator()
+    func loadPhoto(photo: UIImage, authorName: String)
     func showAlert()
     func trackDownloadProgress(progress: Float)
     func hideProgressView()
@@ -46,11 +45,6 @@ class CurrentPhotoViewController: UIViewController {
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(self.gestureRecognizer)
         return imageView
-    }()
-    
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(style: .medium)
-        return activityIndicator
     }()
     
     private lazy var progressView: UIProgressView = {
@@ -111,7 +105,6 @@ class CurrentPhotoViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
         view.addSubview(progressView)
-        view.addSubview(activityIndicator)
         view.addSubview(infoButton)
         view.addSubview(downloadButton)
         
@@ -126,9 +119,6 @@ class CurrentPhotoViewController: UIViewController {
         }
         imageView.snp.makeConstraints {
             $0.leading.trailing.top.bottom.width.height.equalToSuperview()
-        }
-        activityIndicator.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
         }
         downloadButton.snp.makeConstraints {
             $0.width.height.equalTo(44)
@@ -225,27 +215,9 @@ extension CurrentPhotoViewController: CurrentPhotoViewInput {
         navigationController?.pushViewController(view, animated: true)
     }
     
-    func loadPhoto(photo: Photo) {
-        let photoURL = photo.urls.regular
-        guard let url = URL(string: photoURL) else { return }
-        DispatchQueue.main.async { [weak self] in
-            self?.imageView.kf.setImage(with: url) { result in
-                switch result {
-                case .success(_):
-                    self?.activityIndicator.stopAnimating()
-                    
-                case .failure(_):
-                    print("self.imageView.kf.setImage(with: url) { failure }")
-                }
-            }
-            self?.title = photo.user.name
-        }
-    }
-    
-    func startActivityIndicator() {
-        DispatchQueue.main.async { [weak self] in
-            self?.activityIndicator.startAnimating()
-        }
+    func loadPhoto(photo: UIImage, authorName: String) {
+        self.title = authorName
+        self.imageView.image = photo
     }
     
     func trackDownloadProgress(progress: Float) {

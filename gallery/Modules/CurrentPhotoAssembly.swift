@@ -8,9 +8,9 @@
 import UIKit
 
 class CurrentPhotoAssembly {
-    static func assemble(photo: Photo) -> UIViewController {
+    static func assemble(photoId: String, photo: UIImage, authorName: String) -> UIViewController {
         let networkService = NetworkService()
-        let presenter = CurrentPhotoPresenter(photo: photo, networkService: networkService)
+        let presenter = CurrentPhotoPresenter(photoId: photoId, photo: photo, authorName: authorName, networkService: networkService)
         let view = CurrentPhotoViewController(presenter: presenter)
         presenter.view = view
         return view
