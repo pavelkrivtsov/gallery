@@ -13,8 +13,8 @@ protocol MainViewInput: AnyObject {
 
 class MainViewController: UIViewController {
     
-    private var presenter: MainViewOutput
-    private var tableView: UITableView
+    private let presenter: MainViewOutput
+    private let tableView: UITableView
     private let searchController = UISearchController(searchResultsController: nil)
          
     init(presenter: MainViewOutput, tableView: UITableView) {

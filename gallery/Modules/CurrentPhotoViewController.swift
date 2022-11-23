@@ -23,16 +23,7 @@ protocol CurrentPhotoViewInput: AnyObject {
 class CurrentPhotoViewController: UIViewController {
     
     private var presenter: CurrentPhotoViewOutput
-    
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.minimumZoomScale = 1
-        scrollView.maximumZoomScale = 4
-        scrollView.showsVerticalScrollIndicator = false
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.delegate = self
-        return scrollView
-    }()
+    private var scrollView: UIScrollView
     
     private lazy var gestureRecognizer: UITapGestureRecognizer = {
         var gestureRecognizer = UITapGestureRecognizer()
@@ -46,6 +37,7 @@ class CurrentPhotoViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(self.gestureRecognizer)
+        self.presenter.imageViewForZooming(view: imageView)
         return imageView
     }()
     
@@ -73,8 +65,9 @@ class CurrentPhotoViewController: UIViewController {
         return button
     }()
     
-    init(presenter: CurrentPhotoViewOutput) {
+    init(presenter: CurrentPhotoViewOutput, scrollView: UIScrollView) {
         self.presenter = presenter
+        self.scrollView = scrollView
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -149,39 +142,6 @@ class CurrentPhotoViewController: UIViewController {
         self.presenter.calculateZoom(from: location, scrollView: self.scrollView)
     }
 }
-
-
-
-extension CurrentPhotoViewController: UIScrollViewDelegate {
-
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? { imageView }
-    
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        if scrollView.zoomScale > 1 {
-            if let image = imageView.image {
-                let ratioWidth = imageView.frame.width / image.size.width
-                let ratioHeight = imageView.frame.height / image.size.height
-                
-                let ratio = ratioWidth < ratioHeight ? ratioWidth : ratioHeight
-                let newWidth = image.size.width * ratio
-                let newHeight = image.size.height * ratio
-                
-                let conditionLeft = newWidth * scrollView.zoomScale > imageView.frame.width
-                let left = 0.5 * (conditionLeft ? newWidth - imageView.frame.width :
-                                    (scrollView.frame.width - scrollView.contentSize.width))
-                let conditionTop = newHeight * scrollView.zoomScale > imageView.frame.height
-                let top = 0.5 * (conditionTop ? newHeight - imageView.frame.height :
-                                    (scrollView.frame.height - scrollView.contentSize.height))
-                
-                scrollView.contentInset = .init(top: top, left: left ,bottom: top, right: left)
-            }
-        } else {
-            scrollView.contentInset = .zero
-        }
-    }
-}
-
-
 
 extension CurrentPhotoViewController: CurrentPhotoViewInput {
     

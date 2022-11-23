@@ -22,8 +22,8 @@ protocol MainViewOutput: AnyObject {
 class MainPresenter {
     
     weak var view: MainViewInput?
-    private var networkService: NetworkServiceOutput
-    private var tableManager: MainTableManagerOutput
+    private let networkService: NetworkServiceOutput
+    private let tableManager: MainTableManagerOutput
     private var photos = [Photo]()
     private var currentPage = 1
     private var searchText = ""

@@ -12,28 +12,37 @@ protocol CurrentPhotoViewOutput: AnyObject {
     func calculateZoom(from point: CGPoint, scrollView: UIScrollView)
     func showInfoAboutPhoto()
     func downloadPhoto()
+    func imageViewForZooming(view: UIImageView)
+}
+
+protocol PhotoZoomManagerInput: AnyObject {
+    func scrollViewDidZoom()
 }
 
 class CurrentPhotoPresenter: NSObject {
     
     weak var view: CurrentPhotoViewInput?
-    private var networkService: NetworkServiceOutput
+    private let photoZoomManager: PhotoZoomManagerOutput
+    private let networkService: NetworkServiceOutput
     private var detailPhotoInfo: Photo?
-    
     private var photoId = ""
     private var photo = UIImage()
     private var authorName = ""
     
-    init(photoId: String, photo: UIImage, authorName: String, networkService: NetworkServiceOutput) {
+    init(photoId: String,
+         photo: UIImage,
+         authorName: String,
+         networkService: NetworkServiceOutput,
+         photoZoomMAnager: PhotoZoomManagerOutput) {
         self.photo = photo
         self.photoId = photoId
         self.authorName = authorName
         self.networkService = networkService
+        self.photoZoomManager = photoZoomMAnager
     }
 }
 
 extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
-    
     
     func loadPhoto() {
         self.view?.loadPhoto(photo: self.photo, authorName: self.authorName)
@@ -70,6 +79,10 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
         return zoomRect
     }
     
+    func imageViewForZooming(view: UIImageView) {
+        self.photoZoomManager.setImageView(view: view)
+    }
+    
     func showInfoAboutPhoto() {
         let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemble(from: self.detailPhotoInfo!)
         self.view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
@@ -81,6 +94,12 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
                                  delegate: self,
                                  delegateQueue: nil)
         networkService.downloadPhoto(session: session, photo: self.detailPhotoInfo!)
+    }
+}
+
+extension CurrentPhotoPresenter: PhotoZoomManagerInput {
+    func scrollViewDidZoom() {
+        
     }
 }
 

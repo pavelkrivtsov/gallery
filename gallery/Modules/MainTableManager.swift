@@ -15,7 +15,7 @@ protocol MainTableManagerOutput {
 class MainTableManager: NSObject {
     
     weak var presenter: MainTableManagerInput?
-    private var tableView: UITableView
+    private let tableView: UITableView
     private var dataSource: UITableViewDiffableDataSource<Int, Photo>!
     private var photos = [Photo]()
     private var isSearch: Bool = false

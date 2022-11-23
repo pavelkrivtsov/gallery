@@ -18,6 +18,7 @@
 		1E5A928D28EB809500A8CE4E /* CurrentPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */; };
 		1E5A928F28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */; };
 		1E5A929128EB9E5900A8CE4E /* CurrentPhotoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5A929028EB9E5900A8CE4E /* CurrentPhotoPresenter.swift */; };
+		1E87381C292E901700370C46 /* PhotoZoomManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E87381B292E901700370C46 /* PhotoZoomManager.swift */; };
 		1E96981128FDBB6400F3868A /* DetailPhotoInfoAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981028FDBB6400F3868A /* DetailPhotoInfoAssembly.swift */; };
 		1E96981328FDBB7E00F3868A /* DetailPhotoInfoPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981228FDBB7D00F3868A /* DetailPhotoInfoPresenter.swift */; };
 		1E96981528FDBB8A00F3868A /* DetailPhotoInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E96981428FDBB8A00F3868A /* DetailPhotoInfoViewController.swift */; };
@@ -48,6 +49,7 @@
 		1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoViewController.swift; sourceTree = "<group>"; };
 		1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoAssembly.swift; sourceTree = "<group>"; };
 		1E5A929028EB9E5900A8CE4E /* CurrentPhotoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentPhotoPresenter.swift; sourceTree = "<group>"; };
+		1E87381B292E901700370C46 /* PhotoZoomManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoZoomManager.swift; sourceTree = "<group>"; };
 		1E96981028FDBB6400F3868A /* DetailPhotoInfoAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPhotoInfoAssembly.swift; sourceTree = "<group>"; };
 		1E96981228FDBB7D00F3868A /* DetailPhotoInfoPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPhotoInfoPresenter.swift; sourceTree = "<group>"; };
 		1E96981428FDBB8A00F3868A /* DetailPhotoInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPhotoInfoViewController.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				1E5A928E28EB9E4800A8CE4E /* CurrentPhotoAssembly.swift */,
 				1E5A929028EB9E5900A8CE4E /* CurrentPhotoPresenter.swift */,
 				1E5A928C28EB809500A8CE4E /* CurrentPhotoViewController.swift */,
+				1E87381B292E901700370C46 /* PhotoZoomManager.swift */,
 			);
 			name = CurrentPhoto;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				1E96981528FDBB8A00F3868A /* DetailPhotoInfoViewController.swift in Sources */,
 				1EEF6EA228D9DB1300B864AB /* MainAssembly.swift in Sources */,
 				1EEF6EAE28D9FEF400B864AB /* Models.swift in Sources */,
+				1E87381C292E901700370C46 /* PhotoZoomManager.swift in Sources */,
 				1EEF6EB028DA032400B864AB /* PhotoCell.swift in Sources */,
 				1EEF6EAB28D9FEB500B864AB /* NetworkService.swift in Sources */,
 				1E5A928D28EB809500A8CE4E /* CurrentPhotoViewController.swift in Sources */,
