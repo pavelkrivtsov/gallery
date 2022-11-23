@@ -8,6 +8,17 @@
 import UIKit
 import Kingfisher
 
+protocol MainTableManagerInput: AnyObject {
+    func willDisplay(isSearch: Bool)
+    func showPhoto(photo: Photo)
+}
+
+protocol MainViewOutput: AnyObject {
+    func clearList()
+    func loadList()
+    func loadFoundList(from text: String)
+}
+
 class MainPresenter {
     
     weak var view: MainViewInput?

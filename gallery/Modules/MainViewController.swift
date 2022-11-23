@@ -7,12 +7,6 @@
 
 import UIKit
 
-protocol MainViewOutput: AnyObject {
-    func clearList()
-    func loadList()
-    func loadFoundList(from text: String)
-}
-
 protocol MainViewInput: AnyObject {
     func showCurrentPhoto(viewController: UIViewController)
 }
@@ -66,10 +60,12 @@ extension MainViewController {
 extension MainViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
         if let searchText = searchBar.text, !searchText.isEmpty  {
             self.presenter.clearList()
             self.presenter.loadFoundList(from: searchText)
         }
+        
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

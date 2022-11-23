@@ -11,6 +11,7 @@ import SnapKit
 
 protocol CurrentPhotoViewInput: AnyObject {
     func loadPhoto(photo: UIImage, authorName: String)
+    func zoom(to rect: CGRect, animated: Bool)
     func showAlert(alert: UIAlertController)
     func trackDownloadProgress(progress: Float)
     func hideProgressView()
@@ -31,6 +32,13 @@ class CurrentPhotoViewController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.delegate = self
         return scrollView
+    }()
+    
+    private lazy var gestureRecognizer: UITapGestureRecognizer = {
+        var gestureRecognizer = UITapGestureRecognizer()
+        gestureRecognizer.numberOfTapsRequired = 2
+        gestureRecognizer.addTarget(self, action: #selector(handleZoomingTap))
+        return gestureRecognizer
     }()
     
     private lazy var imageView: UIImageView = {
@@ -63,13 +71,6 @@ class CurrentPhotoViewController: UIViewController {
         button.configuration = config
         button.addTarget(self, action: #selector(downloadButtonTapped), for: .touchUpInside)
         return button
-    }()
-    
-    private lazy var gestureRecognizer: UITapGestureRecognizer = {
-        var gestureRecognizer = UITapGestureRecognizer()
-        gestureRecognizer.numberOfTapsRequired = 2
-        gestureRecognizer.addTarget(self, action: #selector(handleZoomingTap))
-        return gestureRecognizer
     }()
     
     init(presenter: CurrentPhotoViewOutput) {
@@ -141,41 +142,18 @@ class CurrentPhotoViewController: UIViewController {
         self.presenter.downloadPhoto()
         generator.impactOccurred()
     }
-}
-
-extension CurrentPhotoViewController: UIScrollViewDelegate {
     
     @objc
     private func handleZoomingTap(sender: UITapGestureRecognizer)  {
         let location = sender.location(in: sender.view)
-        self.zoom(point: location, animated: true)
+        self.presenter.calculateZoom(from: location, scrollView: self.scrollView)
     }
-    
-    private func zoom(point: CGPoint, animated: Bool) {
-        let currentScale = self.scrollView.zoomScale
-        let minScale = self.scrollView.minimumZoomScale
-        let maxScale = self.scrollView.maximumZoomScale
-        
-        if (minScale == maxScale && minScale > 1) {
-            return
-        }
-        
-        let toScale = maxScale
-        let finalScale = (currentScale == minScale) ? toScale : minScale
-        let zoomRect = self.zoomRect(scale: finalScale , center: point)
-        self.scrollView.zoom(to: zoomRect, animated: animated)
-    }
-    
-    private func zoomRect(scale: CGFloat, center: CGPoint ) -> CGRect {
-        var zoomRect = CGRect.zero
-        let bounds = self.scrollView.bounds
-        zoomRect.size.width = bounds.size.width / scale
-        zoomRect.size.height = bounds.size.height / scale
-        zoomRect.origin.x = center.x - (zoomRect.size.width / 2)
-        zoomRect.origin.y = center.y - (zoomRect.size.height  / 2)
-        return zoomRect
-    }
-    
+}
+
+
+
+extension CurrentPhotoViewController: UIScrollViewDelegate {
+
     func viewForZooming(in scrollView: UIScrollView) -> UIView? { imageView }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
@@ -203,15 +181,21 @@ extension CurrentPhotoViewController: UIScrollViewDelegate {
     }
 }
 
+
+
 extension CurrentPhotoViewController: CurrentPhotoViewInput {
-        
-    func showInfoAboutPhoto(from view: UIViewController) {
-        navigationController?.pushViewController(view, animated: true)
-    }
     
     func loadPhoto(photo: UIImage, authorName: String) {
         self.title = authorName
         self.imageView.image = photo
+    }
+    
+    func showInfoAboutPhoto(from view: UIViewController) {
+        navigationController?.pushViewController(view, animated: true)
+    }
+    
+    func zoom(to rect: CGRect, animated: Bool) {
+        self.scrollView.zoom(to: rect, animated: animated)
     }
     
     func trackDownloadProgress(progress: Float) {

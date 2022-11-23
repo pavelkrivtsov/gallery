@@ -9,6 +9,7 @@ import UIKit
 
 protocol CurrentPhotoViewOutput: AnyObject {
     func loadPhoto()
+    func calculateZoom(from point: CGPoint, scrollView: UIScrollView)
     func showInfoAboutPhoto()
     func downloadPhoto()
 }
@@ -33,6 +34,7 @@ class CurrentPhotoPresenter: NSObject {
 
 extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     
+    
     func loadPhoto() {
         self.view?.loadPhoto(photo: self.photo, authorName: self.authorName)
         self.networkService.getCurrentPhoto(by: self.photoId) { [weak self] photo in
@@ -40,6 +42,32 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
                   let photo = photo else { return }
             self.detailPhotoInfo = photo
         }
+    }
+    
+    func calculateZoom(from point: CGPoint, scrollView: UIScrollView) {
+        let currentScale = scrollView.zoomScale
+        let minScale = scrollView.minimumZoomScale
+        let maxScale = scrollView.maximumZoomScale
+        
+        if (minScale == maxScale && minScale > 1) {
+            return
+        }
+        
+        let toScale = maxScale
+        let finalScale = (currentScale == minScale) ? toScale : minScale
+        let zoomRect = self.zoomRect(scale: finalScale, bounds: scrollView.bounds , center: point)
+
+        self.view?.zoom(to: zoomRect, animated: true)
+    }
+
+    private func zoomRect(scale: CGFloat, bounds: CGRect, center: CGPoint ) -> CGRect {
+        var zoomRect = CGRect.zero
+        let bounds = bounds
+        zoomRect.size.width = bounds.size.width / scale
+        zoomRect.size.height = bounds.size.height / scale
+        zoomRect.origin.x = center.x - (zoomRect.size.width / 2)
+        zoomRect.origin.y = center.y - (zoomRect.size.height  / 2)
+        return zoomRect
     }
     
     func showInfoAboutPhoto() {

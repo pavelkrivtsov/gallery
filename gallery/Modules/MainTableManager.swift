@@ -12,11 +12,6 @@ protocol MainTableManagerOutput {
     func setList(from photos: [Photo], isSearch: Bool)
 }
 
-protocol MainTableManagerInput: AnyObject {
-    func willDisplay(isSearch: Bool)
-    func showPhoto(photo: Photo)
-}
-
 class MainTableManager: NSObject {
     
     weak var presenter: MainTableManagerInput?
