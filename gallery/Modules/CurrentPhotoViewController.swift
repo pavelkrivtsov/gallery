@@ -11,18 +11,12 @@ import SnapKit
 
 protocol CurrentPhotoViewInput: AnyObject {
     func loadPhoto(photo: UIImage, authorName: String)
-    func showAlert()
+    func showAlert(alert: UIAlertController)
     func trackDownloadProgress(progress: Float)
     func hideProgressView()
     func showProgressView()
     func setTitle(title: String)
     func showInfoAboutPhoto(from view: UIViewController)
-}
-
-protocol CurrentPhotoViewOutput: AnyObject {
-    func loadPhoto()
-    func showInfoAboutPhoto()
-    func downloadPhoto()
 }
 
 class CurrentPhotoViewController: UIViewController {
@@ -210,7 +204,7 @@ extension CurrentPhotoViewController: UIScrollViewDelegate {
 }
 
 extension CurrentPhotoViewController: CurrentPhotoViewInput {
-    
+        
     func showInfoAboutPhoto(from view: UIViewController) {
         navigationController?.pushViewController(view, animated: true)
     }
@@ -246,22 +240,10 @@ extension CurrentPhotoViewController: CurrentPhotoViewInput {
         }
     }
     
-    func showAlert() {
+    func showAlert(alert: UIAlertController) {
         let generator = UINotificationFeedbackGenerator()
         generator.prepare()
         DispatchQueue.main.async { [weak self] in
-            let alert = UIAlertController(title: "", message: nil, preferredStyle: .alert)
-            let imageView = UIImageView(image: .init(systemName: "square.and.arrow.down"))
-            let alertSize = 75
-            alert.view.addSubview(imageView)
-            alert.view.snp.makeConstraints {
-                $0.size.equalTo(alertSize)
-            }
-            imageView.snp.makeConstraints {
-                $0.centerY.centerX.equalToSuperview()
-                $0.size.equalTo(alertSize / 2)
-            }
-            
             self?.present(alert, animated: true) {
                 alert.dismiss(animated: true)
             }

@@ -28,6 +28,7 @@ class DetailPhotoInfoViewController: UIViewController {
         self.tableView.frame = self.view.bounds
         presenter.getDetailInfo()
     
+        navigationController?.navigationBar.topItem?.backButtonTitle = ""
         let imageView = UIImageView(image: .init(systemName: "info.square.fill"))
         navigationItem.titleView = imageView
     }

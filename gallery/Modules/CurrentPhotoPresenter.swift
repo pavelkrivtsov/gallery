@@ -7,6 +7,12 @@
 
 import UIKit
 
+protocol CurrentPhotoViewOutput: AnyObject {
+    func loadPhoto()
+    func showInfoAboutPhoto()
+    func downloadPhoto()
+}
+
 class CurrentPhotoPresenter: NSObject {
     
     weak var view: CurrentPhotoViewInput?
@@ -16,12 +22,6 @@ class CurrentPhotoPresenter: NSObject {
     private var photoId = ""
     private var photo = UIImage()
     private var authorName = ""
-    
-
-//    init(photo: Photo, networkService: NetworkServiceOutput) {
-//        self.photo = photo
-//        self.networkService = networkService
-//    }
     
     init(photoId: String, photo: UIImage, authorName: String, networkService: NetworkServiceOutput) {
         self.photo = photo
@@ -68,7 +68,23 @@ extension CurrentPhotoPresenter: URLSessionDownloadDelegate {
         UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
         self.view?.hideProgressView()
         self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
-        self.view?.showAlert()
+        self.view?.showAlert(alert: createAlert())
+        
+    }
+    
+    private func createAlert() -> UIAlertController {
+        let alert = UIAlertController(title: "", message: nil, preferredStyle: .alert)
+        let imageView = UIImageView(image: .init(systemName: "square.and.arrow.down"))
+        let alertSize = 75
+        alert.view.addSubview(imageView)
+        alert.view.snp.makeConstraints {
+            $0.size.equalTo(alertSize)
+        }
+        imageView.snp.makeConstraints {
+            $0.centerY.centerX.equalToSuperview()
+            $0.size.equalTo(alertSize / 2)
+        }
+        return alert
     }
     
     func urlSession(_ session: URLSession,
