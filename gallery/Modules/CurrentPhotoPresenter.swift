@@ -9,14 +9,14 @@ import UIKit
 
 protocol CurrentPhotoViewOutput: AnyObject {
     func loadPhoto()
-    func calculateZoom(from point: CGPoint, scrollView: UIScrollView)
+    func calculateZoom(from point: CGPoint)
     func showInfoAboutPhoto()
     func downloadPhoto()
     func imageViewForZooming(view: UIImageView)
 }
 
 protocol PhotoZoomManagerInput: AnyObject {
-    func scrollViewDidZoom()
+    func getZoomRect(rect: CGRect)
 }
 
 class CurrentPhotoPresenter: NSObject {
@@ -53,30 +53,8 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
         }
     }
     
-    func calculateZoom(from point: CGPoint, scrollView: UIScrollView) {
-        let currentScale = scrollView.zoomScale
-        let minScale = scrollView.minimumZoomScale
-        let maxScale = scrollView.maximumZoomScale
-        
-        if (minScale == maxScale && minScale > 1) {
-            return
-        }
-        
-        let toScale = maxScale
-        let finalScale = (currentScale == minScale) ? toScale : minScale
-        let zoomRect = self.zoomRect(scale: finalScale, bounds: scrollView.bounds , center: point)
-
-        self.view?.zoom(to: zoomRect, animated: true)
-    }
-
-    private func zoomRect(scale: CGFloat, bounds: CGRect, center: CGPoint ) -> CGRect {
-        var zoomRect = CGRect.zero
-        let bounds = bounds
-        zoomRect.size.width = bounds.size.width / scale
-        zoomRect.size.height = bounds.size.height / scale
-        zoomRect.origin.x = center.x - (zoomRect.size.width / 2)
-        zoomRect.origin.y = center.y - (zoomRect.size.height  / 2)
-        return zoomRect
+    func calculateZoom(from point: CGPoint) {
+        self.photoZoomManager.calculateZoom(from: point)
     }
     
     func imageViewForZooming(view: UIImageView) {
@@ -98,8 +76,8 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
 }
 
 extension CurrentPhotoPresenter: PhotoZoomManagerInput {
-    func scrollViewDidZoom() {
-        
+    func getZoomRect(rect: CGRect) {
+        self.view?.zoom(to: rect, animated: true)
     }
 }
 
@@ -116,7 +94,6 @@ extension CurrentPhotoPresenter: URLSessionDownloadDelegate {
         self.view?.hideProgressView()
         self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
         self.view?.showAlert(alert: createAlert())
-        
     }
     
     private func createAlert() -> UIAlertController {

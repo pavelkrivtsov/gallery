@@ -78,18 +78,6 @@ class CurrentPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        addSubviews()
-        presenter.loadPhoto()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        KingfisherManager.shared.cache.clearMemoryCache()
-        KingfisherManager.shared.cache.clearDiskCache()
-        KingfisherManager.shared.cache.cleanExpiredDiskCache()
-    }
-    
-    private func addSubviews() {
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
         view.addSubview(progressView)
@@ -118,6 +106,15 @@ class CurrentPhotoViewController: UIViewController {
             $0.trailing.equalTo(downloadButton.snp.leading).offset(-16)
             $0.centerY.equalTo(downloadButton.snp.centerY)
         }
+        
+        presenter.loadPhoto()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        KingfisherManager.shared.cache.clearMemoryCache()
+        KingfisherManager.shared.cache.clearDiskCache()
+        KingfisherManager.shared.cache.cleanExpiredDiskCache()
     }
     
     @objc
@@ -139,7 +136,7 @@ class CurrentPhotoViewController: UIViewController {
     @objc
     private func handleZoomingTap(sender: UITapGestureRecognizer)  {
         let location = sender.location(in: sender.view)
-        self.presenter.calculateZoom(from: location, scrollView: self.scrollView)
+        self.presenter.calculateZoom(from: location)
     }
 }
 

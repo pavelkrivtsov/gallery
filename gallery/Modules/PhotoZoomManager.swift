@@ -9,6 +9,7 @@ import UIKit
 
 protocol PhotoZoomManagerOutput: AnyObject {
     func setImageView(view: UIImageView)
+    func calculateZoom(from point: CGPoint)
 }
 
 class PhotoZoomManager: NSObject {
@@ -32,6 +33,32 @@ class PhotoZoomManager: NSObject {
 extension PhotoZoomManager: PhotoZoomManagerOutput {
     func setImageView(view: UIImageView) {
         self.imageView = view
+    }
+    
+    func calculateZoom(from point: CGPoint) {
+        let currentScale = scrollView.zoomScale
+        let minScale = scrollView.minimumZoomScale
+        let maxScale = scrollView.maximumZoomScale
+        
+        if (minScale == maxScale && minScale > 1) {
+            return
+        }
+        
+        let toScale = maxScale
+        let finalScale = (currentScale == minScale) ? toScale : minScale
+        let zoomRect = self.zoomRect(scale: finalScale, bounds: scrollView.bounds , center: point)
+
+        self.presenter?.getZoomRect(rect: zoomRect)
+    }
+    
+    private func zoomRect(scale: CGFloat, bounds: CGRect, center: CGPoint ) -> CGRect {
+        var zoomRect = CGRect.zero
+        let bounds = bounds
+        zoomRect.size.width = bounds.size.width / scale
+        zoomRect.size.height = bounds.size.height / scale
+        zoomRect.origin.x = center.x - (zoomRect.size.width / 2)
+        zoomRect.origin.y = center.y - (zoomRect.size.height  / 2)
+        return zoomRect
     }
 }
 
