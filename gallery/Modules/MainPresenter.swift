@@ -34,6 +34,7 @@ class MainPresenter {
     }
 }
 
+// MARK: - MainViewOutput
 extension MainPresenter: MainViewOutput {
     
     func clearList() {
@@ -57,6 +58,7 @@ extension MainPresenter: MainViewOutput {
     }
 }
 
+// MARK: - MainTableManagerInput
 extension MainPresenter: MainTableManagerInput {
     
     func willDisplay(isSearch: Bool) {

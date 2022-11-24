@@ -40,6 +40,7 @@ class MainTableManager: NSObject {
     }
 }
 
+// MARK: - MainTableManagerOutput
 extension MainTableManager: MainTableManagerOutput {
     
     func clearList() {
@@ -49,7 +50,7 @@ extension MainTableManager: MainTableManagerOutput {
         snapshot.appendItems(self.photos)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
-
+    
     func setList(from photos: [Photo], isSearch: Bool) {
         self.isSearch = isSearch
         self.photos += photos
@@ -60,8 +61,9 @@ extension MainTableManager: MainTableManagerOutput {
     }
 }
 
+// MARK: - UITableViewDelegate
 extension MainTableManager: UITableViewDelegate {
-        
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let photo = self.photos[indexPath.item]
         let heightPerItem = CGFloat(photo.width) / CGFloat(photo.height)
@@ -69,7 +71,7 @@ extension MainTableManager: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let generator = UIImpactFeedbackGenerator(style: .soft)
+        let generator = UIImpactFeedbackGenerator(style: .rigid)
         generator.prepare()
         let photo = photos[indexPath.item]
         self.presenter?.showPhoto(photo: photo)

@@ -8,6 +8,7 @@
 import UIKit
 
 class MainAssembly {
+    
     static func assemble() -> UINavigationController {
         let tableView = UITableView()
         let tableManager = MainTableManager(tableView: tableView)

@@ -35,13 +35,7 @@ class MainViewController: UIViewController {
     }
 }
 
-extension MainViewController: MainViewInput {
-    
-    func showCurrentPhoto(viewController: UIViewController) {
-        self.navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
+// MARK: - UINavigationController
 extension MainViewController {
     
     func embedInNavigationController() -> UINavigationController {
@@ -57,6 +51,15 @@ extension MainViewController {
     }
 }
 
+// MARK: - MainViewInput
+extension MainViewController: MainViewInput {
+    
+    func showCurrentPhoto(viewController: UIViewController) {
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+// MARK: - UISearchBarDelegate
 extension MainViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -65,7 +68,6 @@ extension MainViewController: UISearchBarDelegate {
             self.presenter.clearList()
             self.presenter.loadFoundList(from: searchText)
         }
-        
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

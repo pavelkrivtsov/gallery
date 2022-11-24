@@ -28,6 +28,7 @@ class DetailTableManager: NSObject {
     }
 }
 
+// MARK: - DetailTableManagerOutput
 extension DetailTableManager: DetailTableManagerOutput {
     
     private func registerForCells(viewModels: [CellType]) {
@@ -81,6 +82,7 @@ extension DetailTableManager: DetailTableManagerOutput {
     }
 }
 
+// MARK: - UITableViewDataSource, UITableViewDelegate
 extension DetailTableManager: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

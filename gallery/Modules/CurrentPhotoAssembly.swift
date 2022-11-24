@@ -8,8 +8,8 @@
 import UIKit
 
 class CurrentPhotoAssembly {
+    
     static func assemble(photoId: String, photo: UIImage, authorName: String) -> UIViewController {
-        
         let scrollView = UIScrollView()
         let photoZoomManager = PhotoZoomManager(scrollView: scrollView)
         let networkService = NetworkService()

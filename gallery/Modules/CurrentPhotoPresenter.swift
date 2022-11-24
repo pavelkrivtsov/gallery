@@ -42,6 +42,7 @@ class CurrentPhotoPresenter: NSObject {
     }
 }
 
+// MARK: - CurrentPhotoViewOutput
 extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     
     func loadPhoto() {
@@ -61,26 +62,31 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
         self.photoZoomManager.setImageView(view: view)
     }
     
+    
     func showInfoAboutPhoto() {
-        let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemble(from: self.detailPhotoInfo!)
+        guard let detailPhotoInfo = self.detailPhotoInfo else { return }
+        let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemble(from: detailPhotoInfo)
         self.view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
     }
     
     func downloadPhoto() {
+        guard let detailPhotoInfo = self.detailPhotoInfo else { return }
         self.view?.showProgressView()
         let session = URLSession(configuration: .default,
                                  delegate: self,
                                  delegateQueue: nil)
-        networkService.downloadPhoto(session: session, photo: self.detailPhotoInfo!)
+        networkService.downloadPhoto(session: session, photo: detailPhotoInfo)
     }
 }
 
+// MARK: - PhotoZoomManagerInput
 extension CurrentPhotoPresenter: PhotoZoomManagerInput {
     func getZoomRect(rect: CGRect) {
         self.view?.zoom(to: rect, animated: true)
     }
 }
 
+// MARK: - URLSessionDownloadDelegate
 extension CurrentPhotoPresenter: URLSessionDownloadDelegate {
     
     func urlSession(_ session: URLSession,

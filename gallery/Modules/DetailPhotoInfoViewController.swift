@@ -29,7 +29,7 @@ class DetailPhotoInfoViewController: UIViewController {
         presenter.getDetailInfo()
     
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
-        let imageView = UIImageView(image: .init(systemName: "info.square.fill"))
+        let imageView = UIImageView(image: .init(systemName: "info.circle.fill"))
         navigationItem.titleView = imageView
     }
 }

@@ -22,6 +22,7 @@ class DetailPhotoInfoPresenter {
     }
 }
 
+// MARK: - DetailPhotoInfoViewOutput
 extension DetailPhotoInfoPresenter: DetailPhotoInfoViewOutput {
     
     func getDetailInfo() {

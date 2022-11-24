@@ -62,6 +62,7 @@ class MapViewCell: UITableViewCell {
     }
 }
 
+// MARK: - MapViewCellProtocol
 extension MapViewCell: MapViewCellProtocol {
     
     func cellConfiguration(model: CellTypeProtocol) {

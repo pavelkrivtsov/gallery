@@ -7,15 +7,15 @@
 
 import Foundation
 
-protocol NetworkServiceProtocol: AnyObject {
+protocol NetworkServiceOutput: AnyObject {
     func getListFromServer(for page: Int, onCompletion: @escaping ([Photo]?) -> Void)
-    func getFoundListFromServer(from searchText: String, for page: Int, onCompletion: @escaping (SearchPhotos?) -> Void)
+    func getFoundListFromServer(from searchText: String, for page: Int, onCompletion: @escaping (SearchResults?) -> Void)
     func getCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void)
     func downloadPhoto(session: URLSession, photo: Photo)
 }
 
-class NetworkService: NetworkServiceProtocol {
-        
+class NetworkService: NetworkServiceOutput {
+    
     func getListFromServer(for page: Int, onCompletion: @escaping ([Photo]?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/photos/?page=\(page)"
@@ -35,7 +35,7 @@ class NetworkService: NetworkServiceProtocol {
     }
     
     
-    func getFoundListFromServer(from searchText: String, for page: Int, onCompletion: @escaping(SearchPhotos?) -> Void) {
+    func getFoundListFromServer(from searchText: String, for page: Int, onCompletion: @escaping(SearchResults?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/search/photos?page=\(page)&query=\(searchText)"
         guard let url = URL(string: urlString) else { return }
@@ -45,7 +45,7 @@ class NetworkService: NetworkServiceProtocol {
         
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in
             guard let self = self, let data = data else { return }
-            if let decodeObjects = self.parseJSON(type: SearchPhotos.self, data: data) {
+            if let decodeObjects = self.parseJSON(type: SearchResults.self, data: data) {
                 onCompletion(decodeObjects)
             }
         }

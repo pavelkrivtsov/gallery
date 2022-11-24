@@ -38,6 +38,7 @@ class LabelCell: UITableViewCell {
     }
 }
 
+// MARK: - LabelCellProtocol
 extension LabelCell: LabelCellProtocol {
     
     public func cellConfiguration(model: CellTypeProtocol) {

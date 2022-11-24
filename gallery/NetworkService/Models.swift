@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - SearchPhotos
-struct SearchPhotos: Codable {
+struct SearchResults: Codable {
     let total, totalPages: Int
     let results: [Photo]
     

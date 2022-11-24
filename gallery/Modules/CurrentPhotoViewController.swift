@@ -46,13 +46,12 @@ class CurrentPhotoViewController: UIViewController {
         progressView.isHidden = true
         return progressView
     }()
-    
-    private lazy var infoButton: UIButton = {
-        var button = UIButton()
-        var config = UIButton.Configuration.bordered()
-        config.image = .init(systemName: "info")
-        button.configuration = config
-        button.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+
+    private lazy var infoButton: UIBarButtonItem = {
+        var button = UIBarButtonItem(image: .init(systemName: "info.circle"),
+                                     style: .done,
+                                     target: self,
+                                     action: #selector(infoButtonTapped))
         return button
     }()
     
@@ -78,10 +77,11 @@ class CurrentPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        navigationItem.rightBarButtonItem = infoButton
+        
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
         view.addSubview(progressView)
-        view.addSubview(infoButton)
         view.addSubview(downloadButton)
         
         scrollView.snp.makeConstraints {
@@ -100,11 +100,6 @@ class CurrentPhotoViewController: UIViewController {
             $0.width.height.equalTo(44)
             $0.trailing.equalToSuperview().inset(16)
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(16)
-        }
-        infoButton.snp.makeConstraints {
-            $0.width.height.equalTo(44)
-            $0.trailing.equalTo(downloadButton.snp.leading).offset(-16)
-            $0.centerY.equalTo(downloadButton.snp.centerY)
         }
         
         presenter.loadPhoto()
@@ -140,6 +135,7 @@ class CurrentPhotoViewController: UIViewController {
     }
 }
 
+// MARK: - CurrentPhotoViewInput
 extension CurrentPhotoViewController: CurrentPhotoViewInput {
     
     func loadPhoto(photo: UIImage, authorName: String) {
@@ -152,7 +148,10 @@ extension CurrentPhotoViewController: CurrentPhotoViewInput {
     }
     
     func zoom(to rect: CGRect, animated: Bool) {
+        let generator = UIImpactFeedbackGenerator(style: .rigid)
+        generator.prepare()
         self.scrollView.zoom(to: rect, animated: animated)
+        generator.impactOccurred()
     }
     
     func trackDownloadProgress(progress: Float) {

@@ -8,6 +8,7 @@
 import UIKit
 
 class DetailPhotoInfoAssembly {
+    
     static func assemble(from photo: Photo) -> UIViewController {
         let tableView = UITableView()
         let tableManager = DetailTableManager(tableView: tableView)

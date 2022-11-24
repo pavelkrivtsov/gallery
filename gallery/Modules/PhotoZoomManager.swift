@@ -30,6 +30,7 @@ class PhotoZoomManager: NSObject {
     }
 }
 
+// MARK: - PhotoZoomManagerOutput
 extension PhotoZoomManager: PhotoZoomManagerOutput {
     func setImageView(view: UIImageView) {
         self.imageView = view
@@ -62,6 +63,7 @@ extension PhotoZoomManager: PhotoZoomManagerOutput {
     }
 }
 
+// MARK: - UIScrollViewDelegate
 extension PhotoZoomManager: UIScrollViewDelegate {
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? { self.imageView }

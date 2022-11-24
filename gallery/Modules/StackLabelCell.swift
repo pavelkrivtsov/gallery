@@ -41,6 +41,7 @@ class StackLabelCell: UITableViewCell {
     }
 }
 
+// MARK: - StackLabelCellProtocol
 extension StackLabelCell: StackLabelCellProtocol {
     
     public func cellConfiguration(model: CellTypeProtocol) {
