@@ -51,9 +51,9 @@ extension MainPresenter: MainViewOutput {
     
     func loadFoundList(from text: String) {
         self.searchText = text
-        self.networkService.getFoundListFromServer(from: text, for: self.currentPage) { [weak self] searchResults in
-            guard let self = self, let searchResults = searchResults else { return }
-            self.tableManager.setList(from: searchResults.results, isSearch: self.searchText.isEmpty ? false : true)
+        self.networkService.getFoundListFromServer(from: text, for: self.currentPage) { [weak self] photos in
+            guard let self = self, let photos = photos else { return }
+            self.tableManager.setList(from: photos, isSearch: self.searchText.isEmpty ? false : true)
         }
     }
 }
@@ -62,6 +62,7 @@ extension MainPresenter: MainViewOutput {
 extension MainPresenter: MainTableManagerInput {
     
     func willDisplay(isSearch: Bool) {
+        KingfisherManager.shared.cache.clearMemoryCache()
         self.currentPage += 1
         isSearch ? self.loadFoundList(from: self.searchText) : self.loadList()
     }
