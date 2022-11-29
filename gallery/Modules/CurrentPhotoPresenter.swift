@@ -19,6 +19,11 @@ protocol PhotoZoomManagerInput: AnyObject {
     func getZoomRect(rect: CGRect)
 }
 
+protocol NetworkServiceInput: AnyObject {
+    func savePhoto(from data: Data)
+    func trackDownloadProgress(progress: Float)
+}
+
 class CurrentPhotoPresenter: NSObject {
     
     weak var view: CurrentPhotoViewInput?
@@ -72,34 +77,24 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     func downloadPhoto() {
         guard let detailPhotoInfo = self.detailPhotoInfo else { return }
         self.view?.showProgressView()
-        let session = URLSession(configuration: .default,
-                                 delegate: self,
-                                 delegateQueue: nil)
-        networkService.downloadPhoto(session: session, photo: detailPhotoInfo)
+        networkService.downloadPhoto(photo: detailPhotoInfo)
     }
 }
 
-// MARK: - PhotoZoomManagerInput
-extension CurrentPhotoPresenter: PhotoZoomManagerInput {
-    func getZoomRect(rect: CGRect) {
-        self.view?.zoom(to: rect, animated: true)
-    }
-}
-
-// MARK: - URLSessionDownloadDelegate
-extension CurrentPhotoPresenter: URLSessionDownloadDelegate {
+// MARK: - NetworkServiceInput
+extension CurrentPhotoPresenter: NetworkServiceInput {
     
-    func urlSession(_ session: URLSession,
-                    downloadTask: URLSessionDownloadTask,
-                    didFinishDownloadingTo location: URL) {
-        guard let data = try? Data(contentsOf: location), let photo = UIImage(data: data) else {
-            print("The data could be loaded")
-            return
+    func trackDownloadProgress(progress: Float) {
+        view?.trackDownloadProgress(progress: progress)
+    }
+    
+    func savePhoto(from data: Data) {
+        if let photo = UIImage(data: data) {
+            UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
+            self.view?.hideProgressView()
+            self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
+            self.view?.showAlert(alert: createAlert())
         }
-        UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
-        self.view?.hideProgressView()
-        self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
-        self.view?.showAlert(alert: createAlert())
     }
     
     private func createAlert() -> UIAlertController {
@@ -116,13 +111,11 @@ extension CurrentPhotoPresenter: URLSessionDownloadDelegate {
         }
         return alert
     }
-    
-    func urlSession(_ session: URLSession,
-                    downloadTask: URLSessionDownloadTask,
-                    didWriteData bytesWritten: Int64,
-                    totalBytesWritten: Int64,
-                    totalBytesExpectedToWrite: Int64) {
-        let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-        self.view?.trackDownloadProgress(progress: progress)
+}
+
+// MARK: - PhotoZoomManagerInput
+extension CurrentPhotoPresenter: PhotoZoomManagerInput {
+    func getZoomRect(rect: CGRect) {
+        self.view?.zoom(to: rect, animated: true)
     }
 }

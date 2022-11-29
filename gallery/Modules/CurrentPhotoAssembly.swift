@@ -19,6 +19,7 @@ class CurrentPhotoAssembly {
                                               networkService: networkService,
                                               photoZoomMAnager: photoZoomManager)
         let view = CurrentPhotoViewController(presenter: presenter, scrollView: scrollView)
+        networkService.presenter = presenter
         photoZoomManager.presenter = presenter
         presenter.view = view
         return view

@@ -25,10 +25,9 @@ class CurrentPhotoViewController: UIViewController {
     private var presenter: CurrentPhotoViewOutput
     private var scrollView: UIScrollView
     
-    private lazy var gestureRecognizer: UITapGestureRecognizer = {
-        var gestureRecognizer = UITapGestureRecognizer()
+    private lazy var doubleTapRecognizer: UITapGestureRecognizer = {
+        var gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(zoomingTap))
         gestureRecognizer.numberOfTapsRequired = 2
-        gestureRecognizer.addTarget(self, action: #selector(handleZoomingTap))
         return gestureRecognizer
     }()
     
@@ -36,7 +35,7 @@ class CurrentPhotoViewController: UIViewController {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(self.gestureRecognizer)
+        imageView.addGestureRecognizer(self.doubleTapRecognizer)
         self.presenter.imageViewForZooming(view: imageView)
         return imageView
     }()
@@ -108,8 +107,6 @@ class CurrentPhotoViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         KingfisherManager.shared.cache.clearMemoryCache()
-        KingfisherManager.shared.cache.clearDiskCache()
-        KingfisherManager.shared.cache.cleanExpiredDiskCache()
     }
     
     @objc
@@ -129,7 +126,7 @@ class CurrentPhotoViewController: UIViewController {
     }
     
     @objc
-    private func handleZoomingTap(sender: UITapGestureRecognizer)  {
+    private func zoomingTap(sender: UITapGestureRecognizer)  {
         let location = sender.location(in: sender.view)
         self.presenter.calculateZoom(from: location)
     }
