@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - SearchPhotos
-struct SearchResults: Codable {
+struct SearchResults: Decodable {
     let total, totalPages: Int
     let results: [Photo]
     
@@ -20,7 +20,7 @@ struct SearchResults: Codable {
 }
 
 // MARK: - Photo
-struct Photo: Codable, Hashable {
+struct Photo: Decodable, Hashable {
     let id: String
     let createdAt: String
     let width, height: Int
@@ -49,7 +49,7 @@ struct Photo: Codable, Hashable {
 }
 
 // MARK: - Urls
-struct Urls: Codable, Hashable {
+struct Urls: Decodable, Hashable {
     let raw, full, regular, small, thumb, smallS3: String
     
     enum CodingKeys: String, CodingKey {
@@ -59,7 +59,7 @@ struct Urls: Codable, Hashable {
 }
 
 // MARK: - Links
-struct PhotosLinks: Codable, Hashable {
+struct PhotosLinks: Decodable, Hashable {
     let linksSelf, html, download, downloadLocation: String
     
     enum CodingKeys: String, CodingKey {
@@ -70,7 +70,7 @@ struct PhotosLinks: Codable, Hashable {
 }
 
 // MARK: - User
-struct User: Codable, Hashable {
+struct User: Decodable, Hashable {
     let id: String
     let username, name, firstName, lastName: String?
     let bio: String?
@@ -89,7 +89,7 @@ struct User: Codable, Hashable {
 }
 
 // MARK: - Links
-struct UserLinks: Codable, Hashable {
+struct UserLinks: Decodable, Hashable {
     let linksSelf, html, photos, likes: String
     let portfolio, following, followers: String
     
@@ -99,12 +99,12 @@ struct UserLinks: Codable, Hashable {
     }
 }
 
-struct ProfileImage: Codable, Hashable {
+struct ProfileImage: Decodable, Hashable {
     let small, medium, large: String
 }
 
 // MARK: - Exif
-struct Exif: Codable, Hashable {
+struct Exif: Decodable, Hashable {
     let make, model, name, exposureTime: String?
     let aperture, focalLength: String?
     let iso: Int?
@@ -119,12 +119,12 @@ struct Exif: Codable, Hashable {
 }
 
 // MARK: - Location
-struct Location: Codable, Hashable {
+struct Location: Decodable, Hashable {
     let name, city, country: String?
     let position: Position
 }
 
 // MARK: - Position
-struct Position: Codable, Hashable {
+struct Position: Decodable, Hashable {
     let latitude, longitude: Double?
 }
