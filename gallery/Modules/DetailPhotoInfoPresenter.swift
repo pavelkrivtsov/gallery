@@ -13,8 +13,8 @@ protocol DetailPhotoInfoViewOutput: AnyObject {
 
 class DetailPhotoInfoPresenter {
     
-    private var tableManager: DetailTableManagerOutput
-    private var photo: Photo
+    private let tableManager: DetailTableManagerOutput
+    private let photo: Photo
     
     init(photo: Photo, tableManager: DetailTableManagerOutput) {
         self.photo = photo

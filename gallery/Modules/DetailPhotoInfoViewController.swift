@@ -9,8 +9,8 @@ import UIKit
 
 class DetailPhotoInfoViewController: UIViewController {
     
-    private var presenter: DetailPhotoInfoViewOutput
-    private var tableView: UITableView
+    private let presenter: DetailPhotoInfoViewOutput
+    private let tableView: UITableView
     
     init(presenter: DetailPhotoInfoViewOutput, tableView: UITableView) {
         self.presenter = presenter
@@ -25,9 +25,9 @@ class DetailPhotoInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
-        self.tableView.frame = self.view.bounds
+        tableView.frame = self.view.bounds
         presenter.getDetailInfo()
-    
+        
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
         let imageView = UIImageView(image: .init(systemName: "info.circle.fill"))
         navigationItem.titleView = imageView

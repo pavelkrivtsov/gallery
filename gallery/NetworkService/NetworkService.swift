@@ -18,29 +18,28 @@ class NetworkService: NSObject {
     
     weak var presenter: NetworkServiceInput?
     
-    private func taskResume<Results: Decodable>(from urlString: String,
-                                                type: Results.Type,
-                                                clientId: String,
-                                                onCompletion: @escaping(Results) -> Void) {
+    private func taskResume<T: Decodable>(from urlString: String,
+                                          type: T.Type,
+                                          clientId: String,
+                                          onCompletion: @escaping(T) -> Void) {
         
         guard let url = URL(string: urlString) else { return }
         var request = URLRequest(url: url)
         request.addValue(clientId, forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
         
-        let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in
+        URLSession.shared.dataTask(with: request) { [weak self] data, _, _ in
             guard let self = self, let data = data else { return }
             if let decodeObjects = self.parseJSON(type: type, data: data) {
                 onCompletion(decodeObjects)
             }
-        }
-        task.resume()
+        }.resume()
     }
     
-    private func parseJSON<Results: Decodable>(type: Results.Type, data: Data?) -> Results? {
+    private func parseJSON<T: Decodable>(type: T.Type, data: Data?) -> T? {
         let decoder = JSONDecoder()
         guard let data = data else { return nil }
-
+        
         do {
             let objects = try decoder.decode(type.self, from: data)
             return objects
@@ -61,7 +60,7 @@ extension NetworkService: NetworkServiceOutput {
     func getListFromServer(for page: Int, onCompletion: @escaping ([Photo]?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/photos/?page=\(page)"
-        self.taskResume(from: urlString, type: [Photo].self, clientId: clientId) { photos in
+        taskResume(from: urlString, type: [Photo].self, clientId: clientId) { photos in
             onCompletion(photos)
         }
     }
@@ -69,16 +68,16 @@ extension NetworkService: NetworkServiceOutput {
     func getFoundListFromServer(from searchText: String, for page: Int, onCompletion: @escaping([Photo]?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/search/photos?page=\(page)&query=\(searchText)"
-        self.taskResume(from: urlString, type: SearchResults.self, clientId: clientId) { searchResults in
+        taskResume(from: urlString, type: SearchResults.self, clientId: clientId) { searchResults in
             let photos = searchResults.results
             onCompletion(photos)
         }
     }
-
+    
     func getCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/photos/\(id)"
-        self.taskResume(from: urlString, type: Photo.self, clientId: clientId) { photo in
+        taskResume(from: urlString, type: Photo.self, clientId: clientId) { photo in
             onCompletion(photo)
         }
     }
@@ -99,12 +98,14 @@ extension NetworkService: NetworkServiceOutput {
 
 extension NetworkService: URLSessionDownloadDelegate {
     
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+    func urlSession(_ session: URLSession,
+                    downloadTask: URLSessionDownloadTask,
+                    didFinishDownloadingTo location: URL) {
         guard let data = try? Data(contentsOf: location) else {
             print("The data could be loaded")
             return
         }
-        self.presenter?.savePhoto(from: data)
+        presenter?.savePhoto(from: data)
     }
     
     func urlSession(_ session: URLSession,
@@ -113,6 +114,6 @@ extension NetworkService: URLSessionDownloadDelegate {
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
         let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-        self.presenter?.trackDownloadProgress(progress: progress)
+        presenter?.trackDownloadProgress(progress: progress)
     }
 }

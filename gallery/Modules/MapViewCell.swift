@@ -15,10 +15,10 @@ protocol MapViewCellProtocol {
 
 class MapViewCell: UITableViewCell {
     
-    lazy var mapView = MKMapView()
-    lazy var mapImageView = UIImageView(image: .init(named: "location"))
-    lazy var locationLabel = UILabel()
-    lazy var separator = UIView(frame: .zero)
+    private let mapView = MKMapView()
+    private let mapImageView = UIImageView(image: .init(named: "location"))
+    private let locationLabel = UILabel()
+    private let separator = UIView(frame: .zero)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -67,7 +67,7 @@ extension MapViewCell: MapViewCellProtocol {
     
     func cellConfiguration(model: CellTypeProtocol) {
         guard let locationLabel = model.label else { return }
-        self.separator.isHidden = locationLabel.separatorIsHidden
+        separator.isHidden = locationLabel.separatorIsHidden
         self.locationLabel.text = locationLabel.title
         self.locationLabel.font = locationLabel.titleFont
         
@@ -76,11 +76,12 @@ extension MapViewCell: MapViewCellProtocol {
         let region = MKCoordinateRegion(center: location.coordinate,
                                         span: MKCoordinateSpan(latitudeDelta: 0.18,
                                                                longitudeDelta: 0.18))
-        self.mapView.setRegion(region, animated: true)
-        self.mapView.regionThatFits(region)
         let annotation = Place(coordinate: .init(latitude: location.coordinate.latitude,
                                                  longitude: location.coordinate.longitude))
-        self.mapView.addAnnotation(annotation)
+        
+        mapView.setRegion(region, animated: true)
+        mapView.regionThatFits(region)
+        mapView.addAnnotation(annotation)
     }
 }
 

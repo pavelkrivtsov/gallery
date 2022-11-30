@@ -51,8 +51,8 @@ class CurrentPhotoPresenter: NSObject {
 extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     
     func loadPhoto() {
-        self.view?.loadPhoto(photo: self.photo, authorName: self.authorName)
-        self.networkService.getCurrentPhoto(by: self.photoId) { [weak self] photo in
+        view?.loadPhoto(photo: photo, authorName: self.authorName)
+        networkService.getCurrentPhoto(by: photoId) { [weak self] photo in
             guard let self = self,
                   let photo = photo else { return }
             self.detailPhotoInfo = photo
@@ -60,23 +60,23 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     }
     
     func calculateZoom(from point: CGPoint) {
-        self.photoZoomManager.calculateZoom(from: point)
+        photoZoomManager.calculateZoom(from: point)
     }
     
     func imageViewForZooming(view: UIImageView) {
-        self.photoZoomManager.setImageView(view: view)
+        photoZoomManager.setImageView(view: view)
     }
     
     
     func showInfoAboutPhoto() {
         guard let detailPhotoInfo = self.detailPhotoInfo else { return }
         let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemble(from: detailPhotoInfo)
-        self.view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
+        view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
     }
     
     func downloadPhoto() {
         guard let detailPhotoInfo = self.detailPhotoInfo else { return }
-        self.view?.showProgressView()
+        view?.showProgressView()
         networkService.downloadPhoto(photo: detailPhotoInfo)
     }
 }
@@ -91,9 +91,9 @@ extension CurrentPhotoPresenter: NetworkServiceInput {
     func savePhoto(from data: Data) {
         if let photo = UIImage(data: data) {
             UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
-            self.view?.hideProgressView()
-            self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
-            self.view?.showAlert(alert: createAlert())
+            view?.hideProgressView()
+            view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
+            view?.showAlert(alert: createAlert())
         }
     }
     
@@ -116,6 +116,6 @@ extension CurrentPhotoPresenter: NetworkServiceInput {
 // MARK: - PhotoZoomManagerInput
 extension CurrentPhotoPresenter: PhotoZoomManagerInput {
     func getZoomRect(rect: CGRect) {
-        self.view?.zoom(to: rect, animated: true)
+        view?.zoom(to: rect, animated: true)
     }
 }

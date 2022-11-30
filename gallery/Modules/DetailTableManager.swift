@@ -38,14 +38,14 @@ extension DetailTableManager: DetailTableManagerOutput {
             guard let classType = objectClass as? UITableViewCell.Type else {
                 return
             }
-            self.tableView.register(classType, forCellReuseIdentifier: key)
+            tableView.register(classType, forCellReuseIdentifier: key)
         }
     }
     
     func fillViewModels(viewModels: [CellType]) {
         self.viewModels = viewModels
-        self.registerForCells(viewModels: viewModels)
-        self.tableView.reloadData()
+        registerForCells(viewModels: viewModels)
+        tableView.reloadData()
     }
     
     func showScreen(tableView: UITableView,

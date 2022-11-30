@@ -13,13 +13,13 @@ protocol LabelCellProtocol {
 }
 
 class LabelCell: UITableViewCell {
- 
-    lazy var titleLabel = UILabel()
-    lazy var separator = UIView(frame: .zero)
+    
+    private let titleLabel = UILabel()
+    private let separator = UIView(frame: .zero)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+        
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalToSuperview().inset(16)
@@ -47,10 +47,10 @@ extension LabelCell: LabelCellProtocol {
         self.titleLabel.font = titleLabel.titleFont
         self.titleLabel.textAlignment = titleLabel.titleAligment
         self.titleLabel.numberOfLines = 0
-        self.separator.isHidden = titleLabel.separatorIsHidden
+        separator.isHidden = titleLabel.separatorIsHidden
         self.titleLabel.snp.remakeConstraints {
             $0.top.leading.trailing.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview().inset(titleLabel.bottomSideMargin)
         }
     }
- }
+}

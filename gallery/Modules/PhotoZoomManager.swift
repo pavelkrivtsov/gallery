@@ -15,7 +15,7 @@ protocol PhotoZoomManagerOutput: AnyObject {
 class PhotoZoomManager: NSObject {
     
     weak var presenter: PhotoZoomManagerInput?
-    private var scrollView: UIScrollView
+    private let scrollView: UIScrollView
     private var imageView = UIImageView()
     
     init(scrollView: UIScrollView) {
@@ -33,7 +33,7 @@ class PhotoZoomManager: NSObject {
 // MARK: - PhotoZoomManagerOutput
 extension PhotoZoomManager: PhotoZoomManagerOutput {
     func setImageView(view: UIImageView) {
-        self.imageView = view
+        imageView = view
     }
     
     func calculateZoom(from point: CGPoint) {
@@ -49,7 +49,7 @@ extension PhotoZoomManager: PhotoZoomManagerOutput {
         let finalScale = (currentScale == minScale) ? toScale : minScale
         let zoomRect = self.zoomRect(scale: finalScale, bounds: scrollView.bounds , center: point)
 
-        self.presenter?.getZoomRect(rect: zoomRect)
+        presenter?.getZoomRect(rect: zoomRect)
     }
     
     private func zoomRect(scale: CGFloat, bounds: CGRect, center: CGPoint ) -> CGRect {

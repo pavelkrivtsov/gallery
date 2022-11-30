@@ -13,7 +13,7 @@ class PhotoCell: UITableViewCell {
     
     static let cellIdentifier = "PhotoCell"
     private let photoView = UIImageView()
-    private var authorLabel = UILabel()
+    private let authorLabel = UILabel()
     private var activityIndicator = UIActivityIndicatorView(style: .medium)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -42,9 +42,8 @@ class PhotoCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.photoView.image = nil
-        self.authorLabel.text = ""
-        self.activityIndicator.startAnimating()
+        photoView.image = nil
+        authorLabel.text = ""
     }
     
     func configure(photo: Photo){

@@ -30,7 +30,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
-        self.tableView.frame = self.view.bounds
+        tableView.frame = self.view.bounds
         presenter.loadList()
     }
 }
@@ -55,7 +55,7 @@ extension MainViewController {
 extension MainViewController: MainViewInput {
     
     func showCurrentPhoto(viewController: UIViewController) {
-        self.navigationController?.pushViewController(viewController, animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
@@ -65,15 +65,15 @@ extension MainViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
         if let searchText = searchBar.text, !searchText.isEmpty  {
-            self.presenter.clearList()
-            self.presenter.loadFoundList(from: searchText)
+            presenter.clearList()
+            presenter.loadFoundList(from: searchText)
         }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         if let searchText = searchBar.text, !searchText.isEmpty {
-            self.presenter.clearList()
-            self.presenter.loadList()
+            presenter.clearList()
+            presenter.loadList()
         }
     }
 }

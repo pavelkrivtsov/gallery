@@ -9,8 +9,8 @@ import UIKit
 
 class LabelStack: UIStackView {
     
-    var titleLabel = UILabel()
-    var textLabel = UILabel()
+    let titleLabel = UILabel()
+    let textLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

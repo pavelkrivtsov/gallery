@@ -13,8 +13,8 @@ protocol StackLabelCellProtocol {
 }
 
 class StackLabelCell: UITableViewCell {
- 
-    lazy var mainStack: UIStackView = {
+    
+    private let mainStack: UIStackView = {
         var stack = UIStackView()
         stack.axis = .horizontal
         stack.distribution = .fillEqually
@@ -22,8 +22,8 @@ class StackLabelCell: UITableViewCell {
         return stack
     }()
     
-    lazy var firstlabelStack = LabelStack(frame: .zero)
-    lazy var secondLabelStack = LabelStack(frame: .zero)
+    private let firstlabelStack = LabelStack(frame: .zero)
+    private let secondLabelStack = LabelStack(frame: .zero)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,12 +46,12 @@ extension StackLabelCell: StackLabelCellProtocol {
     
     public func cellConfiguration(model: CellTypeProtocol) {
         guard let firstTitleLabel = model.labelStack?.firstLabelStackTitle,
-        let secondTitleLabel = model.labelStack?.secondLabelStackTitle else { return }
-        self.firstlabelStack.titleLabel.text = firstTitleLabel
-        self.secondLabelStack.titleLabel.text = secondTitleLabel
-        self.firstlabelStack.textLabel.text = model.labelStack?.firstLabelStackText
-        self.secondLabelStack.textLabel.text = model.labelStack?.secondLabelStackText
-        self.firstlabelStack.textLabel.numberOfLines = 0
-        self.secondLabelStack.textLabel.numberOfLines = 0
+              let secondTitleLabel = model.labelStack?.secondLabelStackTitle else { return }
+        firstlabelStack.titleLabel.text = firstTitleLabel
+        secondLabelStack.titleLabel.text = secondTitleLabel
+        firstlabelStack.textLabel.text = model.labelStack?.firstLabelStackText
+        secondLabelStack.textLabel.text = model.labelStack?.secondLabelStackText
+        firstlabelStack.textLabel.numberOfLines = 0
+        secondLabelStack.textLabel.numberOfLines = 0
     }
- }
+}

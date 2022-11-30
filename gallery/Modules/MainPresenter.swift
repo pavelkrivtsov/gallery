@@ -25,7 +25,7 @@ class MainPresenter {
     private let networkService: NetworkServiceOutput
     private let tableManager: MainTableManagerOutput
     private var photos = [Photo]()
-    private var currentPage = 1
+    private var resultsPage = 1
     private var searchText = ""
     
     init(networkDataFetcher: NetworkServiceOutput, tableManager: MainTableManagerOutput) {
@@ -38,22 +38,22 @@ class MainPresenter {
 extension MainPresenter: MainViewOutput {
     
     func clearList() {
-        self.currentPage = 1
-        self.tableManager.clearList()
+        resultsPage = 1
+        tableManager.clearList()
     }
     
     func loadList() {
-        self.networkService.getListFromServer(for: self.currentPage) { [weak self] photos in
+        networkService.getListFromServer(for: resultsPage) { [weak self] photos in
             guard let self = self, let photos = photos else { return }
-            self.tableManager.setList(from: photos, isSearch: self.searchText.isEmpty ? false : true)
+            self.tableManager.appendPhoros(from: photos, isSearch: self.searchText.isEmpty ? false : true)
         }
     }
     
     func loadFoundList(from text: String) {
-        self.searchText = text
-        self.networkService.getFoundListFromServer(from: text, for: self.currentPage) { [weak self] photos in
+        searchText = text
+        networkService.getFoundListFromServer(from: text, for: resultsPage) { [weak self] photos in
             guard let self = self, let photos = photos else { return }
-            self.tableManager.setList(from: photos, isSearch: self.searchText.isEmpty ? false : true)
+            self.tableManager.appendPhoros(from: photos, isSearch: self.searchText.isEmpty ? false : true)
         }
     }
 }
@@ -63,10 +63,10 @@ extension MainPresenter: MainTableManagerInput {
     
     func willDisplay(isSearch: Bool) {
         KingfisherManager.shared.cache.clearMemoryCache()
-        self.currentPage += 1
-        isSearch ? self.loadFoundList(from: self.searchText) : self.loadList()
+        resultsPage += 1
+        isSearch ? loadFoundList(from: searchText) : loadList()
     }
-
+    
     func showPhoto(photo: Photo) {
         guard let url = URL(string: photo.urls.regular) else { return }
         let photoId = photo.id

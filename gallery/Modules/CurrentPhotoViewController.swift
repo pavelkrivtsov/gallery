@@ -24,6 +24,8 @@ class CurrentPhotoViewController: UIViewController {
     
     private var presenter: CurrentPhotoViewOutput
     private var scrollView: UIScrollView
+    private lazy var notificationGenerator = UINotificationFeedbackGenerator()
+    private lazy var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
     
     private lazy var doubleTapRecognizer: UITapGestureRecognizer = {
         var gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(zoomingTap))
@@ -111,18 +113,14 @@ class CurrentPhotoViewController: UIViewController {
     
     @objc
     private func infoButtonTapped() {
-        let generator = UIImpactFeedbackGenerator(style: .rigid)
-        generator.prepare()
         presenter.showInfoAboutPhoto()
-        generator.impactOccurred()
+        impactGenerator.impactOccurred()
     }
     
     @objc
     private func downloadButtonTapped() {
-        let generator = UIImpactFeedbackGenerator(style: .rigid)
-        generator.prepare()
         self.presenter.downloadPhoto()
-        generator.impactOccurred()
+        impactGenerator.impactOccurred()
     }
     
     @objc
@@ -145,10 +143,8 @@ extension CurrentPhotoViewController: CurrentPhotoViewInput {
     }
     
     func zoom(to rect: CGRect, animated: Bool) {
-        let generator = UIImpactFeedbackGenerator(style: .rigid)
-        generator.prepare()
         self.scrollView.zoom(to: rect, animated: animated)
-        generator.impactOccurred()
+        impactGenerator.impactOccurred()
     }
     
     func trackDownloadProgress(progress: Float) {
@@ -178,13 +174,11 @@ extension CurrentPhotoViewController: CurrentPhotoViewInput {
     }
     
     func showAlert(alert: UIAlertController) {
-        let generator = UINotificationFeedbackGenerator()
-        generator.prepare()
         DispatchQueue.main.async { [weak self] in
             self?.present(alert, animated: true) {
                 alert.dismiss(animated: true)
             }
         }
-        generator.notificationOccurred(.success)
+        notificationGenerator.notificationOccurred(.success)
     }
 }
