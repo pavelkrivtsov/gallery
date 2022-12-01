@@ -15,11 +15,12 @@ class MainViewController: UIViewController {
     
     private let presenter: MainViewOutput
     private let tableView: UITableView
-    private let searchController = UISearchController(searchResultsController: nil)
+    private let searchController: UISearchController
          
-    init(presenter: MainViewOutput, tableView: UITableView) {
+    init(presenter: MainViewOutput, tableView: UITableView, searchController: UISearchController) {
         self.presenter = presenter
         self.tableView = tableView
+        self.searchController = searchController
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,9 +41,6 @@ extension MainViewController {
     
     func embedInNavigationController() -> UINavigationController {
         let navigationController = UINavigationController(rootViewController: self)
-        searchController.definesPresentationContext = true
-        searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Search photos"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationController.navigationBar.topItem?.backButtonTitle = ""
@@ -56,24 +54,5 @@ extension MainViewController: MainViewInput {
     
     func showCurrentPhoto(viewController: UIViewController) {
         navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
-// MARK: - UISearchBarDelegate
-extension MainViewController: UISearchBarDelegate {
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        if let searchText = searchBar.text, !searchText.isEmpty  {
-            presenter.clearList()
-            presenter.loadFoundList(from: searchText)
-        }
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        if let searchText = searchBar.text, !searchText.isEmpty {
-            presenter.clearList()
-            presenter.loadList()
-        }
     }
 }

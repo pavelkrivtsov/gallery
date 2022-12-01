@@ -119,14 +119,14 @@ class CurrentPhotoViewController: UIViewController {
     
     @objc
     private func downloadButtonTapped() {
-        self.presenter.downloadPhoto()
+        presenter.downloadPhoto()
         impactGenerator.impactOccurred()
     }
     
     @objc
     private func zoomingTap(sender: UITapGestureRecognizer)  {
         let location = sender.location(in: sender.view)
-        self.presenter.calculateZoom(from: location)
+        presenter.calculateZoom(from: location)
     }
 }
 
@@ -134,8 +134,8 @@ class CurrentPhotoViewController: UIViewController {
 extension CurrentPhotoViewController: CurrentPhotoViewInput {
     
     func loadPhoto(photo: UIImage, authorName: String) {
-        self.title = authorName
-        self.imageView.image = photo
+        title = authorName
+        imageView.image = photo
     }
     
     func showInfoAboutPhoto(from view: UIViewController) {
@@ -143,34 +143,26 @@ extension CurrentPhotoViewController: CurrentPhotoViewInput {
     }
     
     func zoom(to rect: CGRect, animated: Bool) {
-        self.scrollView.zoom(to: rect, animated: animated)
+        scrollView.zoom(to: rect, animated: animated)
         impactGenerator.impactOccurred()
     }
     
     func trackDownloadProgress(progress: Float) {
-        DispatchQueue.main.async { [weak self] in
-            self?.progressView.setProgress(progress, animated: true)
-            self?.title = "\(Int(progress * 100))%"
-        }
+        progressView.setProgress(progress, animated: true)
+        title = "\(Int(progress * 100))%"
     }
     
     func hideProgressView() {
-        DispatchQueue.main.async { [weak self] in
-            self?.progressView.progress = 0
-            self?.progressView.isHidden = true
-        }
+        progressView.progress = 0
+        progressView.isHidden = true
     }
     
     func setTitle(title: String) {
-        DispatchQueue.main.async { [weak self] in
-            self?.title = title
-        }
+        self.title = title
     }
     
     func showProgressView() {
-        DispatchQueue.main.async { [weak self] in
-            self?.progressView.isHidden = false
-        }
+        progressView.isHidden = false
     }
     
     func showAlert(alert: UIAlertController) {

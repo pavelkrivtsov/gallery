@@ -10,12 +10,19 @@ import UIKit
 class MainAssembly {
     
     static func assemble() -> UINavigationController {
+        let searchController = UISearchController(searchResultsController: nil)
+        let searchManager = SearchManager(searchController: searchController)
         let tableView = UITableView()
         let tableManager = MainTableManager(tableView: tableView)
         let networkService = NetworkService()
-        let presenter = MainPresenter(networkDataFetcher: networkService, tableManager: tableManager)
+        let presenter = MainPresenter(networkDataFetcher: networkService,
+                                      tableManager: tableManager,
+                                      searchManager: searchManager)
         tableManager.presenter = presenter
-        let view = MainViewController(presenter: presenter, tableView: tableView)
+        searchManager.presenter = presenter
+        let view = MainViewController(presenter: presenter,
+                                      tableView: tableView,
+                                      searchController: searchController)
         presenter.view = view
         return view.embedInNavigationController()
     }

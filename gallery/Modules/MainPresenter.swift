@@ -13,6 +13,10 @@ protocol MainTableManagerInput: AnyObject {
     func showPhoto(photo: Photo)
 }
 
+protocol SearchManagerInput: AnyObject {
+    
+}
+
 protocol MainViewOutput: AnyObject {
     func clearList()
     func loadList()
@@ -24,13 +28,18 @@ class MainPresenter {
     weak var view: MainViewInput?
     private let networkService: NetworkServiceOutput
     private let tableManager: MainTableManagerOutput
+    private let searchManager: SearchManagerOutput
     private var photos = [Photo]()
     private var resultsPage = 1
     private var searchText = ""
+    private var imageView = UIImageView()
     
-    init(networkDataFetcher: NetworkServiceOutput, tableManager: MainTableManagerOutput) {
+    init(networkDataFetcher: NetworkServiceOutput,
+         tableManager: MainTableManagerOutput,
+         searchManager: SearchManagerOutput) {
         self.networkService = networkDataFetcher
         self.tableManager = tableManager
+        self.searchManager = searchManager
     }
 }
 
@@ -58,6 +67,11 @@ extension MainPresenter: MainViewOutput {
     }
 }
 
+// MARK: - SearchManagerInput
+extension MainPresenter: SearchManagerInput {
+    
+}
+
 // MARK: - MainTableManagerInput
 extension MainPresenter: MainTableManagerInput {
     
@@ -71,13 +85,17 @@ extension MainPresenter: MainTableManagerInput {
         guard let url = URL(string: photo.urls.regular) else { return }
         let photoId = photo.id
         let authorName = photo.user.name ?? ""
-        
-        DispatchQueue.global().async { [weak self] in
-            if let data = try? Data(contentsOf: url), let photo = UIImage(data: data) {
+    
+        imageView.kf.setImage(with: url) { result in
+            switch result {
+            case .success(_):
+                guard let photo = self.imageView.image else { return }
+                let detailVC = CurrentPhotoAssembly.assemble(photoId: photoId, photo: photo, authorName: authorName)
                 DispatchQueue.main.async {
-                    let detailVC = CurrentPhotoAssembly.assemble(photoId: photoId, photo: photo, authorName: authorName)
-                    self?.view?.showCurrentPhoto(viewController: detailVC)
+                    self.view?.showCurrentPhoto(viewController: detailVC)
                 }
+            case .failure(_):
+                print("self.imageView.kf.setImage(with: url) { failure }")
             }
         }
     }

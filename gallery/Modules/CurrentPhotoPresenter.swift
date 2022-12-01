@@ -51,11 +51,12 @@ class CurrentPhotoPresenter: NSObject {
 extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     
     func loadPhoto() {
-        view?.loadPhoto(photo: photo, authorName: self.authorName)
         networkService.getCurrentPhoto(by: photoId) { [weak self] photo in
-            guard let self = self,
-                  let photo = photo else { return }
+            guard let self = self, let photo = photo else { return }
             self.detailPhotoInfo = photo
+        }
+        DispatchQueue.main.async {
+            self.view?.loadPhoto(photo: self.photo, authorName: self.authorName)
         }
     }
     
@@ -71,12 +72,16 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     func showInfoAboutPhoto() {
         guard let detailPhotoInfo = self.detailPhotoInfo else { return }
         let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemble(from: detailPhotoInfo)
-        view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
+        DispatchQueue.main.async {
+            self.view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
+        }
     }
     
     func downloadPhoto() {
         guard let detailPhotoInfo = self.detailPhotoInfo else { return }
-        view?.showProgressView()
+        DispatchQueue.main.async {
+            self.view?.showProgressView()
+        }
         networkService.downloadPhoto(photo: detailPhotoInfo)
     }
 }
@@ -85,15 +90,19 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
 extension CurrentPhotoPresenter: NetworkServiceInput {
     
     func trackDownloadProgress(progress: Float) {
-        view?.trackDownloadProgress(progress: progress)
+        DispatchQueue.main.async {
+            self.view?.trackDownloadProgress(progress: progress)
+        }
     }
     
     func savePhoto(from data: Data) {
         if let photo = UIImage(data: data) {
             UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
-            view?.hideProgressView()
-            view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
-            view?.showAlert(alert: createAlert())
+            DispatchQueue.main.async {
+                self.view?.hideProgressView()
+                self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
+                self.view?.showAlert(alert: self.createAlert())
+            }
         }
     }
     
@@ -116,6 +125,8 @@ extension CurrentPhotoPresenter: NetworkServiceInput {
 // MARK: - PhotoZoomManagerInput
 extension CurrentPhotoPresenter: PhotoZoomManagerInput {
     func getZoomRect(rect: CGRect) {
-        view?.zoom(to: rect, animated: true)
+        DispatchQueue.main.async {
+            self.view?.zoom(to: rect, animated: true)
+        }
     }
 }
