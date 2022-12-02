@@ -51,7 +51,7 @@ class CurrentPhotoPresenter: NSObject {
 extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     
     func loadPhoto() {
-        networkService.getCurrentPhoto(by: photoId) { [weak self] photo in
+        networkService.getSelectedPhoto(by: photoId) { [weak self] photo in
             guard let self = self, let photo = photo else { return }
             self.detailPhotoInfo = photo
         }

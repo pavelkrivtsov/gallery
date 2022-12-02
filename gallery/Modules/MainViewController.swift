@@ -32,7 +32,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         view.addSubview(tableView)
         tableView.frame = self.view.bounds
-        presenter.loadList()
+        presenter.loadPhotos() 
     }
 }
 

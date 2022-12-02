@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol SearchManagerOutput {
-
-}
-
 class SearchManager: NSObject {
     
     weak var presenter: SearchManagerInput?
@@ -19,23 +15,30 @@ class SearchManager: NSObject {
     init(searchController: UISearchController) {
         self.searchController = searchController
         super.init()
-        self.searchController.definesPresentationContext = true
         self.searchController.searchBar.delegate = self
         self.searchController.searchBar.placeholder = "Search photos"
     }
 }
 
-extension SearchManager: SearchManagerOutput {
-    
-}
-
 extension SearchManager: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-
+        guard let text = searchBar.text else { return print("text.isEmpty") }
+        let newText = text.trimmingCharacters(in: .whitespaces)
+        if newText == "" {
+            return
+        }
+        presenter?.clearList()
+        presenter?.loadPhotos(from: newText)
+    }
+    
+    private func removeWhiteSpace(aString:String) -> String {
+        let replaced = aString.trimmingCharacters(in: NSCharacterSet.whitespaces)
+        return replaced
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-
+        presenter?.clearList()
+        presenter?.loadPhotos()
     }
 }

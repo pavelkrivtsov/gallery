@@ -14,13 +14,13 @@ protocol MainTableManagerInput: AnyObject {
 }
 
 protocol SearchManagerInput: AnyObject {
-    
+    func loadPhotos()
+    func loadPhotos(from text: String)
+    func clearList()
 }
 
 protocol MainViewOutput: AnyObject {
-    func clearList()
-    func loadList()
-    func loadFoundList(from text: String)
+    func loadPhotos() 
 }
 
 class MainPresenter {
@@ -28,48 +28,43 @@ class MainPresenter {
     weak var view: MainViewInput?
     private let networkService: NetworkServiceOutput
     private let tableManager: MainTableManagerOutput
-    private let searchManager: SearchManagerOutput
-    private var photos = [Photo]()
-    private var resultsPage = 1
-    private var searchText = ""
+    private let searchManager: UISearchBarDelegate
     private var imageView = UIImageView()
-    
+    private var photos = [Photo]()
+    private var searchText = String()
+    private var resultsPage = 1
+   
     init(networkDataFetcher: NetworkServiceOutput,
          tableManager: MainTableManagerOutput,
-         searchManager: SearchManagerOutput) {
+         searchManager: UISearchBarDelegate) {
         self.networkService = networkDataFetcher
         self.tableManager = tableManager
         self.searchManager = searchManager
     }
 }
 
-// MARK: - MainViewOutput
-extension MainPresenter: MainViewOutput {
+// MARK: - SearchManagerInput, MainViewOutput
+extension MainPresenter: SearchManagerInput, MainViewOutput {
+
+    func loadPhotos() {
+        networkService.getPhotos(from: resultsPage) { [weak self] photos in
+            guard let self = self, let photos = photos else { return }
+            self.tableManager.appendPhotos(from: photos, isSearch: false)
+        }
+    }
+    
+    func loadPhotos(from text: String) {
+        searchText = text
+        networkService.getFoundPhotos(from: text, from: resultsPage) { [weak self] photos in
+            guard let self = self, let photos = photos else { return }
+            self.tableManager.appendPhotos(from: photos, isSearch: true)
+        }
+    }
     
     func clearList() {
         resultsPage = 1
         tableManager.clearList()
     }
-    
-    func loadList() {
-        networkService.getListFromServer(for: resultsPage) { [weak self] photos in
-            guard let self = self, let photos = photos else { return }
-            self.tableManager.appendPhoros(from: photos, isSearch: self.searchText.isEmpty ? false : true)
-        }
-    }
-    
-    func loadFoundList(from text: String) {
-        searchText = text
-        networkService.getFoundListFromServer(from: text, for: resultsPage) { [weak self] photos in
-            guard let self = self, let photos = photos else { return }
-            self.tableManager.appendPhoros(from: photos, isSearch: self.searchText.isEmpty ? false : true)
-        }
-    }
-}
-
-// MARK: - SearchManagerInput
-extension MainPresenter: SearchManagerInput {
-    
 }
 
 // MARK: - MainTableManagerInput
@@ -78,7 +73,7 @@ extension MainPresenter: MainTableManagerInput {
     func willDisplay(isSearch: Bool) {
         KingfisherManager.shared.cache.clearMemoryCache()
         resultsPage += 1
-        isSearch ? loadFoundList(from: searchText) : loadList()
+        isSearch ? loadPhotos(from: searchText) : loadPhotos()
     }
     
     func showPhoto(photo: Photo) {

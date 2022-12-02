@@ -8,9 +8,9 @@
 import Foundation
 
 protocol NetworkServiceOutput: AnyObject {
-    func getListFromServer(for page: Int, onCompletion: @escaping ([Photo]?) -> Void)
-    func getFoundListFromServer(from searchText: String, for page: Int, onCompletion: @escaping([Photo]?) -> Void)
-    func getCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void)
+    func getPhotos(from page: Int, onCompletion: @escaping ([Photo]?) -> Void)
+    func getFoundPhotos(from searchText: String, from page: Int, onCompletion: @escaping([Photo]?) -> Void)
+    func getSelectedPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void)
     func downloadPhoto(photo: Photo)
 }
 
@@ -57,7 +57,7 @@ class NetworkService: NSObject {
 
 extension NetworkService: NetworkServiceOutput {
     
-    func getListFromServer(for page: Int, onCompletion: @escaping ([Photo]?) -> Void) {
+    func getPhotos(from page: Int, onCompletion: @escaping ([Photo]?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/photos/?page=\(page)"
         taskResume(from: urlString, type: [Photo].self, clientId: clientId) { photos in
@@ -65,7 +65,7 @@ extension NetworkService: NetworkServiceOutput {
         }
     }
     
-    func getFoundListFromServer(from searchText: String, for page: Int, onCompletion: @escaping([Photo]?) -> Void) {
+    func getFoundPhotos(from searchText: String, from page: Int, onCompletion: @escaping([Photo]?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/search/photos?page=\(page)&query=\(searchText)"
         taskResume(from: urlString, type: SearchResults.self, clientId: clientId) { searchResults in
@@ -74,7 +74,7 @@ extension NetworkService: NetworkServiceOutput {
         }
     }
     
-    func getCurrentPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void) {
+    func getSelectedPhoto(by id: String, onCompletion: @escaping(Photo?) -> Void) {
         guard let clientId = getEnvironmentVar("API_KEY") else { return }
         let urlString = "https://api.unsplash.com/photos/\(id)"
         taskResume(from: urlString, type: Photo.self, clientId: clientId) { photo in

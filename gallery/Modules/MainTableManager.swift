@@ -9,7 +9,7 @@ import UIKit
 
 protocol MainTableManagerOutput {
     func clearList()
-    func appendPhoros(from photos: [Photo], isSearch: Bool)
+    func appendPhotos(from photos: [Photo], isSearch: Bool)
 }
 
 class MainTableManager: NSObject {
@@ -52,7 +52,7 @@ extension MainTableManager: MainTableManagerOutput {
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
-    func appendPhoros(from photos: [Photo], isSearch: Bool) {
+    func appendPhotos(from photos: [Photo], isSearch: Bool) {
         self.isSearch = isSearch
         self.photos += photos
         var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
@@ -80,7 +80,7 @@ extension MainTableManager: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let lastIndex = photos.count - 1
         if indexPath.row == lastIndex {
-            presenter?.willDisplay(isSearch: self.isSearch)
+            presenter?.willDisplay(isSearch: isSearch)
         }
     }
 }
