@@ -12,14 +12,14 @@ class CurrentPhotoAssembly {
     static func assemble(photoId: String, photo: UIImage, authorName: String) -> UIViewController {
         let scrollView = UIScrollView()
         let photoZoomManager = PhotoZoomManager(scrollView: scrollView)
-        let networkService = NetworkService()
+        let networkManager = NetworkManager()
         let presenter = CurrentPhotoPresenter(photoId: photoId,
                                               photo: photo,
                                               authorName: authorName,
-                                              networkService: networkService,
+                                              networkManager: networkManager,
                                               photoZoomMAnager: photoZoomManager)
         let view = CurrentPhotoViewController(presenter: presenter, scrollView: scrollView)
-        networkService.presenter = presenter
+        networkManager.presenter = presenter
         photoZoomManager.presenter = presenter
         presenter.view = view
         return view

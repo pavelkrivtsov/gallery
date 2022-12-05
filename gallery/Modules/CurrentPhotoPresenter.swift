@@ -28,7 +28,7 @@ class CurrentPhotoPresenter: NSObject {
     
     weak var view: CurrentPhotoViewInput?
     private let photoZoomManager: PhotoZoomManagerOutput
-    private let networkService: NetworkServiceOutput
+    private let networkManager: NetworkManagerOutput
     private var detailPhotoInfo: Photo?
     private var photoId = ""
     private var photo = UIImage()
@@ -37,12 +37,12 @@ class CurrentPhotoPresenter: NSObject {
     init(photoId: String,
          photo: UIImage,
          authorName: String,
-         networkService: NetworkServiceOutput,
+         networkManager: NetworkManagerOutput,
          photoZoomMAnager: PhotoZoomManagerOutput) {
         self.photo = photo
         self.photoId = photoId
         self.authorName = authorName
-        self.networkService = networkService
+        self.networkManager = networkManager
         self.photoZoomManager = photoZoomMAnager
     }
 }
@@ -51,10 +51,16 @@ class CurrentPhotoPresenter: NSObject {
 extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     
     func loadPhoto() {
-        networkService.getSelectedPhoto(by: photoId) { [weak self] photo in
-            guard let self = self, let photo = photo else { return }
-            self.detailPhotoInfo = photo
+        networkManager.getSelectedPhoto(by: photoId) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let photo):
+                self.detailPhotoInfo = photo
+            case .failure(let error):
+                print(error)
+            }
         }
+        
         DispatchQueue.main.async {
             self.view?.loadPhoto(photo: self.photo, authorName: self.authorName)
         }
@@ -67,7 +73,6 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
     func imageViewForZooming(view: UIImageView) {
         photoZoomManager.setImageView(view: view)
     }
-    
     
     func showInfoAboutPhoto() {
         guard let detailPhotoInfo = self.detailPhotoInfo else { return }
@@ -82,7 +87,7 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
         DispatchQueue.main.async {
             self.view?.showProgressView()
         }
-        networkService.downloadPhoto(photo: detailPhotoInfo)
+        networkManager.downloadPhoto(photo: detailPhotoInfo)
     }
 }
 

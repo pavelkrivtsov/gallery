@@ -20,13 +20,13 @@ protocol SearchManagerInput: AnyObject {
 }
 
 protocol MainViewOutput: AnyObject {
-    func loadPhotos() 
+    func loadPhotos()
 }
 
 class MainPresenter {
     
     weak var view: MainViewInput?
-    private let networkService: NetworkServiceOutput
+    private let networkManager: NetworkManagerOutput
     private let tableManager: MainTableManagerOutput
     private let searchManager: UISearchBarDelegate
     private var imageView = UIImageView()
@@ -34,10 +34,10 @@ class MainPresenter {
     private var searchText = String()
     private var resultsPage = 1
    
-    init(networkDataFetcher: NetworkServiceOutput,
+    init(networkManager: NetworkManagerOutput,
          tableManager: MainTableManagerOutput,
          searchManager: UISearchBarDelegate) {
-        self.networkService = networkDataFetcher
+        self.networkManager = networkManager
         self.tableManager = tableManager
         self.searchManager = searchManager
     }
@@ -47,17 +47,27 @@ class MainPresenter {
 extension MainPresenter: SearchManagerInput, MainViewOutput {
 
     func loadPhotos() {
-        networkService.getPhotos(from: resultsPage) { [weak self] photos in
-            guard let self = self, let photos = photos else { return }
-            self.tableManager.appendPhotos(from: photos, isSearch: false)
+        networkManager.getPhotos(from: resultsPage) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let photos):
+                self.tableManager.appendPhotos(from: photos, isSearch: false)
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     
     func loadPhotos(from text: String) {
-        searchText = text
-        networkService.getFoundPhotos(from: text, from: resultsPage) { [weak self] photos in
-            guard let self = self, let photos = photos else { return }
-            self.tableManager.appendPhotos(from: photos, isSearch: true)
+        searchText = text        
+        networkManager.getFoundPhotos(from: text, from: resultsPage) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let photos):
+                self.tableManager.appendPhotos(from: photos, isSearch: false)
+            case .failure(let error):
+                print(error)
+            }
         }
     }
     

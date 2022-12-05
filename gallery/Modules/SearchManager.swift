@@ -32,11 +32,6 @@ extension SearchManager: UISearchBarDelegate {
         presenter?.loadPhotos(from: newText)
     }
     
-    private func removeWhiteSpace(aString:String) -> String {
-        let replaced = aString.trimmingCharacters(in: NSCharacterSet.whitespaces)
-        return replaced
-    }
-    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         presenter?.clearList()
         presenter?.loadPhotos()
