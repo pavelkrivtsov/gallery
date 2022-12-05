@@ -109,6 +109,7 @@ class CurrentPhotoViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         KingfisherManager.shared.cache.clearMemoryCache()
+        presenter.cancelDownloadTask()
     }
     
     @objc

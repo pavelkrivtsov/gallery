@@ -22,6 +22,7 @@ enum NetworkResponse: String, Error {
 }
 
 protocol NetworkManagerOutput: AnyObject {
+    func cancelDownloadTask()
     func getPhotos(from page: Int, onCompletion: @escaping (Result<[Photo], Error>) -> Void)
     func getFoundPhotos(from searchText: String, from page: Int, onCompletion: @escaping (Result<[Photo], Error>) -> Void)
     func getSelectedPhoto(by id: String, onCompletion: @escaping (Result<Photo, Error>) -> Void)
@@ -90,7 +91,7 @@ class NetworkManager: NSObject {
 }
 
 extension NetworkManager: NetworkManagerOutput {
-    
+
     func getPhotos(from page: Int, onCompletion: @escaping (Result<[Photo], Error>) -> Void) {
         let urlString = "https://api.unsplash.com/photos/?page=\(page)"
         taskResume(from: urlString, type: [Photo].self) { result in
@@ -137,7 +138,12 @@ extension NetworkManager: NetworkManagerOutput {
         var request = URLRequest(url: url)
         request.addValue(clientId, forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
-        session.downloadTask(with: request).resume()
+        task = session.downloadTask(with: request)
+        task?.resume()
+    }
+    
+    func cancelDownloadTask() {
+        task?.cancel()
     }
 }
 

@@ -13,6 +13,7 @@ protocol CurrentPhotoViewOutput: AnyObject {
     func showInfoAboutPhoto()
     func downloadPhoto()
     func imageViewForZooming(view: UIImageView)
+    func cancelDownloadTask()
 }
 
 protocol PhotoZoomManagerInput: AnyObject {
@@ -88,6 +89,10 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
             self.view?.showProgressView()
         }
         networkManager.downloadPhoto(photo: detailPhotoInfo)
+    }
+    
+    func cancelDownloadTask() {
+        networkManager.cancelDownloadTask()
     }
 }
 
