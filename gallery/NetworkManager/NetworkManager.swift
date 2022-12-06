@@ -32,13 +32,16 @@ protocol NetworkManagerOutput: AnyObject {
 class NetworkManager: NSObject {
     
     weak var presenter: NetworkServiceInput?
-    var task : URLSessionTask?
+    private var task : URLSessionTask?
     
     private func taskResume<T: Decodable>(from urlString: String,
                                           type: T.Type,
                                           onCompletion: @escaping(Result<T, Error>) -> Void) {
         
-        guard let url = URL(string: urlString), let clientId = getEnvironmentVar("API_KEY") else { return }
+        guard let url = URL(string: urlString), let clientId = getEnvironmentVar("API_KEY") else {
+            onCompletion(.failure(NetworkResponse.badRequest))            
+            return
+        }
         var request = URLRequest(url: url)
         request.addValue(clientId, forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
@@ -64,6 +67,7 @@ class NetworkManager: NSObject {
                     } catch {
                         onCompletion(.failure(NetworkResponse.unableToDecode))
                     }
+                    
                 case .failure(let failureError):
                     onCompletion(.failure(failureError))
                 case .none:
@@ -153,7 +157,7 @@ extension NetworkManager: URLSessionDownloadDelegate {
                     downloadTask: URLSessionDownloadTask,
                     didFinishDownloadingTo location: URL) {
         guard let data = try? Data(contentsOf: location) else {
-            print("The data could be loaded")
+            presenter?.failedDownloadPhoto()
             return
         }
         presenter?.savePhoto(from: data)

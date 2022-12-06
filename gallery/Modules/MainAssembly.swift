@@ -14,8 +14,8 @@ class MainAssembly {
         let searchManager = SearchManager(searchController: searchController)
         let tableView = UITableView()
         let tableManager = MainTableManager(tableView: tableView)
-        let networkService = NetworkManager()
-        let presenter = MainPresenter(networkManager: networkService,
+        let networkManager = NetworkManager()
+        let presenter = MainPresenter(networkManager: networkManager,
                                       tableManager: tableManager,
                                       searchManager: searchManager)
         tableManager.presenter = presenter

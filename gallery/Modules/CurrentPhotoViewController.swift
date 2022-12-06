@@ -12,12 +12,13 @@ import SnapKit
 protocol CurrentPhotoViewInput: AnyObject {
     func loadPhoto(photo: UIImage, authorName: String)
     func zoom(to rect: CGRect, animated: Bool)
-    func showAlert(alert: UIAlertController)
+    func showAlert(_ alert: UIAlertController, notificationType: UINotificationFeedbackGenerator.FeedbackType)
     func trackDownloadProgress(progress: Float)
     func hideProgressView()
     func showProgressView()
     func setTitle(title: String)
     func showInfoAboutPhoto(from view: UIViewController)
+    func failedLoadPhoto(_ alert: UIAlertController)
 }
 
 class CurrentPhotoViewController: UIViewController {
@@ -166,12 +167,17 @@ extension CurrentPhotoViewController: CurrentPhotoViewInput {
         progressView.isHidden = false
     }
     
-    func showAlert(alert: UIAlertController) {
-        DispatchQueue.main.async { [weak self] in
-            self?.present(alert, animated: true) {
+    func showAlert(_ alert: UIAlertController, notificationType: UINotificationFeedbackGenerator.FeedbackType) {
+        DispatchQueue.main.async {
+            self.present(alert, animated: true) {
                 alert.dismiss(animated: true)
             }
         }
-        notificationGenerator.notificationOccurred(.success)
+        notificationGenerator.notificationOccurred(notificationType)
+    }
+    
+    func failedLoadPhoto(_ alert: UIAlertController) {
+            self.present(alert, animated: true)
+            notificationGenerator.notificationOccurred(.warning)
     }
 }

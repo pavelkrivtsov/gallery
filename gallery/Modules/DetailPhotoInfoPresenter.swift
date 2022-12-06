@@ -97,8 +97,8 @@ extension DetailPhotoInfoPresenter: DetailPhotoInfoViewOutput {
         
         let cellModels: [CellType] = descriptionCell + mapViewCell + cameraLabelCell + stackLabelCell
         
-        DispatchQueue.main.async { [weak self] in
-            self?.tableManager.fillViewModels(viewModels: cellModels)
+        DispatchQueue.main.async {
+            self.tableManager.fillViewModels(viewModels: cellModels)
         }
     }
 }

@@ -9,6 +9,9 @@ import UIKit
 
 protocol MainViewInput: AnyObject {
     func showCurrentPhoto(viewController: UIViewController)
+    func failedLoadPhotos(_ alert: UIAlertController)
+    func noFoundPhotos(_ view: NoPhotosView)
+    func removeNoPhotosFromSuperview()
 }
 
 class MainViewController: UIViewController {
@@ -16,6 +19,8 @@ class MainViewController: UIViewController {
     private let presenter: MainViewOutput
     private let tableView: UITableView
     private let searchController: UISearchController
+    private lazy var notificationGenerator = UINotificationFeedbackGenerator()
+    private lazy var noPhotosView = NoPhotosView()
          
     init(presenter: MainViewOutput, tableView: UITableView, searchController: UISearchController) {
         self.presenter = presenter
@@ -54,5 +59,20 @@ extension MainViewController: MainViewInput {
     
     func showCurrentPhoto(viewController: UIViewController) {
         navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func failedLoadPhotos(_ alert: UIAlertController) {
+        self.present(alert, animated: true)
+        notificationGenerator.notificationOccurred(.warning)
+    }
+    
+    func noFoundPhotos(_ view: NoPhotosView) {
+        self.noPhotosView = view
+        self.noPhotosView.frame = self.view.bounds
+        self.view.addSubview(view)
+    }
+    
+    func removeNoPhotosFromSuperview() {
+        self.noPhotosView.removeFromSuperview()
     }
 }

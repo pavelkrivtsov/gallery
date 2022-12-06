@@ -49,17 +49,17 @@ class PhotoCell: UITableViewCell {
     func configure(photo: Photo){
         let photoURL = photo.urls.regular
         guard let url = URL(string: photoURL) else { return }
-        DispatchQueue.main.async { [weak self] in
-            self?.activityIndicator.startAnimating()
-            self?.photoView.kf.setImage(with: url) { result in
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+            self.photoView.kf.setImage(with: url) { result in
                 switch result {
                 case .success(_):
-                    self?.activityIndicator.stopAnimating()
+                    self.activityIndicator.stopAnimating()
                 case .failure(_):
                     print("self.imageView.kf.setImage(with: url) { failure }")
                 }
             }
-            self?.authorLabel.text = photo.user.name
+            self.authorLabel.text = photo.user.name
         }
     }
 }

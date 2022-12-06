@@ -33,6 +33,16 @@ class MainPresenter {
     private var photos = [Photo]()
     private var searchText = String()
     private var resultsPage = 1
+    private lazy var noPhotosView = NoPhotosView()
+    
+    private lazy var alert: UIAlertController = {
+        var alert = UIAlertController(title: nil,
+                                      message: nil,
+                                      preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .cancel)
+        alert.addAction(ok)
+        return alert
+    }()
    
     init(networkManager: NetworkManagerOutput,
          tableManager: MainTableManagerOutput,
@@ -53,20 +63,39 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
             case .success(let photos):
                 self.tableManager.appendPhotos(from: photos, isSearch: false)
             case .failure(let error):
-                print(error)
+                self.alert.title = error.localizedDescription
+                DispatchQueue.main.async {
+                    self.view?.failedLoadPhotos(self.alert)
+                    let view = NoPhotosView()
+                    self.view?.noFoundPhotos(view)
+                }
             }
         }
     }
     
     func loadPhotos(from text: String) {
-        searchText = text        
-        networkManager.getFoundPhotos(from: text, from: resultsPage) { [weak self] result in
+        searchText = text
+        networkManager.getFoundPhotos(from: searchText, from: resultsPage) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let photos):
-                self.tableManager.appendPhotos(from: photos, isSearch: false)
+                if photos.isEmpty {
+                    DispatchQueue.main.async {
+                        let view = NoPhotosView()
+                        self.view?.noFoundPhotos(view)
+                    }
+                } else {
+                    self.tableManager.appendPhotos(from: photos, isSearch: false)
+                }
             case .failure(let error):
-                print(error)
+             
+                self.alert.title = error.localizedDescription
+                DispatchQueue.main.async {
+                    self.view?.failedLoadPhotos(self.alert)
+                    let view = NoPhotosView()
+                    self.view?.noFoundPhotos(view)
+                }
+                
             }
         }
     }
@@ -74,6 +103,9 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
     func clearList() {
         resultsPage = 1
         tableManager.clearList()
+        DispatchQueue.main.async {
+            self.view?.removeNoPhotosFromSuperview()
+        }
     }
 }
 
@@ -99,8 +131,11 @@ extension MainPresenter: MainTableManagerInput {
                 DispatchQueue.main.async {
                     self.view?.showCurrentPhoto(viewController: detailVC)
                 }
-            case .failure(_):
-                print("self.imageView.kf.setImage(with: url) { failure }")
+            case .failure(let error):
+                self.alert.title = error.localizedDescription
+                DispatchQueue.main.async {
+                    self.view?.failedLoadPhotos(self.alert)
+                }
             }
         }
     }

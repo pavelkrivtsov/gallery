@@ -23,6 +23,7 @@ protocol PhotoZoomManagerInput: AnyObject {
 protocol NetworkServiceInput: AnyObject {
     func savePhoto(from data: Data)
     func trackDownloadProgress(progress: Float)
+    func failedDownloadPhoto()
 }
 
 class CurrentPhotoPresenter: NSObject {
@@ -34,6 +35,38 @@ class CurrentPhotoPresenter: NSObject {
     private var photoId = ""
     private var photo = UIImage()
     private var authorName = ""
+    private lazy var alert: UIAlertController = {
+        var alert = UIAlertController(title: "Failed load photo",
+                                      message: nil,
+                                      preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .cancel)
+        alert.addAction(ok)
+        return alert
+    }()
+    
+    private lazy var downloadAlert: UIAlertController = {
+        let alert = UIAlertController(title: "",
+                                      message: nil,
+                                      preferredStyle: .alert)
+        let imageView = UIImageView(image: .init(systemName: "square.and.arrow.down"))
+        let alertSize = 75
+        alert.view.addSubview(imageView)
+        alert.view.snp.makeConstraints {
+            $0.size.equalTo(alertSize)
+        }
+        imageView.snp.makeConstraints {
+            $0.centerY.centerX.equalToSuperview()
+            $0.size.equalTo(alertSize / 2)
+        }
+        return alert
+    }()
+    
+    private lazy var failedDownloadAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Failed download photo",
+                                      message: nil,
+                                      preferredStyle: .alert)
+        return alert
+    }()
     
     init(photoId: String,
          photo: UIImage,
@@ -57,8 +90,10 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
             switch result {
             case .success(let photo):
                 self.detailPhotoInfo = photo
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                DispatchQueue.main.async {
+                    self.view?.failedLoadPhoto(self.alert)
+                }
             }
         }
         
@@ -98,7 +133,7 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
 
 // MARK: - NetworkServiceInput
 extension CurrentPhotoPresenter: NetworkServiceInput {
-    
+        
     func trackDownloadProgress(progress: Float) {
         DispatchQueue.main.async {
             self.view?.trackDownloadProgress(progress: progress)
@@ -111,24 +146,15 @@ extension CurrentPhotoPresenter: NetworkServiceInput {
             DispatchQueue.main.async {
                 self.view?.hideProgressView()
                 self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
-                self.view?.showAlert(alert: self.createAlert())
+                self.view?.showAlert(self.downloadAlert, notificationType: .success)
             }
         }
     }
     
-    private func createAlert() -> UIAlertController {
-        let alert = UIAlertController(title: "", message: nil, preferredStyle: .alert)
-        let imageView = UIImageView(image: .init(systemName: "square.and.arrow.down"))
-        let alertSize = 75
-        alert.view.addSubview(imageView)
-        alert.view.snp.makeConstraints {
-            $0.size.equalTo(alertSize)
+    func failedDownloadPhoto() {
+        DispatchQueue.main.async {
+            self.view?.showAlert(self.failedDownloadAlert, notificationType: .error)
         }
-        imageView.snp.makeConstraints {
-            $0.centerY.centerX.equalToSuperview()
-            $0.size.equalTo(alertSize / 2)
-        }
-        return alert
     }
 }
 
