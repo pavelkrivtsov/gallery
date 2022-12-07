@@ -61,7 +61,9 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
             guard let self = self else { return }
             switch result {
             case .success(let photos):
-                self.tableManager.appendPhotos(from: photos, isSearch: false)
+                DispatchQueue.main.async {
+                    self.tableManager.appendPhotos(from: photos, isSearch: false)
+                }
             case .failure(let error):
                 self.alert.title = error.rawValue
                 DispatchQueue.main.async {
@@ -85,7 +87,9 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
                         self.view?.noFoundPhotos(view)
                     }
                 } else {
-                    self.tableManager.appendPhotos(from: photos, isSearch: false)
+                    DispatchQueue.main.async {
+                        self.tableManager.appendPhotos(from: photos, isSearch: false)
+                    }
                 }
             case .failure(let error):
                 self.alert.title = error.rawValue
@@ -98,8 +102,8 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
     
     func clearList() {
         resultsPage = 1
-        tableManager.clearList()
         DispatchQueue.main.async {
+            self.tableManager.clearList()
             self.view?.removeNoPhotosFromSuperview()
         }
     }
