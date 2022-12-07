@@ -88,7 +88,7 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self.tableManager.appendPhotos(from: photos, isSearch: false)
+                        self.tableManager.appendPhotos(from: photos, isSearch: true)
                     }
                 }
             case .failure(let error):
