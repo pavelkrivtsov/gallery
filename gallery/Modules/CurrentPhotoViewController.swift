@@ -19,6 +19,7 @@ protocol CurrentPhotoViewInput: AnyObject {
     func setTitle(title: String)
     func showInfoAboutPhoto(from view: UIViewController)
     func failedLoadPhoto(_ alert: UIAlertController)
+    func enabledInfoButton()
 }
 
 class CurrentPhotoViewController: UIViewController {
@@ -54,6 +55,7 @@ class CurrentPhotoViewController: UIViewController {
                                      style: .done,
                                      target: self,
                                      action: #selector(infoButtonTapped))
+        button.isEnabled = false
         return button
     }()
     
@@ -82,22 +84,21 @@ class CurrentPhotoViewController: UIViewController {
         navigationItem.rightBarButtonItem = infoButton
         
         view.addSubview(scrollView)
-        scrollView.addSubview(imageView)
-        view.addSubview(progressView)
-        view.addSubview(downloadButton)
-        
         scrollView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
+        scrollView.addSubview(imageView)
+        imageView.snp.makeConstraints {
+            $0.top.bottom.leading.trailing.width.height.equalToSuperview()
+        }
+        view.addSubview(progressView)
         progressView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
-        imageView.snp.makeConstraints {
-            $0.leading.trailing.top.bottom.width.height.equalToSuperview()
-        }
+        view.addSubview(downloadButton)
         downloadButton.snp.makeConstraints {
             $0.width.height.equalTo(44)
             $0.trailing.equalToSuperview().inset(16)
@@ -106,7 +107,7 @@ class CurrentPhotoViewController: UIViewController {
         
         presenter.loadPhoto()
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         KingfisherManager.shared.cache.clearMemoryCache()
@@ -168,16 +169,18 @@ extension CurrentPhotoViewController: CurrentPhotoViewInput {
     }
     
     func showAlert(_ alert: UIAlertController, notificationType: UINotificationFeedbackGenerator.FeedbackType) {
-        DispatchQueue.main.async {
-            self.present(alert, animated: true) {
-                alert.dismiss(animated: true)
-            }
+        self.present(alert, animated: true) {
+            alert.dismiss(animated: true)
         }
         notificationGenerator.notificationOccurred(notificationType)
     }
     
     func failedLoadPhoto(_ alert: UIAlertController) {
-            self.present(alert, animated: true)
-            notificationGenerator.notificationOccurred(.warning)
+        self.present(alert, animated: true)
+        notificationGenerator.notificationOccurred(.warning)
+    }
+    
+    func enabledInfoButton() {
+        infoButton.isEnabled = true
     }
 }

@@ -90,6 +90,9 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
             switch result {
             case .success(let photo):
                 self.detailPhotoInfo = photo
+                DispatchQueue.main.async {
+                    self.view?.enabledInfoButton()
+                }
             case .failure(_):
                 DispatchQueue.main.async {
                     self.view?.failedLoadPhoto(self.alert)
