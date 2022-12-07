@@ -23,10 +23,15 @@ class SearchManager: NSObject {
 extension SearchManager: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let text = searchBar.text, !text.isEmpty else { return print("text.isEmpty") }
-        let newText = text.trimmingCharacters(in: .whitespaces)
+        guard let text = searchBar.text,
+              !text.isEmpty,
+              text.contains(where: { $0 != " " })  else {
+            return
+        }
+        
+        let editedText = text.components(separatedBy: .whitespaces).joined(separator: "%20")
         presenter?.clearList()
-        presenter?.loadPhotos(from: newText)
+        presenter?.loadPhotos(from: editedText)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
