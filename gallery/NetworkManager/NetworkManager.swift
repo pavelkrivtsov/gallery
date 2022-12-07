@@ -34,22 +34,10 @@ class NetworkManager: NSObject {
     weak var presenter: NetworkServiceInput?
     private var task : URLSessionTask?
     
-    private func taskResume<T: Decodable>(from urlString: String,
+    private func taskResume<T: Decodable>(from request: URLRequest,
                                           type: T.Type,
                                           onCompletion: @escaping(Result<T, NetworkResponse>) -> Void) {
-        
-        
-        guard let url = URL(string: urlString) else {
-            onCompletion(.failure(NetworkResponse.badRequest))
-            return
-        }
-        
-        guard let clientId = getEnvironmentVar("API_KEY") else { return }
-        
-        var request = URLRequest(url: url)
-        request.addValue(clientId, forHTTPHeaderField: "Authorization")
-        request.httpMethod = "GET"
-        
+    
         task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             
             if error != nil {
@@ -80,6 +68,16 @@ class NetworkManager: NSObject {
         task?.resume()
     }
     
+    private func createRequest(from url: URL) -> URLRequest? {
+        guard let clientId = getEnvironmentVar("API_KEY") else {
+            return nil
+        }
+        var request = URLRequest(url: url)
+        request.addValue(clientId, forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+        return request
+    }
+    
     private func handleNetworkResponse(_ response: HTTPURLResponse) -> NetworkResult<NetworkResponse> {
         switch response.statusCode {
         case 200...299 : return .success
@@ -99,8 +97,20 @@ class NetworkManager: NSObject {
 extension NetworkManager: NetworkManagerOutput {
 
     func getPhotos(from page: Int, onCompletion: @escaping (Result<[Photo], NetworkResponse>) -> Void) {
-        let urlString = "https://api.unsplash.com/photos/?page=\(page)"
-        taskResume(from: urlString, type: [Photo].self) { result in
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "api.unsplash.com"
+        urlComponents.path = "/photos"
+        urlComponents.queryItems =  [URLQueryItem(name: "page", value: "\(page)")]
+        
+        guard let url = urlComponents.url,
+              let request = self.createRequest(from: url) else {
+            onCompletion(.failure(NetworkResponse.failed))
+            return
+        }
+        
+        taskResume(from: request, type: [Photo].self) { result in
             switch result {
             case .success(let photos):
                 onCompletion(.success(photos))
@@ -113,11 +123,21 @@ extension NetworkManager: NetworkManagerOutput {
     func getFoundPhotos(from page: Int,
                         from searchText: String,
                         onCompletion: @escaping (Result<[Photo], NetworkResponse>) -> Void) {
-
-        let urlString = "https://api.unsplash.com/search/photos?page=\(page)&query=\(searchText)"
-//        let urlString = "https://api.unsplash.com/search/photos?page=1&query=v%20f"
         
-        taskResume(from: urlString, type: SearchResults.self) { result in
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "api.unsplash.com"
+        urlComponents.path = "/search/photos"
+        urlComponents.queryItems =  [URLQueryItem(name: "page", value: "\(page)"),
+                                     URLQueryItem(name: "query", value: "\(searchText)")]
+        
+        guard let url = urlComponents.url,
+              let request = self.createRequest(from: url) else {
+            onCompletion(.failure(NetworkResponse.failed))
+            return
+        }
+        
+        taskResume(from: request, type: SearchResults.self) { result in
             switch result {
             case .success(let searchResults):
                 onCompletion(.success(searchResults.results))
@@ -125,12 +145,22 @@ extension NetworkManager: NetworkManagerOutput {
                 onCompletion(.failure(failureError))
             }
         }
-        
     }
     
-    func getSelectedPhoto(by id: String, onCompletion: @escaping (Result<Photo, NetworkResponse>) -> Void){
-        let urlString = "https://api.unsplash.com/photos/\(id)"
-        taskResume(from: urlString, type: Photo.self) { result in
+    func getSelectedPhoto(by id: String, onCompletion: @escaping (Result<Photo, NetworkResponse>) -> Void) {
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "api.unsplash.com"
+        urlComponents.path = "/photos/\(id)"
+        
+        guard let url = urlComponents.url,
+              let request = self.createRequest(from: url) else {
+            onCompletion(.failure(NetworkResponse.failed))
+            return
+        }
+        
+        taskResume(from: request, type: Photo.self) { result in
             switch result {
             case .success(let photo):
                 onCompletion(.success(photo))

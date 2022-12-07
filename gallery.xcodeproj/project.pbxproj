@@ -482,7 +482,9 @@
 				DEVELOPMENT_TEAM = A3JHD7MWF8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "gallery/Supporting files/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = ImageGallery;
+				INFOPLIST_KEY_CFBundleDisplayName = images;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
@@ -493,7 +495,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = pavelkrivtsov.gallery;
+				PRODUCT_BUNDLE_IDENTIFIER = pavelkrivtsov.images;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -514,7 +516,9 @@
 				DEVELOPMENT_TEAM = A3JHD7MWF8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "gallery/Supporting files/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = ImageGallery;
+				INFOPLIST_KEY_CFBundleDisplayName = images;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
@@ -525,7 +529,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = pavelkrivtsov.gallery;
+				PRODUCT_BUNDLE_IDENTIFIER = pavelkrivtsov.images;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
