@@ -63,7 +63,7 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
             case .success(let photos):
                 self.tableManager.appendPhotos(from: photos, isSearch: false)
             case .failure(let error):
-                self.alert.title = error.localizedDescription
+                self.alert.title = error.rawValue
                 DispatchQueue.main.async {
                     self.view?.failedLoadPhotos(self.alert)
                     let view = NoPhotosView()
@@ -75,7 +75,7 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
     
     func loadPhotos(from text: String) {
         searchText = text
-        networkManager.getFoundPhotos(from: searchText, from: resultsPage) { [weak self] result in
+        networkManager.getFoundPhotos(from: resultsPage, from: searchText) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let photos):
@@ -88,14 +88,10 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
                     self.tableManager.appendPhotos(from: photos, isSearch: false)
                 }
             case .failure(let error):
-             
-                self.alert.title = error.localizedDescription
+                self.alert.title = error.rawValue
                 DispatchQueue.main.async {
                     self.view?.failedLoadPhotos(self.alert)
-                    let view = NoPhotosView()
-                    self.view?.noFoundPhotos(view)
                 }
-                
             }
         }
     }
@@ -129,7 +125,7 @@ extension MainPresenter: MainTableManagerInput {
                 guard let photo = self.imageView.image else { return }
                 let detailVC = CurrentPhotoAssembly.assemble(photoId: photoId, photo: photo, authorName: authorName)
                 DispatchQueue.main.async {
-                    self.view?.showCurrentPhoto(viewController: detailVC)
+                    self.view?.showSelectedPhoto(viewController: detailVC)
                 }
             case .failure(let error):
                 self.alert.title = error.localizedDescription

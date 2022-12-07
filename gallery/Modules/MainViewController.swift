@@ -8,7 +8,7 @@
 import UIKit
 
 protocol MainViewInput: AnyObject {
-    func showCurrentPhoto(viewController: UIViewController)
+    func showSelectedPhoto(viewController: UIViewController)
     func failedLoadPhotos(_ alert: UIAlertController)
     func noFoundPhotos(_ view: NoPhotosView)
     func removeNoPhotosFromSuperview()
@@ -57,7 +57,7 @@ extension MainViewController {
 // MARK: - MainViewInput
 extension MainViewController: MainViewInput {
     
-    func showCurrentPhoto(viewController: UIViewController) {
+    func showSelectedPhoto(viewController: UIViewController) {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
