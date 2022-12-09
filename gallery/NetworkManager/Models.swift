@@ -60,39 +60,12 @@ struct User: Decodable, Hashable {
     let name: String?
     let firstName: String?
     let lastName: String?
-    let bio: String?
-    let location: String?
-    let links: UserLinks
-    let profileImage: ProfileImage
     
     enum CodingKeys: String, CodingKey {
-        case id, username, name, bio, location, links
+        case id, username, name
         case firstName = "first_name"
         case lastName = "last_name"
-        case profileImage = "profile_image"
     }
-}
-
-// MARK: - Links
-struct UserLinks: Decodable, Hashable {
-    let linksSelf: String
-    let html: String
-    let photos: String
-    let likes: String
-    let portfolio: String
-    let following: String
-    let followers: String
-    
-    enum CodingKeys: String, CodingKey {
-        case html, photos, likes, portfolio, following, followers
-        case linksSelf = "self"
-    }
-}
-
-struct ProfileImage: Decodable, Hashable {
-    let small: String
-    let medium: String
-    let large: String
 }
 
 // MARK: - Exif

@@ -30,7 +30,6 @@ class MainPresenter {
     private let tableManager: MainTableManagerOutput
     private let searchManager: UISearchBarDelegate
     private var imageView = UIImageView()
-    private var photos = [Photo]()
     private var searchText = String()
     private var resultsPage = 1
     private lazy var noPhotosView = NoPhotosView()
@@ -113,9 +112,11 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
 extension MainPresenter: MainTableManagerInput {
     
     func willDisplay(isSearch: Bool) {
-        KingfisherManager.shared.cache.clearMemoryCache()
-        resultsPage += 1
-        isSearch ? loadPhotos(from: searchText) : loadPhotos()
+        DispatchQueue.global().async {
+            KingfisherManager.shared.cache.clearMemoryCache()
+            self.resultsPage += 1
+            isSearch ? self.loadPhotos(from: self.searchText) : self.loadPhotos()
+        }
     }
     
     func showPhoto(photo: Photo) {

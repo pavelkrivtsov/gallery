@@ -78,7 +78,7 @@ extension MainTableManager: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let lastIndex = photos.count - 1
+        let lastIndex = photos.count - 29
         if indexPath.row == lastIndex {
             presenter?.willDisplay(isSearch: isSearch)
         }

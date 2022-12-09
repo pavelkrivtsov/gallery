@@ -102,7 +102,9 @@ extension NetworkManager: NetworkManagerOutput {
         urlComponents.scheme = "https"
         urlComponents.host = "api.unsplash.com"
         urlComponents.path = "/photos"
-        urlComponents.queryItems =  [URLQueryItem(name: "page", value: "\(page)")]
+        urlComponents.queryItems =  [URLQueryItem(name: "page", value: "\(page)"),
+                                     URLQueryItem(name: "per_page", value: "30"),
+                                     URLQueryItem(name: "order_by", value: "popular")]
         
         guard let url = urlComponents.url,
               let request = self.createRequest(from: url) else {
@@ -129,7 +131,8 @@ extension NetworkManager: NetworkManagerOutput {
         urlComponents.host = "api.unsplash.com"
         urlComponents.path = "/search/photos"
         urlComponents.queryItems =  [URLQueryItem(name: "page", value: "\(page)"),
-                                     URLQueryItem(name: "query", value: "\(searchText)")]
+                                     URLQueryItem(name: "query", value: "\(searchText)"),
+                                     URLQueryItem(name: "per_page", value: "30")]
         
         guard let url = urlComponents.url,
               let request = self.createRequest(from: url) else {
