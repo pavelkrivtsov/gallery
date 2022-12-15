@@ -39,6 +39,19 @@ class MainTableManager: NSObject {
             return cell
         }
     }
+    
+    private func createSpinnerFooter() -> UIView {
+        let footerView = UIView(frame: .init(x: 0,
+                                             y: 0,
+                                             width: self.tableView.frame.width,
+                                             height: self.tableView.frame.width / 3))
+        footerView.backgroundColor = .red
+        let spinner = UIActivityIndicatorView(style: .medium)
+        spinner.center = footerView.center
+        footerView.addSubview(spinner )
+        spinner.startAnimating()
+        return footerView
+    }
 }
 
 // MARK: - MainTableManagerOutput
@@ -78,9 +91,16 @@ extension MainTableManager: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let lastIndex = photos.count - 29
-        if indexPath.row == lastIndex {
+        switch indexPath.row {
+        case photos.count - 1:
             presenter?.willDisplay(isSearch: isSearch)
+            DispatchQueue.main.async {
+                tableView.tableFooterView = self.createSpinnerFooter()
+            }
+        default:
+            DispatchQueue.main.async {
+                tableView.tableFooterView = nil
+            }
         }
     }
 }
