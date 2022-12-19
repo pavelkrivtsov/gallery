@@ -23,9 +23,15 @@ enum NetworkResponse: String, Error {
 
 protocol NetworkManagerOutput: AnyObject {
     func cancelDownloadTask()
-    func getPhotos(from page: Int, onCompletion: @escaping (Result<[Photo], NetworkResponse>) -> Void)
-    func getFoundPhotos(from page: Int,from searchText: String, onCompletion: @escaping (Result<[Photo], NetworkResponse>) -> Void)
-    func getSelectedPhoto(by id: String, onCompletion: @escaping (Result<Photo, NetworkResponse>) -> Void)
+    func getPhotos(from page: Int,
+                   onCompletion: @escaping (Result<[Photo], NetworkResponse>) -> Void)
+    func getFoundPhotos(from page: Int,
+                        from searchText: String,
+                        onCompletion: @escaping (Result<[Photo], NetworkResponse>) -> Void)
+    func getTotalPhotosNumber(from searchText: String,
+                                   onCompletion: @escaping(Int) -> Void)
+    func getSelectedPhoto(by id: String,
+                          onCompletion: @escaping (Result<Photo, NetworkResponse>) -> Void)
     func downloadPhoto(photo: Photo)
 }
 
@@ -146,6 +152,28 @@ extension NetworkManager: NetworkManagerOutput {
                 onCompletion(.success(searchResults.results))
             case .failure(let failureError):
                 onCompletion(.failure(failureError))
+            }
+        }
+    }
+    
+    func getTotalPhotosNumber(from searchText: String,
+                              onCompletion: @escaping(Int) -> Void) {
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "api.unsplash.com"
+        urlComponents.path = "/search/photos"
+        urlComponents.queryItems =  [URLQueryItem(name: "query", value: "\(searchText)")]
+        
+        guard let url = urlComponents.url,
+              let request = self.createRequest(from: url) else { return }
+        
+        taskResume(from: request, type: SearchResults.self) { result in
+            switch result {
+            case .success(let searchResults):
+                onCompletion(searchResults.total)
+            case .failure(_):
+                break
             }
         }
     }

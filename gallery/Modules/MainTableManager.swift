@@ -9,7 +9,7 @@ import UIKit
 
 protocol MainTableManagerOutput {
     func clearList()
-    func appendPhotos(from photos: [Photo], isSearch: Bool)
+    func appendPhotos(from photos: [Photo], totalPhotos: Int?, isSearch: Bool)
 }
 
 class MainTableManager: NSObject {
@@ -18,6 +18,7 @@ class MainTableManager: NSObject {
     private let tableView: UITableView
     private var dataSource: UITableViewDiffableDataSource<Int, Photo>!
     private var photos = [Photo]()
+    private var totalPhotos = Int()
     private var isSearch: Bool = false
     private lazy var generator = UIImpactFeedbackGenerator(style: .rigid)
     
@@ -44,8 +45,7 @@ class MainTableManager: NSObject {
         let footerView = UIView(frame: .init(x: 0,
                                              y: 0,
                                              width: self.tableView.frame.width,
-                                             height: self.tableView.frame.width / 3))
-        footerView.backgroundColor = .red
+                                             height: self.tableView.frame.width / 5))
         let spinner = UIActivityIndicatorView(style: .medium)
         spinner.center = footerView.center
         footerView.addSubview(spinner )
@@ -59,15 +59,17 @@ extension MainTableManager: MainTableManagerOutput {
     
     func clearList() {
         photos.removeAll()
+        totalPhotos = 0
         var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
         snapshot.appendSections([0])
         snapshot.appendItems(photos)
         dataSource.apply(snapshot, animatingDifferences: false)
     }
     
-    func appendPhotos(from photos: [Photo], isSearch: Bool) {
+    func appendPhotos(from photos: [Photo], totalPhotos: Int? = nil, isSearch: Bool) {
         self.isSearch = isSearch
         self.photos += photos
+        self.totalPhotos = totalPhotos ?? 0
         var snapshot = NSDiffableDataSourceSnapshot<Int, Photo>()
         snapshot.appendSections([0])
         snapshot.appendItems(self.photos)
@@ -91,15 +93,17 @@ extension MainTableManager: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        switch indexPath.row {
-        case photos.count - 1:
-            presenter?.willDisplay(isSearch: isSearch)
-            DispatchQueue.main.async {
-                tableView.tableFooterView = self.createSpinnerFooter()
-            }
-        default:
-            DispatchQueue.main.async {
-                tableView.tableFooterView = nil
+        if photos.count != totalPhotos {
+            switch indexPath.row {
+            case photos.count - 1:
+                presenter?.willDisplay(isSearch: isSearch)
+                DispatchQueue.main.async {
+                    tableView.tableFooterView = self.createSpinnerFooter()
+                }
+            default:
+                DispatchQueue.main.async {
+                    tableView.tableFooterView = nil
+                }
             }
         }
     }

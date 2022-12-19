@@ -61,14 +61,12 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
             switch result {
             case .success(let photos):
                 DispatchQueue.main.async {
-                    self.tableManager.appendPhotos(from: photos, isSearch: false)
+                    self.tableManager.appendPhotos(from: photos, totalPhotos: nil, isSearch: false)
                 }
             case .failure(let error):
                 self.alert.title = error.rawValue
                 DispatchQueue.main.async {
                     self.view?.failedLoadPhotos(self.alert)
-                    let view = NoPhotosView()
-                    self.view?.noFoundPhotos(view)
                 }
             }
         }
@@ -82,12 +80,13 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
             case .success(let photos):
                 if photos.isEmpty {
                     DispatchQueue.main.async {
-                        let view = NoPhotosView()
-                        self.view?.noFoundPhotos(view)
+                        self.view?.noFoundPhotos(self.noPhotosView)
                     }
                 } else {
-                    DispatchQueue.main.async {
-                        self.tableManager.appendPhotos(from: photos, isSearch: true)
+                    self.networkManager.getTotalPhotosNumber(from: self.searchText) { totalPhotos in
+                        DispatchQueue.main.async {
+                            self.tableManager.appendPhotos(from: photos, totalPhotos: totalPhotos, isSearch: true)
+                        }
                     }
                 }
             case .failure(let error):
