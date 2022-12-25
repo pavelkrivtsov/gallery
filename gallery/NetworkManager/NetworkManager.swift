@@ -5,7 +5,7 @@
 //  Created by Павел Кривцов on 19.09.2021.
 //
 
-import Foundation
+import UIKit
 
 enum NetworkResult<Error> {
     case success
@@ -33,12 +33,14 @@ protocol NetworkManagerOutput: AnyObject {
     func getSelectedPhoto(by id: String,
                           onCompletion: @escaping (Result<Photo, NetworkResponse>) -> Void)
     func downloadPhoto(photo: Photo)
+    func downloadImage(url: URL, completion: @escaping(UIImage?) -> Void )
 }
 
 class NetworkManager: NSObject {
     
     weak var presenter: NetworkServiceInput?
     private var task : URLSessionTask?
+    var imageCache = NSCache<NSString, UIImage>()
     
     private func taskResume<T: Decodable>(from request: URLRequest,
                                           type: T.Type,
@@ -198,6 +200,28 @@ extension NetworkManager: NetworkManagerOutput {
             case .failure(let failureError):
                 onCompletion(.failure(failureError))
             }
+        }
+    }
+    
+    func downloadImage(url: URL, completion: @escaping(UIImage?) -> Void ) {
+        
+        if let cachedImage = imageCache.object(forKey: url.absoluteString as NSString) {
+            completion(cachedImage)
+        } else {
+            let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+            let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard error == nil,
+                      data != nil,
+                      let resp = response as? HTTPURLResponse,
+                      resp.statusCode == 200 else { return }
+                
+                guard let image = UIImage(data: data!) else { return }
+                
+                DispatchQueue.main.async {
+                    completion(image)
+                }
+            }
+            dataTask.resume()
         }
     }
     

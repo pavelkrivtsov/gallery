@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 import SnapKit
 
 class PhotoCell: UITableViewCell {
@@ -15,6 +14,7 @@ class PhotoCell: UITableViewCell {
     private let photoView = UIImageView()
     private let authorLabel = UILabel()
     private var activityIndicator = UIActivityIndicatorView(style: .medium)
+    private let networkManager = NetworkManager()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -47,19 +47,17 @@ class PhotoCell: UITableViewCell {
     }
     
     func configure(photo: Photo){
-        let photoURL = photo.urls.regular
-        guard let url = URL(string: photoURL) else { return }
-        DispatchQueue.main.async {
-            self.activityIndicator.startAnimating()
-            self.photoView.kf.setImage(with: url) { result in
-                switch result {
-                case .success(_):
+        self.activityIndicator.startAnimating()
+        DispatchQueue.global().async {
+            let photoURL = photo.urls.regular
+            guard let url = URL(string: photoURL) else { return }
+            self.networkManager.downloadImage(url: url) { image in
+                DispatchQueue.main.async {
+                    self.photoView.image = image
+                    self.authorLabel.text = photo.user.name
                     self.activityIndicator.stopAnimating()
-                case .failure(_):
-                    print("self.imageView.kf.setImage(with: url) { failure }")
                 }
             }
-            self.authorLabel.text = photo.user.name
         }
     }
 }
