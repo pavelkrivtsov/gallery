@@ -33,7 +33,7 @@ protocol NetworkManagerOutput: AnyObject {
     func getSelectedPhoto(by id: String,
                           onCompletion: @escaping (Result<Photo, NetworkResponse>) -> Void)
     func downloadPhoto(photo: Photo)
-    func downloadImage(url: URL, completion: @escaping(UIImage?) -> Void )
+    func downloadImage(url: URL, onCompletion: @escaping(Result<UIImage, NetworkResponse>) -> Void)
 }
 
 class NetworkManager: NSObject {
@@ -203,28 +203,41 @@ extension NetworkManager: NetworkManagerOutput {
         }
     }
     
-    func downloadImage(url: URL, completion: @escaping(UIImage?) -> Void ) {
+    func downloadImage(url: URL, onCompletion: @escaping(Result<UIImage, NetworkResponse>) -> Void ) {
         
         if let cachedImage = imageCache.object(forKey: url.absoluteString as NSString) {
-            completion(cachedImage)
+            onCompletion(.success(cachedImage))
         } else {
             let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
-            let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard error == nil,
-                      data != nil,
-                      let resp = response as? HTTPURLResponse,
-                      resp.statusCode == 200 else { return }
+            let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
                 
-                guard let image = UIImage(data: data!) else { return }
+                if error != nil {
+                    onCompletion(.failure(NetworkResponse.failed))
+                }
                 
-                DispatchQueue.main.async {
-                    completion(image)
+                if let response = response as? HTTPURLResponse {
+                    guard let result = self?.handleNetworkResponse(response) else { return }
+                    switch result {
+                    case .success:
+                        guard let responseData = data,
+                              let image = UIImage(data: responseData) else {
+                            onCompletion(.failure(NetworkResponse.noData))
+                            return
+                        }
+                        
+                        DispatchQueue.main.async {
+                            onCompletion(.success(image))
+                        }
+
+                    case .failure(let failureError):
+                        onCompletion(.failure(failureError))
+                    }
                 }
             }
-            dataTask.resume()
+            task.resume()
         }
     }
-    
+            
     func downloadPhoto(photo: Photo) {
         let session = URLSession(configuration: .default,
                                  delegate: self,

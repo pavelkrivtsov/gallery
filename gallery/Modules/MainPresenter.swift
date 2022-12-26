@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 protocol MainTableManagerInput: AnyObject {
     func willDisplay(isSearch: Bool)
@@ -29,7 +28,6 @@ class MainPresenter {
     private let networkManager: NetworkManagerOutput
     private let tableManager: MainTableManagerOutput
     private let searchManager: UISearchBarDelegate
-    private var imageView = UIImageView()
     private var searchText = String()
     private var resultsPage = 1
     private lazy var noPhotosView = NoPhotosView()
@@ -112,7 +110,6 @@ extension MainPresenter: MainTableManagerInput {
     
     func willDisplay(isSearch: Bool) {
         DispatchQueue.global().async {
-            KingfisherManager.shared.cache.clearMemoryCache()
             self.resultsPage += 1
             isSearch ? self.loadPhotos(from: self.searchText) : self.loadPhotos()
         }
@@ -122,12 +119,12 @@ extension MainPresenter: MainTableManagerInput {
         guard let url = URL(string: photo.urls.regular) else { return }
         let photoId = photo.id
         let authorName = photo.user.name ?? ""
-    
-        imageView.kf.setImage(with: url) { result in
+        
+        networkManager.downloadImage(url: url) { result in
             switch result {
-            case .success(_):
-                guard let photo = self.imageView.image else { return }
-                let detailVC = CurrentPhotoAssembly.assemble(photoId: photoId, photo: photo, authorName: authorName)
+                
+            case .success(let image):
+                let detailVC = CurrentPhotoAssembly.assemble(photoId: photoId, photo: image, authorName: authorName)
                 DispatchQueue.main.async {
                     self.view?.showSelectedPhoto(viewController: detailVC)
                 }

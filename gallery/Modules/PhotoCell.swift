@@ -51,11 +51,17 @@ class PhotoCell: UITableViewCell {
         DispatchQueue.global().async {
             let photoURL = photo.urls.regular
             guard let url = URL(string: photoURL) else { return }
-            self.networkManager.downloadImage(url: url) { image in
-                DispatchQueue.main.async {
-                    self.photoView.image = image
-                    self.authorLabel.text = photo.user.name
-                    self.activityIndicator.stopAnimating()
+            
+            self.networkManager.downloadImage(url: url) { result in
+                switch result {
+                case .success(let image):
+                    DispatchQueue.main.async {
+                        self.photoView.image = image
+                        self.authorLabel.text = photo.user.name
+                        self.activityIndicator.stopAnimating()
+                    }
+                case .failure(_):
+                    break
                 }
             }
         }
