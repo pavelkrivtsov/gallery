@@ -1,15 +1,14 @@
 //
-//  CurrentPhotoViewController.swift
+//  PhotoViewController.swift
 //  gallery
 //
 //  Created by Павел Кривцов on 03.10.2022.
 //
 
 import UIKit
-import Kingfisher
 import SnapKit
 
-protocol CurrentPhotoViewInput: AnyObject {
+protocol PhotoViewInput: AnyObject {
     func loadPhoto(photo: UIImage, authorName: String)
     func zoom(to rect: CGRect, animated: Bool)
     func showAlert(_ alert: UIAlertController, notificationType: UINotificationFeedbackGenerator.FeedbackType)
@@ -22,9 +21,9 @@ protocol CurrentPhotoViewInput: AnyObject {
     func enabledInfoButton()
 }
 
-class CurrentPhotoViewController: UIViewController {
+class PhotoViewController: UIViewController {
     
-    private var presenter: CurrentPhotoViewOutput
+    private var presenter: PhotoViewOutput
     private var scrollView: UIScrollView
     private lazy var notificationGenerator = UINotificationFeedbackGenerator()
     private lazy var impactGenerator = UIImpactFeedbackGenerator(style: .rigid)
@@ -68,7 +67,7 @@ class CurrentPhotoViewController: UIViewController {
         return button
     }()
     
-    init(presenter: CurrentPhotoViewOutput, scrollView: UIScrollView) {
+    init(presenter: PhotoViewOutput, scrollView: UIScrollView) {
         self.presenter = presenter
         self.scrollView = scrollView
         super.init(nibName: nil, bundle: nil)
@@ -110,7 +109,6 @@ class CurrentPhotoViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        KingfisherManager.shared.cache.clearMemoryCache()
         presenter.cancelDownloadTask()
     }
     
@@ -133,8 +131,8 @@ class CurrentPhotoViewController: UIViewController {
     }
 }
 
-// MARK: - CurrentPhotoViewInput
-extension CurrentPhotoViewController: CurrentPhotoViewInput {
+// MARK: - PhotoViewInput
+extension PhotoViewController: PhotoViewInput {
     
     func loadPhoto(photo: UIImage, authorName: String) {
         title = authorName

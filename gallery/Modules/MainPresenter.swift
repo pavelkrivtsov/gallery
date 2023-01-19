@@ -124,7 +124,7 @@ extension MainPresenter: MainTableManagerInput {
             switch result {
                 
             case .success(let image):
-                let detailVC = CurrentPhotoAssembly.assemble(photoId: photoId, photo: image, authorName: authorName)
+                let detailVC = PhotoViewAssembly.assemble(photoId: photoId, photo: image, authorName: authorName)
                 DispatchQueue.main.async {
                     self.view?.showSelectedPhoto(viewController: detailVC)
                 }

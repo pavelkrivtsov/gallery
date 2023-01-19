@@ -1,5 +1,5 @@
 //
-//  CurrentPhotoPresenter.swift
+//  PhotoPresenter.swift
 //  gallery
 //
 //  Created by Павел Кривцов on 04.10.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol CurrentPhotoViewOutput: AnyObject {
+protocol PhotoViewOutput: AnyObject {
     func loadPhoto()
     func calculateZoom(from point: CGPoint)
     func showInfoAboutPhoto()
@@ -26,9 +26,9 @@ protocol NetworkServiceInput: AnyObject {
     func failedDownloadPhoto()
 }
 
-class CurrentPhotoPresenter: NSObject {
+class PhotoPresenter: NSObject {
     
-    weak var view: CurrentPhotoViewInput?
+    weak var view: PhotoViewInput?
     private let photoZoomManager: PhotoZoomManagerOutput
     private let networkManager: NetworkManagerOutput
     private var detailPhotoInfo: Photo?
@@ -81,8 +81,8 @@ class CurrentPhotoPresenter: NSObject {
     }
 }
 
-// MARK: - CurrentPhotoViewOutput
-extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
+// MARK: - PhotoViewOutput
+extension PhotoPresenter: PhotoViewOutput {
     
     func loadPhoto() {
         networkManager.getSelectedPhoto(by: photoId) { [weak self] result in
@@ -135,7 +135,7 @@ extension CurrentPhotoPresenter: CurrentPhotoViewOutput {
 }
 
 // MARK: - NetworkServiceInput
-extension CurrentPhotoPresenter: NetworkServiceInput {
+extension PhotoPresenter: NetworkServiceInput {
         
     func trackDownloadProgress(progress: Float) {
         DispatchQueue.main.async {
@@ -162,7 +162,7 @@ extension CurrentPhotoPresenter: NetworkServiceInput {
 }
 
 // MARK: - PhotoZoomManagerInput
-extension CurrentPhotoPresenter: PhotoZoomManagerInput {
+extension PhotoPresenter: PhotoZoomManagerInput {
     func getZoomRect(rect: CGRect) {
         DispatchQueue.main.async {
             self.view?.zoom(to: rect, animated: true)
