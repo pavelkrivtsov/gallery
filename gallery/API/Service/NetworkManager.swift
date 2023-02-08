@@ -29,7 +29,7 @@ protocol NetworkManagerOutput: AnyObject {
                         from searchText: String,
                         onCompletion: @escaping (Result<[Photo], NetworkResponse>) -> Void)
     func getTotalPhotosNumber(from searchText: String,
-                                   onCompletion: @escaping(Int) -> Void)
+                              onCompletion: @escaping(Int) -> Void)
     func getSelectedPhoto(by id: String,
                           onCompletion: @escaping (Result<Photo, NetworkResponse>) -> Void)
     func downloadPhoto(photo: Photo)
@@ -40,36 +40,38 @@ class NetworkManager: NSObject {
     
     weak var presenter: NetworkServiceInput?
     private var task : URLSessionTask?
-    var imageCache = NSCache<NSString, UIImage>()
+    private var imageCache = NSCache<NSString, UIImage>()
     
     private func taskResume<T: Decodable>(from request: URLRequest,
                                           type: T.Type,
                                           onCompletion: @escaping(Result<T, NetworkResponse>) -> Void) {
     
         task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            
-            if error != nil {
-                onCompletion(.failure(NetworkResponse.failed))
-            }
-            
-            if let response = response as? HTTPURLResponse {
-                guard let result = self?.handleNetworkResponse(response) else { return }
-                switch result {
-                case .success:
-                    guard let responseData = data else {
-                        onCompletion(.failure(NetworkResponse.noData))
-                        return
-                    }
+            DispatchQueue.main.async {
+                guard let `self` = self else { return }
+                if error != nil {
+                    onCompletion(.failure(NetworkResponse.failed))
+                }
                 
-                    do {
-                        let apiResponse = try JSONDecoder().decode(type, from: responseData)
-                        onCompletion(.success(apiResponse))
-                    } catch {
-                        onCompletion(.failure(NetworkResponse.unableToDecode))
+                if let response = response as? HTTPURLResponse {
+                    let result = self.handleNetworkResponse(response)
+                    switch result {
+                    case .success:
+                        guard let responseData = data else {
+                            onCompletion(.failure(NetworkResponse.noData))
+                            return
+                        }
+                        
+                        do {
+                            let apiResponse = try JSONDecoder().decode(type, from: responseData)
+                            onCompletion(.success(apiResponse))
+                        } catch {
+                            onCompletion(.failure(NetworkResponse.unableToDecode))
+                        }
+                        
+                    case .failure(let failureError):
+                        onCompletion(.failure(failureError))
                     }
-                    
-                case .failure(let failureError):
-                    onCompletion(.failure(failureError))
                 }
             }
         }
@@ -209,35 +211,34 @@ extension NetworkManager: NetworkManagerOutput {
             onCompletion(.success(cachedImage))
         } else {
             let request = URLRequest(url: url, cachePolicy: .returnCacheDataElseLoad)
+            
             let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-                
-                if error != nil {
-                    onCompletion(.failure(NetworkResponse.failed))
-                }
-                
-                if let response = response as? HTTPURLResponse {
-                    guard let result = self?.handleNetworkResponse(response) else { return }
-                    switch result {
-                    case .success:
-                        guard let responseData = data,
-                              let image = UIImage(data: responseData) else {
-                            onCompletion(.failure(NetworkResponse.noData))
-                            return
-                        }
-                        
-                        DispatchQueue.main.async {
+                guard let `self` = self else { return }
+                DispatchQueue.main.async {
+                    if error != nil {
+                        onCompletion(.failure(NetworkResponse.failed))
+                    }
+                    
+                    if let response = response as? HTTPURLResponse {
+                        let result = self.handleNetworkResponse(response)
+                        switch result {
+                        case .success:
+                            guard let responseData = data,
+                                  let image = UIImage(data: responseData) else {
+                                onCompletion(.failure(NetworkResponse.noData))
+                                return
+                            }
                             onCompletion(.success(image))
+                        case .failure(let failureError):
+                            onCompletion(.failure(failureError))
                         }
-
-                    case .failure(let failureError):
-                        onCompletion(.failure(failureError))
                     }
                 }
             }
             task.resume()
         }
     }
-            
+    
     func downloadPhoto(photo: Photo) {
         let session = URLSession(configuration: .default,
                                  delegate: self,
@@ -257,16 +258,21 @@ extension NetworkManager: NetworkManagerOutput {
     }
 }
 
+// MARK: - URLSessionDownloadDelegate
 extension NetworkManager: URLSessionDownloadDelegate {
     
     func urlSession(_ session: URLSession,
                     downloadTask: URLSessionDownloadTask,
                     didFinishDownloadingTo location: URL) {
         guard let data = try? Data(contentsOf: location) else {
-            presenter?.failedDownloadPhoto()
+            DispatchQueue.main.async {
+                self.presenter?.failedDownloadPhoto()
+            }
             return
         }
-        presenter?.savePhoto(from: data)
+        DispatchQueue.main.async {
+            self.presenter?.savePhoto(from: data)
+        }
     }
     
     func urlSession(_ session: URLSession,
@@ -275,6 +281,8 @@ extension NetworkManager: URLSessionDownloadDelegate {
                     totalBytesWritten: Int64,
                     totalBytesExpectedToWrite: Int64) {
         let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
-        presenter?.trackDownloadProgress(progress: progress)
+        DispatchQueue.main.async {
+            self.presenter?.trackDownloadProgress(progress: progress)
+        }
     }
 }

@@ -58,14 +58,10 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
             guard let self = self else { return }
             switch result {
             case .success(let photos):
-                DispatchQueue.main.async {
-                    self.tableManager.appendPhotos(from: photos, totalPhotos: nil, isSearch: false)
-                }
+                self.tableManager.appendPhotos(from: photos, totalPhotos: nil, isSearch: false)
             case .failure(let error):
                 self.alert.title = error.rawValue
-                DispatchQueue.main.async {
-                    self.view?.failedLoadPhotos(self.alert)
-                }
+                self.view?.failedLoadPhotos(self.alert)
             }
         }
     }
@@ -77,31 +73,23 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
             switch result {
             case .success(let photos):
                 if photos.isEmpty {
-                    DispatchQueue.main.async {
-                        self.view?.noFoundPhotos(self.noPhotosView)
-                    }
+                    self.view?.noFoundPhotos(self.noPhotosView)
                 } else {
                     self.networkManager.getTotalPhotosNumber(from: self.searchText) { totalPhotos in
-                        DispatchQueue.main.async {
-                            self.tableManager.appendPhotos(from: photos, totalPhotos: totalPhotos, isSearch: true)
-                        }
+                        self.tableManager.appendPhotos(from: photos, totalPhotos: totalPhotos, isSearch: true)
                     }
                 }
             case .failure(let error):
                 self.alert.title = error.rawValue
-                DispatchQueue.main.async {
-                    self.view?.failedLoadPhotos(self.alert)
-                }
+                self.view?.failedLoadPhotos(self.alert)
             }
         }
     }
     
     func clearList() {
         resultsPage = 1
-        DispatchQueue.main.async {
-            self.tableManager.clearList()
-            self.view?.removeNoPhotosFromSuperview()
-        }
+        self.tableManager.clearList()
+        self.view?.removeNoPhotosFromSuperview()
     }
 }
 
@@ -109,10 +97,8 @@ extension MainPresenter: SearchManagerInput, MainViewOutput {
 extension MainPresenter: MainTableManagerInput {
     
     func willDisplay(isSearch: Bool) {
-        DispatchQueue.global().async {
-            self.resultsPage += 1
-            isSearch ? self.loadPhotos(from: self.searchText) : self.loadPhotos()
-        }
+        self.resultsPage += 1
+        isSearch ? self.loadPhotos(from: self.searchText) : self.loadPhotos()
     }
     
     func showPhoto(photo: Photo) {
@@ -122,17 +108,12 @@ extension MainPresenter: MainTableManagerInput {
         
         networkManager.downloadImage(url: url) { result in
             switch result {
-                
             case .success(let image):
                 let detailVC = PhotoViewAssembly.assemble(photoId: photoId, photo: image, authorName: authorName)
-                DispatchQueue.main.async {
-                    self.view?.showSelectedPhoto(viewController: detailVC)
-                }
+                self.view?.showSelectedPhoto(viewController: detailVC)
             case .failure(let error):
                 self.alert.title = error.localizedDescription
-                DispatchQueue.main.async {
-                    self.view?.failedLoadPhotos(self.alert)
-                }
+                self.view?.failedLoadPhotos(self.alert)
             }
         }
     }

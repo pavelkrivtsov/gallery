@@ -97,13 +97,9 @@ extension MainTableManager: UITableViewDelegate {
             switch indexPath.row {
             case photos.count - 1:
                 presenter?.willDisplay(isSearch: isSearch)
-                DispatchQueue.main.async {
-                    tableView.tableFooterView = self.createSpinnerFooter()
-                }
+                tableView.tableFooterView = self.createSpinnerFooter()
             default:
-                DispatchQueue.main.async {
-                    tableView.tableFooterView = nil
-                }
+                tableView.tableFooterView = nil
             }
         }
     }

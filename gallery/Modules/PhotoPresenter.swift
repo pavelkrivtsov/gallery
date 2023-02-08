@@ -90,19 +90,12 @@ extension PhotoPresenter: PhotoViewOutput {
             switch result {
             case .success(let photo):
                 self.detailPhotoInfo = photo
-                DispatchQueue.main.async {
-                    self.view?.enabledInfoButton()
-                }
+                self.view?.enabledInfoButton()
             case .failure(_):
-                DispatchQueue.main.async {
-                    self.view?.failedLoadPhoto(self.alert)
-                }
+                self.view?.failedLoadPhoto(self.alert)
             }
         }
-        
-        DispatchQueue.main.async {
-            self.view?.loadPhoto(photo: self.photo, authorName: self.authorName)
-        }
+        self.view?.loadPhoto(photo: self.photo, authorName: self.authorName)
     }
     
     func calculateZoom(from point: CGPoint) {
@@ -116,16 +109,13 @@ extension PhotoPresenter: PhotoViewOutput {
     func showInfoAboutPhoto() {
         guard let detailPhotoInfo = self.detailPhotoInfo else { return }
         let detailPhotoInfoVC = DetailPhotoInfoAssembly.assemble(from: detailPhotoInfo)
-        DispatchQueue.main.async {
-            self.view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
-        }
+        self.view?.showInfoAboutPhoto(from: detailPhotoInfoVC)
+        
     }
     
     func downloadPhoto() {
         guard let detailPhotoInfo = self.detailPhotoInfo else { return }
-        DispatchQueue.main.async {
-            self.view?.showProgressView()
-        }
+        self.view?.showProgressView()
         networkManager.downloadPhoto(photo: detailPhotoInfo)
     }
     
@@ -136,36 +126,28 @@ extension PhotoPresenter: PhotoViewOutput {
 
 // MARK: - NetworkServiceInput
 extension PhotoPresenter: NetworkServiceInput {
-        
+    
     func trackDownloadProgress(progress: Float) {
-        DispatchQueue.main.async {
-            self.view?.trackDownloadProgress(progress: progress)
-        }
+        self.view?.trackDownloadProgress(progress: progress)
     }
     
     func savePhoto(from data: Data) {
         if let photo = UIImage(data: data) {
             UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
-            DispatchQueue.main.async {
-                self.view?.hideProgressView()
-                self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
-                self.view?.showAlert(self.downloadAlert, notificationType: .success)
-            }
+            self.view?.hideProgressView()
+            self.view?.setTitle(title: self.detailPhotoInfo?.user.name ?? "")
+            self.view?.showAlert(self.downloadAlert, notificationType: .success)
         }
     }
     
     func failedDownloadPhoto() {
-        DispatchQueue.main.async {
-            self.view?.showAlert(self.failedDownloadAlert, notificationType: .error)
-        }
+        self.view?.showAlert(self.failedDownloadAlert, notificationType: .error)
     }
 }
 
 // MARK: - PhotoZoomManagerInput
 extension PhotoPresenter: PhotoZoomManagerInput {
     func getZoomRect(rect: CGRect) {
-        DispatchQueue.main.async {
-            self.view?.zoom(to: rect, animated: true)
-        }
+        self.view?.zoom(to: rect, animated: true)
     }
 }
