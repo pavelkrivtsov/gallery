@@ -47,32 +47,33 @@ class NetworkManager: NSObject {
                                           onCompletion: @escaping(Result<T, NetworkResponse>) -> Void) {
         
         task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            
-            guard let `self` = self else { return }
-            if error != nil {
-                onCompletion(.failure(NetworkResponse.failed))
-            }
-            
-            if let response = response as? HTTPURLResponse {
-                let result = self.handleNetworkResponse(response)
-                switch result {
-                case .success:
-                    guard let responseData = data else {
-                        onCompletion(.failure(NetworkResponse.noData))
-                        return
-                    }
-                    
-                    do {
-                        let apiResponse = try JSONDecoder().decode(type, from: responseData)
-                        onCompletion(.success(apiResponse))
-                    } catch {
-                        onCompletion(.failure(NetworkResponse.unableToDecode))
-                    }
-                    
-                case .failure(let failureError):
-                    onCompletion(.failure(failureError))
+            DispatchQueue.main.async {
+                guard let `self` = self else { return }
+                if error != nil {
+                    onCompletion(.failure(NetworkResponse.failed))
                 }
                 
+                if let response = response as? HTTPURLResponse {
+                    let result = self.handleNetworkResponse(response)
+                    switch result {
+                    case .success:
+                        guard let responseData = data else {
+                            onCompletion(.failure(NetworkResponse.noData))
+                            return
+                        }
+                        
+                        do {
+                            let apiResponse = try JSONDecoder().decode(type, from: responseData)
+                            onCompletion(.success(apiResponse))
+                        } catch {
+                            onCompletion(.failure(NetworkResponse.unableToDecode))
+                        }
+                        
+                    case .failure(let failureError):
+                        onCompletion(.failure(failureError))
+                    }
+                    
+                }
             }
         }
         task?.resume()
