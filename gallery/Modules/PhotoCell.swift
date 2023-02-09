@@ -54,11 +54,9 @@ class PhotoCell: UITableViewCell {
         self.networkManager.downloadImage(url: url) { result in
             switch result {
             case .success(let image):
-                DispatchQueue.main.async {
                     self.photoView.image = image
                     self.authorLabel.text = photo.user.name
                     self.activityIndicator.stopAnimating()
-                }
             case .failure(_):
                 break
             }
